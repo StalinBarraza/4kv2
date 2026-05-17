@@ -91,7 +91,7 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════
 @st.cache_resource
 def cargar_modelo():
-    filename = 'modelo-ensamble-reg-loads-v2.pkl'
+    filename = 'modelo-ensamble-reg-loads-v2.1.pkl'
     return pickle.load(open(filename, 'rb'))
 
 modelo_ml, variables, min_max_scaler = cargar_modelo()
