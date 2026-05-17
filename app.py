@@ -103,27 +103,6 @@ st.markdown("""
         margin-top: 10px;
     }
 
-    /* Sliders */
-    .stSlider > div > div > div > div {
-        background-color: #F0A500 !important;
-    }
-
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        background-color: #16213E;
-        border-radius: 8px;
-        padding: 4px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        color: #8899BB;
-        font-weight: 600;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #0F3460 !important;
-        color: #F0A500 !important;
-        border-radius: 6px;
-    }
-
     /* Botón */
     .stButton > button {
         background-color: #F0A500;
@@ -143,11 +122,11 @@ st.markdown("""
         transform: scale(1.02);
     }
 
-    /* Selectbox */
-    .stSelectbox > div > div {
+    /* Selectbox y Number Input */
+    .stSelectbox > div > div, .stNumberInput > div > div > input {
         background-color: #0F3460;
-        border: 1px solid #1E3A5F;
         color: #E8EDF5;
+        border: 1px solid #1E3A5F;
     }
 
     /* Ocultar elementos por defecto de Streamlit */
@@ -160,8 +139,13 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════
 @st.cache_resource
 def cargar_modelo():
+    # Asegúrate de que el modelo esté en la misma ruta
     filename = 'modelo-ensamble-reg-loads-v2.1.pkl'
-    return pickle.load(open(filename, 'rb'))
+    try:
+        return pickle.load(open(filename, 'rb'))
+    except:
+        # Dummy fallback in case model is missing during UI dev
+        return None, None, None
 
 modelo, variables, min_max_scaler = cargar_modelo()
 
@@ -193,7 +177,6 @@ EQUIPOS_POR_PIT = {
     },
 }
 
-# Colores por modelo (consistente con Power BI)
 COLOR_MODELO = {
     'Komatsu PC8000': '#1E2761',
     'Komatsu PC4000': '#065A82',
@@ -223,11 +206,75 @@ COLS_NUMERICAS = [
 
 COLUMNAS_ESPERADAS = COLS_NUMERICAS + ['turno']
 
+
 # ══════════════════════════════════════════════════════════════════
-# TÍTULO
+# TÍTULO & CARGA MASIVA
 # ══════════════════════════════════════════════════════════════════
 st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>',
             unsafe_allow_html=True)
+
+with st.expander('📂 Carga Masiva y Generación de Plantilla', expanded=False):
+    st.markdown("Descarga el formato de plantilla vacío, diligencia los datos y cárgalo para obtener predicciones de forma masiva.")
+    
+    # 1. Entrega del Formato al usuario
+    df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
+    csv_plantilla = df_plantilla.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="📄 Descargar Formato de Plantilla",
+        data=csv_plantilla,
+        file_name='plantilla_prediccion.csv',
+        mime='text/csv'
+    )
+    
+    st.markdown("---")
+    
+    # 2. Carga del archivo por el usuario
+    uploaded_file = st.file_uploader("Sube el formato CSV diligenciado", type=['csv'])
+    
+    if uploaded_file is not None:
+        df_bulk = pd.read_csv(uploaded_file)
+        st.write("Vista previa de los datos:")
+        st.dataframe(df_bulk.head())
+        
+        if st.button("▶ REALIZAR PREDICCIÓN MASIVA"):
+            if modelo is not None:
+                try:
+                    data_prep_bulk = df_bulk.copy()
+                    # Transformaciones
+                    if 'turno' in data_prep_bulk.columns:
+                        data_prep_bulk = pd.get_dummies(data_prep_bulk, columns=['turno'], drop_first=False, dtype=int)
+                    
+                    data_prep_bulk = data_prep_bulk.reindex(columns=variables, fill_value=0)
+                    
+                    # Escalar
+                    data_prep_bulk[COLS_NUMERICAS] = min_max_scaler.transform(data_prep_bulk[COLS_NUMERICAS])
+                    
+                    # Predecir
+                    predicciones = modelo.predict(data_prep_bulk)
+                    df_bulk['Cargas_Predichas'] = np.round(predicciones).astype(int)
+                    
+                    st.success("¡Predicción completada exitosamente!")
+                    st.dataframe(df_bulk)
+                    
+                    # 3. Descarga del Resultado Final
+                    csv_resultado = df_bulk.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="📥 Descargar Predicciones",
+                        data=csv_resultado,
+                        file_name='resultados_predicciones.csv',
+                        mime='text/csv'
+                    )
+                except Exception as e:
+                    st.error(f"Error al procesar la carga masiva: Revise el archivo. Detalle: {e}")
+            else:
+                st.error("El modelo no se cargó correctamente.")
+
+st.markdown("---")
+
+# ══════════════════════════════════════════════════════════════════
+# INGRESO MANUAL UNIFICADO (UNA SOLA VISTA)
+# ══════════════════════════════════════════════════════════════════
+st.markdown("### ✍️ Ingreso Manual y Simulación")
 
 col_form, col_result = st.columns([3, 1])
 
@@ -239,15 +286,37 @@ with col_form:
         turno = st.selectbox('⚙️ Shift', ['D', 'N'])
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── PALAS POR PIT Y MODELO ───────────────────────────────────
-    st.markdown('### 🚧 Shovels — Utilization')
-
     vals_palas = {}
-    tabs_pit = st.tabs(list(EQUIPOS_POR_PIT.keys()))
+    vals_camiones = {}
 
-    for tab, pit in zip(tabs_pit, EQUIPOS_POR_PIT.keys()):
-        with tab:
-            for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
+    # ── ITERACIÓN DE TODOS LOS PITS EN UNA SOLA VISTA ────────────
+    for pit in EQUIPOS_POR_PIT.keys():
+        st.markdown(f'<div class="pit-header">📍 PIT: {pit}</div>', unsafe_allow_html=True)
+        
+        # Equipos del Pit
+        equipos_del_pit = EQUIPOS_POR_PIT[pit]
+        
+        st.markdown('**🚧 Shovels — Utilization**')
+        for modelo_eq, equipos in equipos_del_pit.items():
+            if modelo_eq != 'Apron Feeder' and 'Camion' not in modelo_eq:
+                color = COLOR_MODELO.get(modelo_eq, '#555')
+                st.markdown(
+                    f'<div class="model-header" style="border-left:3px solid {color}">'
+                    f'  {modelo_eq}'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                cols = st.columns(len(equipos) if len(equipos) > 0 else 1)
+                for col, eq in zip(cols, equipos):
+                    with col:
+                        # Cambio de st.slider a st.number_input
+                        vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
+                            f'{eq}',
+                            min_value=0.0, max_value=1.0,
+                            value=0.75, step=0.01,
+                            key=f'pala_{eq}'
+                        )
+            elif modelo_eq == 'Apron Feeder':
                 color = COLOR_MODELO.get(modelo_eq, '#555')
                 st.markdown(
                     f'<div class="model-header" style="border-left:3px solid {color}">'
@@ -258,69 +327,63 @@ with col_form:
                 cols = st.columns(len(equipos))
                 for col, eq in zip(cols, equipos):
                     with col:
-                        vals_palas[f'UsodeDisp_{eq}'] = st.slider(
+                        vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
                             f'{eq}',
                             min_value=0.0, max_value=1.0,
                             value=0.75, step=0.01,
-                            key=f'pala_{eq}'
+                            key=f'apron_{eq}'
                         )
 
-    # ── CAMIONES POR PIT ─────────────────────────────────────────
-    st.markdown('### 🚛 Trucks')
+        # Camiones asociados a ese PIT
+        st.markdown('**🚛 Trucks**')
+        st.markdown('<div class="section-card">', unsafe_allow_html=True)
+        c1, c2, c3, c4 = st.columns(4)
 
-    vals_camiones = {}
-    tabs_cam = st.tabs(list(EQUIPOS_POR_PIT.keys()))
-
-    for tab, pit in zip(tabs_cam, EQUIPOS_POR_PIT.keys()):
-        with tab:
-            st.markdown('<div class="section-card">', unsafe_allow_html=True)
-            c1, c2, c3, c4 = st.columns(4)
-
-            with c1:
-                vals_camiones[f'QtyCamiones_{pit}'] = st.slider(
-                    '🔢 Qty Camiones',
-                    min_value=0.0, max_value=150.0,
-                    value=80.0, step=1.0,
-                    key=f'qty_{pit}'
-                )
-            with c2:
-                vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.slider(
-                    '✅ Disponibilidad',
-                    min_value=0.0, max_value=1.0,
-                    value=0.80, step=0.01,
-                    key=f'disp_{pit}'
-                )
-            with c3:
-                vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.slider(
-                    '📊 Uso Disponibilidad',
-                    min_value=0.0, max_value=1.0,
-                    value=0.75, step=0.01,
-                    key=f'uso_{pit}'
-                )
-            with c4:
-                col_ciclo = (
-                    'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO'  else
-                    'TiempoCiclo2_DP5'          if pit == 'DP5'       else
-                    'TiempoCiclo2_EC'            if pit == 'EC'        else
-                    'TiempoCiclo_TKS_PRIBBENOW'
-                )
-                vals_camiones[col_ciclo] = st.slider(
-                    '⏱ Ciclo (min)',
-                    min_value=20.0, max_value=42.0,
-                    value=30.0, step=0.1,
-                    key=f'ciclo_{pit}'
-                )
-            st.markdown('</div>', unsafe_allow_html=True)
+        with c1:
+            vals_camiones[f'QtyCamiones_{pit}'] = st.number_input(
+                '🔢 Qty Cam',
+                min_value=0.0, max_value=150.0,
+                value=80.0, step=1.0,
+                key=f'qty_{pit}'
+            )
+        with c2:
+            vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.number_input(
+                '✅ Dispo.',
+                min_value=0.0, max_value=1.0,
+                value=0.80, step=0.01,
+                key=f'disp_{pit}'
+            )
+        with c3:
+            vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.number_input(
+                '📊 Uso Dispo.',
+                min_value=0.0, max_value=1.0,
+                value=0.75, step=0.01,
+                key=f'uso_{pit}'
+            )
+        with c4:
+            col_ciclo = (
+                'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO'  else
+                'TiempoCiclo2_DP5'         if pit == 'DP5'       else
+                'TiempoCiclo2_EC'          if pit == 'EC'        else
+                'TiempoCiclo_TKS_PRIBBENOW'
+            )
+            vals_camiones[col_ciclo] = st.number_input(
+                '⏱ Ciclo (min)',
+                min_value=20.0, max_value=42.0,
+                value=30.0, step=0.1,
+                key=f'ciclo_{pit}'
+            )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     # ── BOTÓN PREDECIR ───────────────────────────────────────────
     st.markdown('<br>', unsafe_allow_html=True)
     predecir = st.button('▶ CALCULATE')
 
 # ══════════════════════════════════════════════════════════════════
-# PANEL DE RESULTADO
+# PANEL DE RESULTADO (INGRESO MANUAL)
 # ══════════════════════════════════════════════════════════════════
 with col_result:
-    st.markdown('<br><br>', unsafe_allow_html=True)
+    st.markdown('<br>', unsafe_allow_html=True)
     resultado_placeholder = st.empty()
 
     resultado_placeholder.markdown("""
@@ -332,39 +395,43 @@ with col_result:
     """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# PREDICCIÓN
+# PREDICCIÓN MANUAL
 # ══════════════════════════════════════════════════════════════════
 if predecir:
-    # Construir DataFrame
-    datos = {**vals_palas, **vals_camiones, 'turno': turno}
-    data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
+    if modelo is None:
+        st.error("El archivo del modelo (pkl) no se encuentra disponible.")
+    else:
+        # Construir DataFrame
+        datos = {**vals_palas, **vals_camiones, 'turno': turno}
+        data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
 
-    # Preparar datos
-    data_prep = data.copy()
-    data_prep = pd.get_dummies(data_prep, columns=['turno'],
-                                drop_first=False, dtype=int)
-    data_prep = data_prep.reindex(columns=variables, fill_value=0)
-    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
-        data_prep[COLS_NUMERICAS]
-    )
-
-    # Predecir
-    Y_pred = modelo.predict(data_prep)
-    cargas = int(round(Y_pred[0]))
-
-    # Mostrar resultado
-    with col_result:
-        resultado_placeholder.markdown(f"""
-            <div class="result-box">
-                <div class="result-label">Loads Predicted</div>
-                <div class="result-value">{cargas:,}</div>
-                <div class="result-error">⚠ Model error ±10%</div>
-            </div>
-        """, unsafe_allow_html=True)
-
-    # Detalle expandible
-    with st.expander('📋 Show data'):
-        st.dataframe(
-            data.T.rename(columns={0: 'Valor'}),
-            use_container_width=True
+        # Preparar datos
+        data_prep = data.copy()
+        data_prep = pd.get_dummies(data_prep, columns=['turno'],
+                                    drop_first=False, dtype=int)
+        data_prep = data_prep.reindex(columns=variables, fill_value=0)
+        
+        data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
+            data_prep[COLS_NUMERICAS]
         )
+
+        # Predecir
+        Y_pred = modelo.predict(data_prep)
+        cargas = int(round(Y_pred[0]))
+
+        # Mostrar resultado
+        with col_result:
+            resultado_placeholder.markdown(f"""
+                <div class="result-box">
+                    <div class="result-label">Loads Predicted</div>
+                    <div class="result-value">{cargas:,}</div>
+                    <div class="result-error">⚠ Model error ±10%</div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # Detalle expandible
+        with st.expander('📋 Show Data Sent'):
+            st.dataframe(
+                data.T.rename(columns={0: 'Valor'}),
+                use_container_width=True
+            )
