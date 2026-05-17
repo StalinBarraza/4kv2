@@ -170,7 +170,7 @@ modelo, variables, min_max_scaler = cargar_modelo()
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
-        'Komatsu PC8000': ['6233', '6234', '6247', '6248'],
+        'Komatsu PC8000': ['6233', '6234', '6239','6247', '6248'],
         'Bucyrus BE495':  ['6243', '6244'],
         'Hitachi EX3600': ['6260'],
     },
@@ -182,10 +182,11 @@ EQUIPOS_POR_PIT = {
     },
     'EC': {
         'Komatsu PC8000': ['6231'],
-        'Hitachi EX3600': ['6262', '6268'],
+        'Hitachi EX3600': ['6262'],
+        'Komatsu PC4000': ['6268'],
     },
     'PRIBBENOW': {
-        'Komatsu PC8000': ['6235', '6245', '6246'],
+        'Komatsu PC8000': ['6235', '6245', '6246', '6249'],
         'Bucyrus BE495':  ['6241'],
         'Komatsu PC4000': ['6264', '6269'],
         'Apron Feeder':   ['6457'],
