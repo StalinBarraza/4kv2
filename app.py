@@ -12,7 +12,7 @@ st.set_page_config(
     page_title='Load Forecast — Complex',
     page_icon='⛏️',
     layout='wide',
-    initial_sidebar_state='expanded'  # <--- AGREGA ESTA LÍNEA
+    initial_sidebar_state='collapsed'  # Forzamos que la barra lateral inicie cerrada
 )
 
 # ══════════════════════════════════════════════════════════════════
@@ -21,7 +21,6 @@ st.set_page_config(
 st.markdown("""
 <style>
     .stApp { background-color: #1A1A2E; }
-    section[data-testid="stSidebar"] { background-color: #16213E; }
     html, body, [class*="css"] { color: #E8EDF5; font-family: 'Segoe UI', sans-serif; }
     .main-title { font-size: 2.2rem; font-weight: 800; color: #F0A500; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #F0A500; padding-bottom: 10px; margin-bottom: 24px; }
     .pit-header { background: linear-gradient(90deg, #0F3460, #16213E); border-left: 4px solid #F0A500; border-radius: 6px; padding: 10px 18px; margin: 20px 0 12px 0; font-size: 1.1rem; font-weight: 700; color: #F0A500; letter-spacing: 1px; text-transform: uppercase; }
@@ -115,29 +114,32 @@ def preparar_y_predecir(df_input):
     return modelo.predict(data_prep)
 
 # ══════════════════════════════════════════════════════════════════
-# SIDEBAR: PLANTILLA Y CARGUE MASIVO
+# INTERFAZ PRINCIPAL
 # ══════════════════════════════════════════════════════════════════
-with st.sidebar:
-    st.markdown("### 📂 Bulk Prediction")
-    
-    # Botón para descargar plantilla
+st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>', unsafe_allow_html=True)
+
+# ── MODULO DE CARGUE MASIVO (FIJO EN PANTALLA) ─────────────────────
+st.markdown('<div class="pit-header">📂 Bulk Prediction Module</div>', unsafe_allow_html=True)
+col_csv1, col_csv2 = st.columns([1, 3])
+
+with col_csv1:
     df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
     csv_plantilla = df_plantilla.to_csv(index=False).encode('utf-8')
     st.download_button(
         "⬇️ Download Template CSV",
         data=csv_plantilla,
         file_name='plantilla_prediccion.csv',
-        mime='text/csv'
+        mime='text/csv',
+        use_container_width=True
     )
-    
-    st.divider()
-    archivo = st.file_uploader("Upload CSV File", type=['csv'])
 
-# ══════════════════════════════════════════════════════════════════
-# INTERFAZ PRINCIPAL
-# ══════════════════════════════════════════════════════════════════
-st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>', unsafe_allow_html=True)
+with col_csv2:
+    archivo = st.file_uploader("Upload CSV File for multi-row prediction", type=['csv'], label_visibility="collapsed")
 
+st.markdown("<br>", unsafe_allow_html=True)
+st.divider()
+
+# ── SIMULADOR MANUAL ─────────────────────────────────────────────
 col_form, col_result = st.columns([3, 1])
 
 with col_form:
@@ -185,11 +187,8 @@ with col_form:
                 vals_camiones[col_ciclo] = st.slider('⏱ Ciclo (min)', 20.0, 42.0, 30.0, 0.1, key=f'ciclo_{pit}')
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Botón de Cálculo
-    if archivo is not None:
-        btn_label = '▶ CALCULATE BULK'
-    else:
-        btn_label = '▶ CALCULATE'
+    # Botón de Cálculo dinámico
+    btn_label = '▶ CALCULATE BULK CSV' if archivo is not None else '▶ CALCULATE MANUAL'
     predecir = st.button(btn_label)
 
 with col_result:
@@ -202,7 +201,6 @@ with col_result:
 # ══════════════════════════════════════════════════════════════════
 if predecir:
     if archivo is not None:
-        # MODO CARGUE MASIVO
         try:
             df_bulk = pd.read_csv(archivo)
             missing = [c for c in COLUMNAS_ESPERADAS if c not in df_bulk.columns]
@@ -211,17 +209,13 @@ if predecir:
             else:
                 y_preds = preparar_y_predecir(df_bulk)
                 df_bulk['Predicted_Loads'] = np.round(y_preds).astype(int)
-                
                 st.success(f"Processed {len(df_bulk)} rows.")
                 st.dataframe(df_bulk, use_container_width=True)
-                
-                # Descargar resultados
                 csv_res = df_bulk.to_csv(index=False).encode('utf-8')
                 st.download_button("📥 Download Results", csv_res, "results.csv", "text/csv")
         except Exception as e:
             st.error(f"Error: {e}")
     else:
-        # MODO MANUAL
         datos = {**vals_palas, **vals_camiones, 'turno': turno}
         data_manual = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
         Y_pred = preparar_y_predecir(data_manual)
