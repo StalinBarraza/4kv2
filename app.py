@@ -243,13 +243,17 @@ with col_up1:
     )
 
 with col_up2:
-    with open("plantilla.csv", "rb") as file:
-        st.download_button(
-            label="📥 Download template",
-            data=file,
-            file_name="plantilla.csv",
-            mime="text/csv"
-        )
+    # Crear plantilla vacía dinámicamente
+template_df = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
+
+template_csv = template_df.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+    label="📥 Download template",
+    data=template_csv,
+    file_name="plantilla.csv",
+    mime="text/csv"
+)
 
 st.markdown("---")
 
