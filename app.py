@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ══════════════════════════════════════════════════════════════════
-# ESTILOS (Mantenidos del original)
+# ESTILOS
 # ══════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
@@ -31,13 +31,13 @@ st.markdown("""
     .result-value { font-size: 4rem; font-weight: 900; color: #00E676; line-height: 1; }
     .result-error { font-size: 0.8rem; color: #8899BB; margin-top: 10px; }
     .stSlider > div > div > div > div { background-color: #F0A500 !important; }
-    .stButton > button { background-color: #F0A500; color: #1A1A2E; font-weight: 800; border-radius: 10px; width: 100%; }
+    .stButton > button { background-color: #F0A500; color: #1A1A2E; font-weight: 800; border: none; border-radius: 10px; padding: 14px; width: 100%; }
     #MainMenu, footer, header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# CARGAR MODELO Y CONSTANTES
+# CARGAR MODELO
 # ══════════════════════════════════════════════════════════════════
 @st.cache_resource
 def cargar_modelo():
@@ -46,6 +46,9 @@ def cargar_modelo():
 
 modelo, variables, min_max_scaler = cargar_modelo()
 
+# ══════════════════════════════════════════════════════════════════
+# CONSTANTES Y COLUMNAS
+# ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
         'Komatsu PC8000': ['6233', '6234', '6239','6247', '6248'],
@@ -72,153 +75,164 @@ EQUIPOS_POR_PIT = {
 }
 
 COLOR_MODELO = {
-    'Komatsu PC8000': '#1E2761', 'Komatsu PC4000': '#065A82',
-    'Hitachi EX3600': '#028090', 'Bucyrus BE495':  '#2C5F2D',
+    'Komatsu PC8000': '#1E2761',
+    'Komatsu PC4000': '#065A82',
+    'Hitachi EX3600': '#028090',
+    'Bucyrus BE495':  '#2C5F2D',
     'Apron Feeder':   '#FF8C00',
 }
 
 COLS_NUMERICAS = [
-    'UsodeDisp_6231','UsodeDisp_6232','UsodeDisp_6233','UsodeDisp_6234','UsodeDisp_6235',
-    'UsodeDisp_6236','UsodeDisp_6237','UsodeDisp_6238','UsodeDisp_6239','UsodeDisp_6241',
-    'UsodeDisp_6242','UsodeDisp_6243','UsodeDisp_6244','UsodeDisp_6245','UsodeDisp_6246',
-    'UsodeDisp_6247','UsodeDisp_6248','UsodeDisp_6249','UsodeDisp_6250','UsodeDisp_6260',
-    'UsodeDisp_6261','UsodeDisp_6262','UsodeDisp_6263','UsodeDisp_6264','UsodeDisp_6268',
-    'UsodeDisp_6269','UsodeDisp_6449','UsodeDisp_6455','UsodeDisp_6457',
-    'QtyCamiones_DESCANSO','Disponibilidad_TKS_DESCANSO','UsodeDisp_TKS_DESCANSO','TiempoCiclo_TKS_DESCANSO',
-    'QtyCamiones_DP5','Disponibilidad_TKS_DP5','UsodeDisp_TKS_DP5','TiempoCiclo2_DP5',
-    'QtyCamiones_EC','Disponibilidad_TKS_EC','UsodeDisp_TKS_EC','TiempoCiclo2_EC',
-    'QtyCamiones_PRIBBENOW','Disponibilidad_TKS_PRIBBENOW','UsodeDisp_TKS_PRIBBENOW','TiempoCiclo_TKS_PRIBBENOW'
-] [cite: 1]
+    'UsodeDisp_6231','UsodeDisp_6232','UsodeDisp_6233','UsodeDisp_6234',
+    'UsodeDisp_6235','UsodeDisp_6236','UsodeDisp_6237','UsodeDisp_6238',
+    'UsodeDisp_6239','UsodeDisp_6241','UsodeDisp_6242','UsodeDisp_6243',
+    'UsodeDisp_6244','UsodeDisp_6245','UsodeDisp_6246','UsodeDisp_6247',
+    'UsodeDisp_6248','UsodeDisp_6249','UsodeDisp_6250','UsodeDisp_6260',
+    'UsodeDisp_6261','UsodeDisp_6262','UsodeDisp_6263','UsodeDisp_6264',
+    'UsodeDisp_6268','UsodeDisp_6269','UsodeDisp_6449','UsodeDisp_6455',
+    'UsodeDisp_6457',
+    'QtyCamiones_DESCANSO','Disponibilidad_TKS_DESCANSO',
+    'UsodeDisp_TKS_DESCANSO','TiempoCiclo_TKS_DESCANSO',
+    'QtyCamiones_DP5','Disponibilidad_TKS_DP5',
+    'UsodeDisp_TKS_DP5','TiempoCiclo2_DP5',
+    'QtyCamiones_EC','Disponibilidad_TKS_EC',
+    'UsodeDisp_TKS_EC','TiempoCiclo2_EC',
+    'QtyCamiones_PRIBBENOW','Disponibilidad_TKS_PRIBBENOW',
+    'UsodeDisp_TKS_PRIBBENOW','TiempoCiclo_TKS_PRIBBENOW',
+]
+
+COLUMNAS_ESPERADAS = COLS_NUMERICAS + ['turno']
 
 # ══════════════════════════════════════════════════════════════════
 # FUNCIONES DE PROCESAMIENTO
 # ══════════════════════════════════════════════════════════════════
 def preparar_y_predecir(df_input):
-    """Aplica la transformación y predicción a un DataFrame."""
-    df_prep = df_input.copy()
-    # One-hot encoding para turno
-    df_prep = pd.get_dummies(df_prep, columns=['turno'], drop_first=False, dtype=int)
-    # Alinear columnas con el entrenamiento
-    df_prep = df_prep.reindex(columns=variables, fill_value=0)
-    # Escalar
-    df_prep[COLS_NUMERICAS] = min_max_scaler.transform(df_prep[COLS_NUMERICAS])
-    # Predecir
-    return modelo.predict(df_prep)
+    data_prep = df_input.copy()
+    data_prep = pd.get_dummies(data_prep, columns=['turno'], drop_first=False, dtype=int)
+    data_prep = data_prep.reindex(columns=variables, fill_value=0)
+    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(data_prep[COLS_NUMERICAS])
+    return modelo.predict(data_prep)
 
 # ══════════════════════════════════════════════════════════════════
-# SIDEBAR - MODOS Y PLANTILLA
+# SIDEBAR: PLANTILLA Y CARGUE MASIVO
 # ══════════════════════════════════════════════════════════════════
 with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/4342/4342728.png", width=80)
-    st.title("Control Panel")
-    modo = st.radio("Select Input Mode:", ["Manual Entry", "Bulk Load (CSV)"])
+    st.markdown("### 📂 Bulk Prediction")
+    
+    # Botón para descargar plantilla
+    df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
+    csv_plantilla = df_plantilla.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        "⬇️ Download Template CSV",
+        data=csv_plantilla,
+        file_name='plantilla_prediccion.csv',
+        mime='text/csv'
+    )
     
     st.divider()
-    if modo == "Bulk Load (CSV)":
-        st.subheader("Template")
-        # Generar CSV de plantilla basado en la estructura solicitada 
-        buffer = io.StringIO()
-        pd.DataFrame(columns=COLS_NUMERICAS + ['turno']).to_csv(buffer, index=False)
-        st.download_button(
-            label="📥 Download CSV Template",
-            data=buffer.getvalue(),
-            file_name="plantilla_cargas.csv",
-            mime="text/csv"
-        )
+    archivo = st.file_uploader("Upload CSV File", type=['csv'])
 
 # ══════════════════════════════════════════════════════════════════
 # INTERFAZ PRINCIPAL
 # ══════════════════════════════════════════════════════════════════
 st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>', unsafe_allow_html=True)
 
-if modo == "Manual Entry":
-    col_form, col_result = st.columns([3, 1])
+col_form, col_result = st.columns([3, 1])
 
-    with col_form:
-        # ── TURNO ────────────────────────────────────────────────────
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        c1, _ = st.columns([1, 3])
-        with c1:
-            turno = st.selectbox('⚙️ Shift', ['D', 'N'])
-        st.markdown('</div>', unsafe_allow_html=True)
+with col_form:
+    # ── TURNO ────────────────────────────────────────────────────
+    st.markdown('<div class="section-card">', unsafe_allow_html=True)
+    c1, _ = st.columns([1, 3])
+    with c1:
+        turno = st.selectbox('⚙️ Shift', ['D', 'N'])
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        # ── PALAS POR PIT Y MODELO ───────────────────────────────────
-        st.markdown('### 🚧 Shovels — Utilization')
-        vals_palas = {}
-        tabs_pit = st.tabs(list(EQUIPOS_POR_PIT.keys()))
-        for tab, pit in zip(tabs_pit, EQUIPOS_POR_PIT.keys()):
-            with tab:
-                for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
-                    color = COLOR_MODELO.get(modelo_eq, '#555')
-                    st.markdown(f'<div class="model-header" style="border-left:3px solid {color}">{modelo_eq}</div>', unsafe_allow_html=True)
-                    cols = st.columns(len(equipos))
-                    for col, eq in zip(cols, equipos):
-                        with col:
-                            vals_palas[f'UsodeDisp_{eq}'] = st.slider(f'{eq}', 0.0, 1.0, 0.75, 0.01, key=f'pala_{eq}')
+    # ── PALAS POR PIT Y MODELO ───────────────────────────────────
+    st.markdown('### 🚧 Shovels — Utilization')
+    vals_palas = {}
+    tabs_pit = st.tabs(list(EQUIPOS_POR_PIT.keys()))
 
-        # ── CAMIONES POR PIT ─────────────────────────────────────────
-        st.markdown('### 🚛 Trucks')
-        vals_camiones = {}
-        tabs_cam = st.tabs(list(EQUIPOS_POR_PIT.keys()))
-        for tab, pit in zip(tabs_cam, EQUIPOS_POR_PIT.keys()):
-            with tab:
-                st.markdown('<div class="section-card">', unsafe_allow_html=True)
-                c1, c2, c3, c4 = st.columns(4)
-                with c1: vals_camiones[f'QtyCamiones_{pit}'] = st.slider('🔢 Qty Camiones', 0.0, 150.0, 80.0, 1.0, key=f'qty_{pit}')
-                with c2: vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.slider('✅ Disponibilidad', 0.0, 1.0, 0.80, 0.01, key=f'disp_{pit}')
-                with c3: vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.slider('📊 Uso Disponibilidad', 0.0, 1.0, 0.75, 0.01, key=f'uso_{pit}')
-                with c4:
-                    col_ciclo = ('TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO' else 'TiempoCiclo2_DP5' if pit == 'DP5' else 'TiempoCiclo2_EC' if pit == 'EC' else 'TiempoCiclo_TKS_PRIBBENOW')
-                    vals_camiones[col_ciclo] = st.slider('⏱ Ciclo (min)', 20.0, 42.0, 30.0, 0.1, key=f'ciclo_{pit}')
-                st.markdown('</div>', unsafe_allow_html=True)
+    for tab, pit in zip(tabs_pit, EQUIPOS_POR_PIT.keys()):
+        with tab:
+            for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
+                color = COLOR_MODELO.get(modelo_eq, '#555')
+                st.markdown(f'<div class="model-header" style="border-left:3px solid {color}"> {modelo_eq}</div>', unsafe_allow_html=True)
+                cols = st.columns(len(equipos))
+                for col, eq in zip(cols, equipos):
+                    with col:
+                        vals_palas[f'UsodeDisp_{eq}'] = st.slider(f'{eq}', 0.0, 1.0, 0.75, 0.01, key=f'pala_{eq}')
 
-        predecir = st.button('▶ CALCULATE')
+    # ── CAMIONES POR PIT ─────────────────────────────────────────
+    st.markdown('### 🚛 Trucks')
+    vals_camiones = {}
+    tabs_cam = st.tabs(list(EQUIPOS_POR_PIT.keys()))
 
-    with col_result:
-        st.markdown('<br><br>', unsafe_allow_html=True)
-        resultado_placeholder = st.empty()
-        resultado_placeholder.markdown('<div class="result-box"><div class="result-label">Loads Predicted</div><div class="result-value" style="color:#2A3A5A">—</div><div class="result-error">Enter data and press Calculate.</div></div>', unsafe_allow_html=True)
+    for tab, pit in zip(tabs_cam, EQUIPOS_POR_PIT.keys()):
+        with tab:
+            st.markdown('<div class="section-card">', unsafe_allow_html=True)
+            c1, c2, c3, c4 = st.columns(4)
+            with c1: vals_camiones[f'QtyCamiones_{pit}'] = st.slider('🔢 Qty Camiones', 0.0, 150.0, 80.0, 1.0, key=f'qty_{pit}')
+            with c2: vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.slider('✅ Disponibilidad', 0.0, 1.0, 0.80, 0.01, key=f'disp_{pit}')
+            with c3: vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.slider('📊 Uso Disponibilidad', 0.0, 1.0, 0.75, 0.01, key=f'uso_{pit}')
+            with c4:
+                col_ciclo = (
+                    'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO'  else
+                    'TiempoCiclo2_DP5'          if pit == 'DP5'       else
+                    'TiempoCiclo2_EC'           if pit == 'EC'        else
+                    'TiempoCiclo_TKS_PRIBBENOW'
+                )
+                vals_camiones[col_ciclo] = st.slider('⏱ Ciclo (min)', 20.0, 42.0, 30.0, 0.1, key=f'ciclo_{pit}')
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    if predecir:
+    # Botón de Cálculo
+    if archivo is not None:
+        btn_label = '▶ CALCULATE BULK'
+    else:
+        btn_label = '▶ CALCULATE'
+    predecir = st.button(btn_label)
+
+with col_result:
+    st.markdown('<br><br>', unsafe_allow_html=True)
+    resultado_placeholder = st.empty()
+    resultado_placeholder.markdown('<div class="result-box"><div class="result-label">Loads Predicted</div><div class="result-value" style="color:#2A3A5A">—</div><div class="result-error">Enter data and press Calculate.</div></div>', unsafe_allow_html=True)
+
+# ══════════════════════════════════════════════════════════════════
+# LOGICA DE PREDICCIÓN
+# ══════════════════════════════════════════════════════════════════
+if predecir:
+    if archivo is not None:
+        # MODO CARGUE MASIVO
+        try:
+            df_bulk = pd.read_csv(archivo)
+            missing = [c for c in COLUMNAS_ESPERADAS if c not in df_bulk.columns]
+            if missing:
+                st.error(f"Missing columns: {missing}")
+            else:
+                y_preds = preparar_y_predecir(df_bulk)
+                df_bulk['Predicted_Loads'] = np.round(y_preds).astype(int)
+                
+                st.success(f"Processed {len(df_bulk)} rows.")
+                st.dataframe(df_bulk, use_container_width=True)
+                
+                # Descargar resultados
+                csv_res = df_bulk.to_csv(index=False).encode('utf-8')
+                st.download_button("📥 Download Results", csv_res, "results.csv", "text/csv")
+        except Exception as e:
+            st.error(f"Error: {e}")
+    else:
+        # MODO MANUAL
         datos = {**vals_palas, **vals_camiones, 'turno': turno}
-        df_manual = pd.DataFrame([datos])[COLS_NUMERICAS + ['turno']]
-        Y_pred = preparar_y_predecir(df_manual)
+        data_manual = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
+        Y_pred = preparar_y_predecir(data_manual)
         cargas = int(round(Y_pred[0]))
-        resultado_placeholder.markdown(f'<div class="result-box"><div class="result-label">Loads Predicted</div><div class="result-value">{cargas:,}</div><div class="result-error">⚠ Model error ±10%</div></div>', unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════════
-# MODO CARGA MASIVA
-# ══════════════════════════════════════════════════════════════════
-else:
-    st.subheader("📂 Bulk Prediction")
-    archivo = st.file_uploader("Upload your completed template (CSV)", type=["csv"])
-    
-    if archivo:
-        df_bulk = pd.read_csv(archivo)
-        st.write(f"Loaded {len(df_bulk)} rows.")
-        
-        # Validar columnas
-        missing = [c for c in (COLS_NUMERICAS + ['turno']) if c not in df_bulk.columns]
-        if missing:
-            st.error(f"Error: Missing columns in file: {missing}")
-        else:
-            if st.button("🚀 PROCESS BULK DATA"):
-                try:
-                    preds = preparar_y_predecir(df_bulk)
-                    df_bulk['Predicted_Loads'] = np.round(preds).astype(int)
-                    
-                    st.divider()
-                    st.success("Analysis Complete")
-                    st.dataframe(df_bulk, use_container_width=True)
-                    
-                    # Descarga de resultados
-                    res_buffer = io.StringIO()
-                    df_bulk.to_csv(res_buffer, index=False)
-                    st.download_button(
-                        "📥 Download Processed Results",
-                        data=res_buffer.getvalue(),
-                        file_name="results_forecast.csv",
-                        mime="text/csv"
-                    )
-                except Exception as e:
-                    st.error(f"Prediction Error: {e}")
+        resultado_placeholder.markdown(f"""
+            <div class="result-box">
+                <div class="result-label">Loads Predicted</div>
+                <div class="result-value">{cargas:,}</div>
+                <div class="result-error">⚠ Model error ±10%</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+        with st.expander('📋 Show Input Data'):
+            st.dataframe(data_manual.T.rename(columns={0: 'Valor'}), use_container_width=True)
