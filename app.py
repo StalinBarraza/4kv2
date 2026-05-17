@@ -236,7 +236,7 @@ with col_form:
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
     c1, c2 = st.columns([1, 3])
     with c1:
-        turno = st.selectbox('⚙️ Turno', ['D', 'N'])
+        turno = st.selectbox('⚙️ Shift', ['D', 'N'])
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ── PALAS POR PIT Y MODELO ───────────────────────────────────
