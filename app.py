@@ -240,7 +240,7 @@ with col_form:
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ── PALAS POR PIT Y MODELO ───────────────────────────────────
-    st.markdown('### 🚧 Palas — Uso de Disponibilidad')
+    st.markdown('### 🚧 Shovels — Utilization')
 
     vals_palas = {}
     tabs_pit = st.tabs(list(EQUIPOS_POR_PIT.keys()))
@@ -266,7 +266,7 @@ with col_form:
                         )
 
     # ── CAMIONES POR PIT ─────────────────────────────────────────
-    st.markdown('### 🚛 Camiones — por Pit')
+    st.markdown('### 🚛 Trucks')
 
     vals_camiones = {}
     tabs_cam = st.tabs(list(EQUIPOS_POR_PIT.keys()))
@@ -314,7 +314,7 @@ with col_form:
 
     # ── BOTÓN PREDECIR ───────────────────────────────────────────
     st.markdown('<br>', unsafe_allow_html=True)
-    predecir = st.button('▶ CALCULAR PREDICCIÓN')
+    predecir = st.button('▶ CALCULATE')
 
 # ══════════════════════════════════════════════════════════════════
 # PANEL DE RESULTADO
@@ -327,7 +327,7 @@ with col_result:
         <div class="result-box">
             <div class="result-label">Loads Predicted</div>
             <div class="result-value" style="color:#2A3A5A">—</div>
-            <div class="result-error">Ingresa los datos y presiona Calcular</div>
+            <div class="result-error">Enter the data and press Calculate.</div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -358,12 +358,12 @@ if predecir:
             <div class="result-box">
                 <div class="result-label">Loads Predicted</div>
                 <div class="result-value">{cargas:,}</div>
-                <div class="result-error">⚠ Error del modelo: ±1.5%</div>
+                <div class="result-error">⚠ Model error ±10%</div>
             </div>
         """, unsafe_allow_html=True)
 
     # Detalle expandible
-    with st.expander('📋 Ver datos ingresados'):
+    with st.expander('📋 Show data'):
         st.dataframe(
             data.T.rename(columns={0: 'Valor'}),
             use_container_width=True
