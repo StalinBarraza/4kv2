@@ -229,6 +229,30 @@ COLUMNAS_ESPERADAS = COLS_NUMERICAS + ['turno']
 st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>',
             unsafe_allow_html=True)
 
+# ══════════════════════════════════════════════════════════════════
+# CARGA MASIVA
+# ══════════════════════════════════════════════════════════════════
+st.markdown("### 📂 Bulk Upload")
+
+col_up1, col_up2 = st.columns([1,1])
+
+with col_up1:
+    uploaded_file = st.file_uploader(
+        "Upload template completed",
+        type=["csv", "xlsx"]
+    )
+
+with col_up2:
+    with open("plantilla.csv", "rb") as file:
+        st.download_button(
+            label="📥 Download template",
+            data=file,
+            file_name="plantilla.csv",
+            mime="text/csv"
+        )
+
+st.markdown("---")
+
 col_form, col_result = st.columns([3, 1])
 
 with col_form:
@@ -334,37 +358,163 @@ with col_result:
 # ══════════════════════════════════════════════════════════════════
 # PREDICCIÓN
 # ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════
+# PREDICCIÓN
+# ══════════════════════════════════════════════════════════════════
 if predecir:
-    # Construir DataFrame
-    datos = {**vals_palas, **vals_camiones, 'turno': turno}
-    data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
 
-    # Preparar datos
-    data_prep = data.copy()
-    data_prep = pd.get_dummies(data_prep, columns=['turno'],
-                                drop_first=False, dtype=int)
-    data_prep = data_prep.reindex(columns=variables, fill_value=0)
-    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
-        data_prep[COLS_NUMERICAS]
-    )
+    # ============================================================
+    # SI EL USUARIO CARGÓ ARCHIVO
+    # ============================================================
+    if uploaded_file is not None:
 
-    # Predecir
-    Y_pred = modelo.predict(data_prep)
-    cargas = int(round(Y_pred[0]))
+        try:
+            # Leer archivo
+            if uploaded_file.name.endswith(".csv"):
+                data = pd.read_csv(uploaded_file)
+            else:
+                data = pd.read_excel(uploaded_file)
 
-    # Mostrar resultado
-    with col_result:
-        resultado_placeholder.markdown(f"""
-            <div class="result-box">
-                <div class="result-label">Loads Predicted</div>
-                <div class="result-value">{cargas:,}</div>
-                <div class="result-error">⚠ Model error ±10%</div>
-            </div>
-        """, unsafe_allow_html=True)
+            # Validar columnas
+            faltantes = [
+                col for col in COLUMNAS_ESPERADAS
+                if col not in data.columns
+            ]
 
-    # Detalle expandible
-    with st.expander('📋 Show data'):
-        st.dataframe(
-            data.T.rename(columns={0: 'Valor'}),
-            use_container_width=True
+            if len(faltantes) > 0:
+                st.error(
+                    f"Missing columns in uploaded file: {faltantes}"
+                )
+                st.stop()
+
+            # Mantener solo columnas esperadas
+            data = data[COLUMNAS_ESPERADAS]
+
+            # ====================================================
+            # PREPARACIÓN
+            # ====================================================
+            data_prep = data.copy()
+
+            data_prep = pd.get_dummies(
+                data_prep,
+                columns=['turno'],
+                drop_first=False,
+                dtype=int
+            )
+
+            data_prep = data_prep.reindex(
+                columns=variables,
+                fill_value=0
+            )
+
+            data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
+                data_prep[COLS_NUMERICAS]
+            )
+
+            # ====================================================
+            # PREDICCIÓN
+            # ====================================================
+            Y_pred = modelo.predict(data_prep)
+
+            data["Loads_Predicted"] = np.round(Y_pred).astype(int)
+
+            promedio = int(round(data["Loads_Predicted"].mean()))
+
+            # ====================================================
+            # RESULTADO
+            # ====================================================
+            with col_result:
+                resultado_placeholder.markdown(f"""
+                    <div class="result-box">
+                        <div class="result-label">
+                            Avg Loads Predicted
+                        </div>
+                        <div class="result-value">{promedio:,}</div>
+                        <div class="result-error">
+                            ⚠ Model error ±10%
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+
+            # ====================================================
+            # TABLA RESULTADOS
+            # ====================================================
+            with st.expander('📋 Show uploaded results'):
+                st.dataframe(
+                    data,
+                    use_container_width=True
+                )
+
+            # ====================================================
+            # DESCARGAR RESULTADOS
+            # ====================================================
+            csv_result = data.to_csv(index=False).encode("utf-8")
+
+            st.download_button(
+                label="📥 Download results",
+                data=csv_result,
+                file_name="forecast_results.csv",
+                mime="text/csv"
+            )
+
+        except Exception as e:
+            st.error(f"Error processing uploaded file: {e}")
+
+    # ============================================================
+    # SI NO HAY ARCHIVO → INPUT MANUAL
+    # ============================================================
+    else:
+
+        # Construir DataFrame manual
+        datos = {
+            **vals_palas,
+            **vals_camiones,
+            'turno': turno
+        }
+
+        data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
+
+        # Preparar datos
+        data_prep = data.copy()
+
+        data_prep = pd.get_dummies(
+            data_prep,
+            columns=['turno'],
+            drop_first=False,
+            dtype=int
         )
+
+        data_prep = data_prep.reindex(
+            columns=variables,
+            fill_value=0
+        )
+
+        data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
+            data_prep[COLS_NUMERICAS]
+        )
+
+        # Predecir
+        Y_pred = modelo.predict(data_prep)
+
+        cargas = int(round(Y_pred[0]))
+
+        # Mostrar resultado
+        with col_result:
+            resultado_placeholder.markdown(f"""
+                <div class="result-box">
+                    <div class="result-label">
+                        Loads Predicted
+                    </div>
+                    <div class="result-value">{cargas:,}</div>
+                    <div class="result-error">
+                        ⚠ Model error ±10%
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # Mostrar datos
+        with st.expander('📋 Show data'):
+            st.dataframe(
+                data.T.rename(columns={0: 'Valor'}),
+                use_container_width=True
+            )
