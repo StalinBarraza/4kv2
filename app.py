@@ -8,19 +8,21 @@ import streamlit as st
 # CONFIGURACIÓN DE PÁGINA
 # ══════════════════════════════════════════════════════════════════
 st.set_page_config(
-    page_title='Load Forecast — Complex',
+    page_title='Load Forecast — Compact',
     page_icon='⛏️',
     layout='wide'
 )
 
 # ══════════════════════════════════════════════════════════════════
-# ESTILOS
+# ESTILOS COMPACTOS
 # ══════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
     /* Fondo general */
     .stApp { background-color: #1A1A2E; }
-    section[data-testid="stSidebar"] { background-color: #16213E; }
+    
+    /* Reducir espacio superior de Streamlit */
+    .block-container { padding-top: 2rem !important; padding-bottom: 1rem !important; }
 
     /* Tipografía general */
     html, body, [class*="css"] {
@@ -28,130 +30,125 @@ st.markdown("""
         font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Título principal */
+    /* Título principal más compacto */
     .main-title {
-        font-size: 2.2rem;
+        font-size: 1.5rem;
         font-weight: 800;
         color: #F0A500;
-        letter-spacing: 2px;
         text-transform: uppercase;
         border-bottom: 2px solid #F0A500;
-        padding-bottom: 10px;
-        margin-bottom: 24px;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
     }
 
-    /* Encabezado de pit */
+    /* Encabezado de pit super compacto */
     .pit-header {
         background: linear-gradient(90deg, #0F3460, #16213E);
         border-left: 4px solid #F0A500;
-        border-radius: 6px;
-        padding: 10px 18px;
-        margin: 20px 0 12px 0;
-        font-size: 1.1rem;
+        border-radius: 4px;
+        padding: 5px 10px;
+        margin: 5px 0;
+        font-size: 1rem;
         font-weight: 700;
         color: #F0A500;
+        text-align: center;
         letter-spacing: 1px;
+    }
+
+    /* Subtítulos de sección (Palas/Camiones) */
+    .section-title {
+        font-size: 0.85rem;
+        color: #8899BB;
+        font-weight: 700;
+        border-bottom: 1px solid #0F3460;
+        margin-top: 10px;
+        margin-bottom: 5px;
         text-transform: uppercase;
     }
 
-    /* Encabezado de modelo */
+    /* Encabezado de modelo miniatura */
     .model-header {
         background-color: #0F3460;
-        border-radius: 6px;
-        padding: 6px 14px;
-        margin: 10px 0 8px 0;
-        font-size: 0.85rem;
+        border-radius: 3px;
+        padding: 2px 8px;
+        margin: 4px 0;
+        font-size: 0.75rem;
         font-weight: 600;
         color: #B0C4DE;
-        letter-spacing: 1px;
     }
 
-    /* Cards de sección */
-    .section-card {
-        background-color: #16213E;
-        border: 1px solid #0F3460;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 16px;
-    }
-
-    /* Resultado */
+    /* Resultado compacto */
     .result-box {
         background: linear-gradient(135deg, #0F3460, #1A1A2E);
-        border: 2px solid #F0A500;
-        border-radius: 14px;
-        padding: 32px;
+        border: 2px solid #00E676;
+        border-radius: 8px;
+        padding: 10px;
         text-align: center;
-        margin-top: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
     .result-label {
-        font-size: 0.95rem;
-        color: #8899BB;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-    }
-    .result-value {
-        font-size: 4rem;
-        font-weight: 900;
-        color: #00E676;
-        line-height: 1;
-    }
-    .result-error {
         font-size: 0.8rem;
         color: #8899BB;
-        margin-top: 10px;
+        text-transform: uppercase;
     }
-
-    /* Botón */
+    .result-value {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #00E676;
+        line-height: 1.1;
+    }
+    
+    /* Botón compacto */
     .stButton > button {
         background-color: #F0A500;
         color: #1A1A2E;
         font-weight: 800;
-        font-size: 1.1rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        border: none;
-        border-radius: 10px;
-        padding: 14px 40px;
+        border-radius: 6px;
         width: 100%;
-        transition: all 0.2s;
+        height: 100%;
+        min-height: 50px;
+        padding: 0;
     }
     .stButton > button:hover {
         background-color: #FFC027;
-        transform: scale(1.02);
     }
 
-    /* Selectbox y Number Input */
-    .stSelectbox > div > div, .stNumberInput > div > div > input {
-        background-color: #0F3460;
-        color: #E8EDF5;
-        border: 1px solid #1E3A5F;
+    /* Ajuste de Inputs */
+    .stNumberInput > div > div > input, .stSelectbox > div > div {
+        background-color: #0F3460 !important;
+        color: #E8EDF5 !important;
+        border: 1px solid #1E3A5F !important;
+        font-size: 0.85rem !important;
+        padding: 0.2rem !important;
+    }
+    
+    /* Etiquetas de input más pequeñas */
+    .stNumberInput label p {
+        font-size: 0.75rem !important;
+        color: #A0B0D0 !important;
+        margin-bottom: -5px !important;
     }
 
-    /* Ocultar elementos por defecto de Streamlit */
     #MainMenu, footer, header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# CARGAR MODELO
+# CARGAR MODELO Y VARIABLES
 # ══════════════════════════════════════════════════════════════════
 @st.cache_resource
 def cargar_modelo():
-    # Asegúrate de que el modelo esté en la misma ruta
     filename = 'modelo-ensamble-reg-loads-v2.1.pkl'
     try:
         return pickle.load(open(filename, 'rb'))
     except:
-        # Dummy fallback in case model is missing during UI dev
         return None, None, None
 
 modelo, variables, min_max_scaler = cargar_modelo()
 
-# ══════════════════════════════════════════════════════════════════
-# ESTRUCTURA DE EQUIPOS POR PIT Y MODELO
-# ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
         'Komatsu PC8000': ['6233', '6234', '6239','6247', '6248'],
@@ -178,260 +175,124 @@ EQUIPOS_POR_PIT = {
 }
 
 COLOR_MODELO = {
-    'Komatsu PC8000': '#1E2761',
-    'Komatsu PC4000': '#065A82',
-    'Hitachi EX3600': '#028090',
-    'Bucyrus BE495':  '#2C5F2D',
-    'Apron Feeder':   '#FF8C00',
+    'Komatsu PC8000': '#1E2761', 'Komatsu PC4000': '#065A82',
+    'Hitachi EX3600': '#028090', 'Bucyrus BE495': '#2C5F2D', 'Apron Feeder': '#FF8C00',
 }
 
 COLS_NUMERICAS = [
-    'UsodeDisp_6231','UsodeDisp_6232','UsodeDisp_6233','UsodeDisp_6234',
-    'UsodeDisp_6235','UsodeDisp_6236','UsodeDisp_6237','UsodeDisp_6238',
-    'UsodeDisp_6239','UsodeDisp_6241','UsodeDisp_6242','UsodeDisp_6243',
-    'UsodeDisp_6244','UsodeDisp_6245','UsodeDisp_6246','UsodeDisp_6247',
-    'UsodeDisp_6248','UsodeDisp_6249','UsodeDisp_6250','UsodeDisp_6260',
-    'UsodeDisp_6261','UsodeDisp_6262','UsodeDisp_6263','UsodeDisp_6264',
-    'UsodeDisp_6268','UsodeDisp_6269','UsodeDisp_6449','UsodeDisp_6455',
-    'UsodeDisp_6457',
-    'QtyCamiones_DESCANSO','Disponibilidad_TKS_DESCANSO',
-    'UsodeDisp_TKS_DESCANSO','TiempoCiclo_TKS_DESCANSO',
-    'QtyCamiones_DP5','Disponibilidad_TKS_DP5',
-    'UsodeDisp_TKS_DP5','TiempoCiclo2_DP5',
-    'QtyCamiones_EC','Disponibilidad_TKS_EC',
-    'UsodeDisp_TKS_EC','TiempoCiclo2_EC',
-    'QtyCamiones_PRIBBENOW','Disponibilidad_TKS_PRIBBENOW',
-    'UsodeDisp_TKS_PRIBBENOW','TiempoCiclo_TKS_PRIBBENOW',
+    'UsodeDisp_6231','UsodeDisp_6232','UsodeDisp_6233','UsodeDisp_6234','UsodeDisp_6235',
+    'UsodeDisp_6236','UsodeDisp_6237','UsodeDisp_6238','UsodeDisp_6239','UsodeDisp_6241',
+    'UsodeDisp_6242','UsodeDisp_6243','UsodeDisp_6244','UsodeDisp_6245','UsodeDisp_6246',
+    'UsodeDisp_6247','UsodeDisp_6248','UsodeDisp_6249','UsodeDisp_6250','UsodeDisp_6260',
+    'UsodeDisp_6261','UsodeDisp_6262','UsodeDisp_6263','UsodeDisp_6264','UsodeDisp_6268',
+    'UsodeDisp_6269','UsodeDisp_6449','UsodeDisp_6455','UsodeDisp_6457',
+    'QtyCamiones_DESCANSO','Disponibilidad_TKS_DESCANSO','UsodeDisp_TKS_DESCANSO','TiempoCiclo_TKS_DESCANSO',
+    'QtyCamiones_DP5','Disponibilidad_TKS_DP5','UsodeDisp_TKS_DP5','TiempoCiclo2_DP5',
+    'QtyCamiones_EC','Disponibilidad_TKS_EC','UsodeDisp_TKS_EC','TiempoCiclo2_EC',
+    'QtyCamiones_PRIBBENOW','Disponibilidad_TKS_PRIBBENOW','UsodeDisp_TKS_PRIBBENOW','TiempoCiclo_TKS_PRIBBENOW',
 ]
-
 COLUMNAS_ESPERADAS = COLS_NUMERICAS + ['turno']
 
-
 # ══════════════════════════════════════════════════════════════════
-# TÍTULO & CARGA MASIVA
+# HEADER: TÍTULO Y CARGA MASIVA
 # ══════════════════════════════════════════════════════════════════
-st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>',
-            unsafe_allow_html=True)
+st.markdown('<div class="main-title">⛏ Load Forecast Simulator</div>', unsafe_allow_html=True)
 
-with st.expander('📂 Carga Masiva y Generación de Plantilla', expanded=False):
-    st.markdown("Descarga el formato de plantilla vacío, diligencia los datos y cárgalo para obtener predicciones de forma masiva.")
-    
-    # 1. Entrega del Formato al usuario
-    df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
-    csv_plantilla = df_plantilla.to_csv(index=False).encode('utf-8')
-    st.download_button(
-        label="📄 Descargar Formato de Plantilla",
-        data=csv_plantilla,
-        file_name='plantilla_prediccion.csv',
-        mime='text/csv'
-    )
-    
-    st.markdown("---")
-    
-    # 2. Carga del archivo por el usuario
-    uploaded_file = st.file_uploader("Sube el formato CSV diligenciado", type=['csv'])
-    
-    if uploaded_file is not None:
-        df_bulk = pd.read_csv(uploaded_file)
-        st.write("Vista previa de los datos:")
-        st.dataframe(df_bulk.head())
-        
-        if st.button("▶ REALIZAR PREDICCIÓN MASIVA"):
-            if modelo is not None:
-                try:
-                    data_prep_bulk = df_bulk.copy()
-                    # Transformaciones
-                    if 'turno' in data_prep_bulk.columns:
-                        data_prep_bulk = pd.get_dummies(data_prep_bulk, columns=['turno'], drop_first=False, dtype=int)
-                    
-                    data_prep_bulk = data_prep_bulk.reindex(columns=variables, fill_value=0)
-                    
-                    # Escalar
-                    data_prep_bulk[COLS_NUMERICAS] = min_max_scaler.transform(data_prep_bulk[COLS_NUMERICAS])
-                    
-                    # Predecir
-                    predicciones = modelo.predict(data_prep_bulk)
-                    df_bulk['Cargas_Predichas'] = np.round(predicciones).astype(int)
-                    
-                    st.success("¡Predicción completada exitosamente!")
-                    st.dataframe(df_bulk)
-                    
-                    # 3. Descarga del Resultado Final
-                    csv_resultado = df_bulk.to_csv(index=False).encode('utf-8')
-                    st.download_button(
-                        label="📥 Descargar Predicciones",
-                        data=csv_resultado,
-                        file_name='resultados_predicciones.csv',
-                        mime='text/csv'
-                    )
-                except Exception as e:
-                    st.error(f"Error al procesar la carga masiva: Revise el archivo. Detalle: {e}")
-            else:
-                st.error("El modelo no se cargó correctamente.")
-
-st.markdown("---")
-
-# ══════════════════════════════════════════════════════════════════
-# INGRESO MANUAL UNIFICADO (UNA SOLA VISTA)
-# ══════════════════════════════════════════════════════════════════
-st.markdown("### ✍️ Ingreso Manual y Simulación")
-
-col_form, col_result = st.columns([3, 1])
-
-with col_form:
-    # ── TURNO ────────────────────────────────────────────────────
-    st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    c1, c2 = st.columns([1, 3])
+with st.expander('📂 Carga Masiva (Archivo CSV)', expanded=False):
+    c1, c2 = st.columns([1,2])
     with c1:
-        turno = st.selectbox('⚙️ Shift', ['D', 'N'])
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    vals_palas = {}
-    vals_camiones = {}
-
-    # ── ITERACIÓN DE TODOS LOS PITS EN UNA SOLA VISTA ────────────
-    for pit in EQUIPOS_POR_PIT.keys():
-        st.markdown(f'<div class="pit-header">📍 PIT: {pit}</div>', unsafe_allow_html=True)
-        
-        # Equipos del Pit
-        equipos_del_pit = EQUIPOS_POR_PIT[pit]
-        
-        st.markdown('**🚧 Shovels — Utilization**')
-        for modelo_eq, equipos in equipos_del_pit.items():
-            if modelo_eq != 'Apron Feeder' and 'Camion' not in modelo_eq:
-                color = COLOR_MODELO.get(modelo_eq, '#555')
-                st.markdown(
-                    f'<div class="model-header" style="border-left:3px solid {color}">'
-                    f'  {modelo_eq}'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-                cols = st.columns(len(equipos) if len(equipos) > 0 else 1)
-                for col, eq in zip(cols, equipos):
-                    with col:
-                        # Cambio de st.slider a st.number_input
-                        vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
-                            f'{eq}',
-                            min_value=0.0, max_value=1.0,
-                            value=0.75, step=0.01,
-                            key=f'pala_{eq}'
-                        )
-            elif modelo_eq == 'Apron Feeder':
-                color = COLOR_MODELO.get(modelo_eq, '#555')
-                st.markdown(
-                    f'<div class="model-header" style="border-left:3px solid {color}">'
-                    f'  {modelo_eq}'
-                    f'</div>',
-                    unsafe_allow_html=True
-                )
-                cols = st.columns(len(equipos))
-                for col, eq in zip(cols, equipos):
-                    with col:
-                        vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
-                            f'{eq}',
-                            min_value=0.0, max_value=1.0,
-                            value=0.75, step=0.01,
-                            key=f'apron_{eq}'
-                        )
-
-        # Camiones asociados a ese PIT
-        st.markdown('**🚛 Trucks**')
-        st.markdown('<div class="section-card">', unsafe_allow_html=True)
-        c1, c2, c3, c4 = st.columns(4)
-
-        with c1:
-            vals_camiones[f'QtyCamiones_{pit}'] = st.number_input(
-                '🔢 Qty Cam',
-                min_value=0.0, max_value=150.0,
-                value=80.0, step=1.0,
-                key=f'qty_{pit}'
-            )
-        with c2:
-            vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.number_input(
-                '✅ Dispo.',
-                min_value=0.0, max_value=1.0,
-                value=0.80, step=0.01,
-                key=f'disp_{pit}'
-            )
-        with c3:
-            vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.number_input(
-                '📊 Uso Dispo.',
-                min_value=0.0, max_value=1.0,
-                value=0.75, step=0.01,
-                key=f'uso_{pit}'
-            )
-        with c4:
-            col_ciclo = (
-                'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO'  else
-                'TiempoCiclo2_DP5'         if pit == 'DP5'       else
-                'TiempoCiclo2_EC'          if pit == 'EC'        else
-                'TiempoCiclo_TKS_PRIBBENOW'
-            )
-            vals_camiones[col_ciclo] = st.number_input(
-                '⏱ Ciclo (min)',
-                min_value=20.0, max_value=42.0,
-                value=30.0, step=0.1,
-                key=f'ciclo_{pit}'
-            )
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── BOTÓN PREDECIR ───────────────────────────────────────────
-    st.markdown('<br>', unsafe_allow_html=True)
-    predecir = st.button('▶ CALCULATE')
+        df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
+        st.download_button("📄 Bajar Formato", df_plantilla.to_csv(index=False).encode('utf-8'), 'plantilla.csv', 'text/csv')
+    with c2:
+        uploaded_file = st.file_uploader("Subir Formato Lleno", type=['csv'], label_visibility="collapsed")
+        if uploaded_file is not None and modelo is not None:
+            df_bulk = pd.read_csv(uploaded_file)
+            data_bulk = df_bulk.copy()
+            if 'turno' in data_bulk.columns:
+                data_bulk = pd.get_dummies(data_bulk, columns=['turno'], drop_first=False, dtype=int)
+            data_bulk = data_bulk.reindex(columns=variables, fill_value=0)
+            data_bulk[COLS_NUMERICAS] = min_max_scaler.transform(data_bulk[COLS_NUMERICAS])
+            df_bulk['Cargas_Predichas'] = np.round(modelo.predict(data_bulk)).astype(int)
+            st.download_button("📥 Descargar Resultados", df_bulk.to_csv(index=False).encode('utf-8'), 'resultados.csv', 'text/csv')
 
 # ══════════════════════════════════════════════════════════════════
-# PANEL DE RESULTADO (INGRESO MANUAL)
+# PANEL DE CONTROL SUPERIOR Y RESULTADO (Fijo arriba)
 # ══════════════════════════════════════════════════════════════════
-with col_result:
-    st.markdown('<br>', unsafe_allow_html=True)
+ctrl_col1, ctrl_col2, res_col = st.columns([1, 1, 3])
+
+with ctrl_col1:
+    turno = st.selectbox('⚙️ TURNO', ['D', 'N'])
+with ctrl_col2:
+    st.markdown('<div style="height:23px;"></div>', unsafe_allow_html=True) # Espaciador
+    predecir = st.button('▶ CALCULAR')
+with res_col:
     resultado_placeholder = st.empty()
-
     resultado_placeholder.markdown("""
         <div class="result-box">
-            <div class="result-label">Loads Predicted</div>
-            <div class="result-value" style="color:#2A3A5A">—</div>
-            <div class="result-error">Enter the data and press Calculate.</div>
+            <div class="result-label">Cargas Estimadas</div>
+            <div class="result-value" style="color:#555;">—</div>
         </div>
     """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# PREDICCIÓN MANUAL
+# GRID PRINCIPAL COMPACTO (4 Columnas para los Pits)
 # ══════════════════════════════════════════════════════════════════
-if predecir:
-    if modelo is None:
-        st.error("El archivo del modelo (pkl) no se encuentra disponible.")
-    else:
-        # Construir DataFrame
-        datos = {**vals_palas, **vals_camiones, 'turno': turno}
-        data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
+st.markdown("---")
+pit_cols = st.columns(4)
+vals_palas = {}
+vals_camiones = {}
 
-        # Preparar datos
-        data_prep = data.copy()
-        data_prep = pd.get_dummies(data_prep, columns=['turno'],
-                                    drop_first=False, dtype=int)
-        data_prep = data_prep.reindex(columns=variables, fill_value=0)
+for idx, (pit, equipos_del_pit) in enumerate(EQUIPOS_POR_PIT.items()):
+    with pit_cols[idx]:
+        st.markdown(f'<div class="pit-header">{pit}</div>', unsafe_allow_html=True)
         
-        data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
-            data_prep[COLS_NUMERICAS]
-        )
-
-        # Predecir
-        Y_pred = modelo.predict(data_prep)
-        cargas = int(round(Y_pred[0]))
-
-        # Mostrar resultado
-        with col_result:
-            resultado_placeholder.markdown(f"""
-                <div class="result-box">
-                    <div class="result-label">Loads Predicted</div>
-                    <div class="result-value">{cargas:,}</div>
-                    <div class="result-error">⚠ Model error ±10%</div>
-                </div>
-            """, unsafe_allow_html=True)
-
-        # Detalle expandible
-        with st.expander('📋 Show Data Sent'):
-            st.dataframe(
-                data.T.rename(columns={0: 'Valor'}),
-                use_container_width=True
+        # ── PALAS ──
+        st.markdown('<div class="section-title">🚧 Equipos (Uso Dispo)</div>', unsafe_allow_html=True)
+        for modelo_eq, equipos in equipos_del_pit.items():
+            color = COLOR_MODELO.get(modelo_eq, '#555')
+            st.markdown(f'<div class="model-header" style="border-left:3px solid {color}">{modelo_eq}</div>', unsafe_allow_html=True)
+            
+            # Agrupar de a 2 inputs por fila para ahorrar altura
+            shov_cols = st.columns(2)
+            for i, eq in enumerate(equipos):
+                with shov_cols[i % 2]:
+                    vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
+                        f'ID {eq}', min_value=0.0, max_value=1.0, value=0.75, step=0.01, key=f'p_{eq}'
+                    )
+        
+        # ── CAMIONES ──
+        st.markdown('<div class="section-title">🚛 Camiones</div>', unsafe_allow_html=True)
+        tk_c1, tk_c2 = st.columns(2)
+        with tk_c1:
+            vals_camiones[f'QtyCamiones_{pit}'] = st.number_input('Qty (Q)', min_value=0.0, max_value=150.0, value=80.0, step=1.0, key=f'q_{pit}')
+            vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.number_input('Uso Disp.', min_value=0.0, max_value=1.0, value=0.75, step=0.01, key=f'u_{pit}')
+        with tk_c2:
+            vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.number_input('Dispo.', min_value=0.0, max_value=1.0, value=0.80, step=0.01, key=f'd_{pit}')
+            col_ciclo = (
+                'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO' else
+                'TiempoCiclo2_DP5'         if pit == 'DP5' else
+                'TiempoCiclo2_EC'          if pit == 'EC' else
+                'TiempoCiclo_TKS_PRIBBENOW'
             )
+            vals_camiones[col_ciclo] = st.number_input('Ciclo (m)', min_value=20.0, max_value=42.0, value=30.0, step=0.1, key=f'c_{pit}')
+
+# ══════════════════════════════════════════════════════════════════
+# LÓGICA DE PREDICCIÓN AL PRESIONAR BOTÓN
+# ══════════════════════════════════════════════════════════════════
+if predecir and modelo is not None:
+    datos = {**vals_palas, **vals_camiones, 'turno': turno}
+    data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
+
+    data_prep = pd.get_dummies(data.copy(), columns=['turno'], drop_first=False, dtype=int)
+    data_prep = data_prep.reindex(columns=variables, fill_value=0)
+    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(data_prep[COLS_NUMERICAS])
+
+    cargas = int(round(modelo.predict(data_prep)[0]))
+
+    # Actualizar el recuadro superior fijado
+    resultado_placeholder.markdown(f"""
+        <div class="result-box">
+            <div class="result-label">Cargas Estimadas</div>
+            <div class="result-value">{cargas:,}</div>
+        </div>
+    """, unsafe_allow_html=True)
