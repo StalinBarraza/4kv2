@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import pickle
 import streamlit as st
-import io
 
 # ══════════════════════════════════════════════════════════════════
 # CONFIGURACIÓN DE PÁGINA
@@ -11,8 +10,7 @@ import io
 st.set_page_config(
     page_title='Load Forecast — Complex',
     page_icon='⛏️',
-    layout='wide',
-    initial_sidebar_state='collapsed'  # Forzamos que la barra lateral inicie cerrada
+    layout='wide'
 )
 
 # ══════════════════════════════════════════════════════════════════
@@ -20,18 +18,139 @@ st.set_page_config(
 # ══════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
+    /* Fondo general */
     .stApp { background-color: #1A1A2E; }
-    html, body, [class*="css"] { color: #E8EDF5; font-family: 'Segoe UI', sans-serif; }
-    .main-title { font-size: 2.2rem; font-weight: 800; color: #F0A500; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #F0A500; padding-bottom: 10px; margin-bottom: 24px; }
-    .pit-header { background: linear-gradient(90deg, #0F3460, #16213E); border-left: 4px solid #F0A500; border-radius: 6px; padding: 10px 18px; margin: 20px 0 12px 0; font-size: 1.1rem; font-weight: 700; color: #F0A500; letter-spacing: 1px; text-transform: uppercase; }
-    .model-header { background-color: #0F3460; border-radius: 6px; padding: 6px 14px; margin: 10px 0 8px 0; font-size: 0.85rem; font-weight: 600; color: #B0C4DE; letter-spacing: 1px; }
-    .section-card { background-color: #16213E; border: 1px solid #0F3460; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
-    .result-box { background: linear-gradient(135deg, #0F3460, #1A1A2E); border: 2px solid #F0A500; border-radius: 14px; padding: 32px; text-align: center; margin-top: 20px; }
-    .result-label { font-size: 0.95rem; color: #8899BB; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-    .result-value { font-size: 4rem; font-weight: 900; color: #00E676; line-height: 1; }
-    .result-error { font-size: 0.8rem; color: #8899BB; margin-top: 10px; }
-    .stSlider > div > div > div > div { background-color: #F0A500 !important; }
-    .stButton > button { background-color: #F0A500; color: #1A1A2E; font-weight: 800; border: none; border-radius: 10px; padding: 14px; width: 100%; }
+    section[data-testid="stSidebar"] { background-color: #16213E; }
+
+    /* Tipografía general */
+    html, body, [class*="css"] {
+        color: #E8EDF5;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Título principal */
+    .main-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #F0A500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border-bottom: 2px solid #F0A500;
+        padding-bottom: 10px;
+        margin-bottom: 24px;
+    }
+
+    /* Encabezado de pit */
+    .pit-header {
+        background: linear-gradient(90deg, #0F3460, #16213E);
+        border-left: 4px solid #F0A500;
+        border-radius: 6px;
+        padding: 10px 18px;
+        margin: 20px 0 12px 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #F0A500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    /* Encabezado de modelo */
+    .model-header {
+        background-color: #0F3460;
+        border-radius: 6px;
+        padding: 6px 14px;
+        margin: 10px 0 8px 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #B0C4DE;
+        letter-spacing: 1px;
+    }
+
+    /* Cards de sección */
+    .section-card {
+        background-color: #16213E;
+        border: 1px solid #0F3460;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+
+    /* Resultado */
+    .result-box {
+        background: linear-gradient(135deg, #0F3460, #1A1A2E);
+        border: 2px solid #F0A500;
+        border-radius: 14px;
+        padding: 32px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .result-label {
+        font-size: 0.95rem;
+        color: #8899BB;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    .result-value {
+        font-size: 4rem;
+        font-weight: 900;
+        color: #00E676;
+        line-height: 1;
+    }
+    .result-error {
+        font-size: 0.8rem;
+        color: #8899BB;
+        margin-top: 10px;
+    }
+
+    /* Sliders */
+    .stSlider > div > div > div > div {
+        background-color: #F0A500 !important;
+    }
+
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #16213E;
+        border-radius: 8px;
+        padding: 4px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #8899BB;
+        font-weight: 600;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #0F3460 !important;
+        color: #F0A500 !important;
+        border-radius: 6px;
+    }
+
+    /* Botón */
+    .stButton > button {
+        background-color: #F0A500;
+        color: #1A1A2E;
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 40px;
+        width: 100%;
+        transition: all 0.2s;
+    }
+    .stButton > button:hover {
+        background-color: #FFC027;
+        transform: scale(1.02);
+    }
+
+    /* Selectbox */
+    .stSelectbox > div > div {
+        background-color: #0F3460;
+        border: 1px solid #1E3A5F;
+        color: #E8EDF5;
+    }
+
+    /* Ocultar elementos por defecto de Streamlit */
     #MainMenu, footer, header { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
@@ -47,7 +166,7 @@ def cargar_modelo():
 modelo, variables, min_max_scaler = cargar_modelo()
 
 # ══════════════════════════════════════════════════════════════════
-# CONSTANTES Y COLUMNAS
+# ESTRUCTURA DE EQUIPOS POR PIT Y MODELO
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
@@ -74,6 +193,7 @@ EQUIPOS_POR_PIT = {
     },
 }
 
+# Colores por modelo (consistente con Power BI)
 COLOR_MODELO = {
     'Komatsu PC8000': '#1E2761',
     'Komatsu PC4000': '#065A82',
@@ -104,54 +224,24 @@ COLS_NUMERICAS = [
 COLUMNAS_ESPERADAS = COLS_NUMERICAS + ['turno']
 
 # ══════════════════════════════════════════════════════════════════
-# FUNCIONES DE PROCESAMIENTO
+# TÍTULO
 # ══════════════════════════════════════════════════════════════════
-def preparar_y_predecir(df_input):
-    data_prep = df_input.copy()
-    data_prep = pd.get_dummies(data_prep, columns=['turno'], drop_first=False, dtype=int)
-    data_prep = data_prep.reindex(columns=variables, fill_value=0)
-    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(data_prep[COLS_NUMERICAS])
-    return modelo.predict(data_prep)
+st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>',
+            unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════════
-# INTERFAZ PRINCIPAL
-# ══════════════════════════════════════════════════════════════════
-st.markdown('<div class="main-title">⛏ Load Forecast Simulator — Complex</div>', unsafe_allow_html=True)
-
-# ── MODULO DE CARGUE MASIVO (FIJO EN PANTALLA) ─────────────────────
-st.markdown('<div class="pit-header">📂 Bulk Prediction Module</div>', unsafe_allow_html=True)
-col_csv1, col_csv2 = st.columns([1, 3])
-
-with col_csv1:
-    df_plantilla = pd.DataFrame(columns=COLUMNAS_ESPERADAS)
-    csv_plantilla = df_plantilla.to_csv(index=False).encode('utf-8')
-    st.download_button(
-        "⬇️ Download Template CSV",
-        data=csv_plantilla,
-        file_name='plantilla_prediccion.csv',
-        mime='text/csv',
-        use_container_width=True
-    )
-
-with col_csv2:
-    archivo = st.file_uploader("Upload CSV File for multi-row prediction", type=['csv'], label_visibility="collapsed")
-
-st.markdown("<br>", unsafe_allow_html=True)
-st.divider()
-
-# ── SIMULADOR MANUAL ─────────────────────────────────────────────
 col_form, col_result = st.columns([3, 1])
 
 with col_form:
     # ── TURNO ────────────────────────────────────────────────────
     st.markdown('<div class="section-card">', unsafe_allow_html=True)
-    c1, _ = st.columns([1, 3])
+    c1, c2 = st.columns([1, 3])
     with c1:
         turno = st.selectbox('⚙️ Shift', ['D', 'N'])
     st.markdown('</div>', unsafe_allow_html=True)
 
     # ── PALAS POR PIT Y MODELO ───────────────────────────────────
     st.markdown('### 🚧 Shovels — Utilization')
+
     vals_palas = {}
     tabs_pit = st.tabs(list(EQUIPOS_POR_PIT.keys()))
 
@@ -159,14 +249,25 @@ with col_form:
         with tab:
             for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
                 color = COLOR_MODELO.get(modelo_eq, '#555')
-                st.markdown(f'<div class="model-header" style="border-left:3px solid {color}"> {modelo_eq}</div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<div class="model-header" style="border-left:3px solid {color}">'
+                    f'  {modelo_eq}'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
                 cols = st.columns(len(equipos))
                 for col, eq in zip(cols, equipos):
                     with col:
-                        vals_palas[f'UsodeDisp_{eq}'] = st.slider(f'{eq}', 0.0, 1.0, 0.75, 0.01, key=f'pala_{eq}')
+                        vals_palas[f'UsodeDisp_{eq}'] = st.slider(
+                            f'{eq}',
+                            min_value=0.0, max_value=1.0,
+                            value=0.75, step=0.01,
+                            key=f'pala_{eq}'
+                        )
 
     # ── CAMIONES POR PIT ─────────────────────────────────────────
     st.markdown('### 🚛 Trucks')
+
     vals_camiones = {}
     tabs_cam = st.tabs(list(EQUIPOS_POR_PIT.keys()))
 
@@ -174,53 +275,85 @@ with col_form:
         with tab:
             st.markdown('<div class="section-card">', unsafe_allow_html=True)
             c1, c2, c3, c4 = st.columns(4)
-            with c1: vals_camiones[f'QtyCamiones_{pit}'] = st.slider('🔢 Qty Camiones', 0.0, 150.0, 80.0, 1.0, key=f'qty_{pit}')
-            with c2: vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.slider('✅ Disponibilidad', 0.0, 1.0, 0.80, 0.01, key=f'disp_{pit}')
-            with c3: vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.slider('📊 Uso Disponibilidad', 0.0, 1.0, 0.75, 0.01, key=f'uso_{pit}')
+
+            with c1:
+                vals_camiones[f'QtyCamiones_{pit}'] = st.slider(
+                    '🔢 Qty Camiones',
+                    min_value=0.0, max_value=150.0,
+                    value=80.0, step=1.0,
+                    key=f'qty_{pit}'
+                )
+            with c2:
+                vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.slider(
+                    '✅ Disponibilidad',
+                    min_value=0.0, max_value=1.0,
+                    value=0.80, step=0.01,
+                    key=f'disp_{pit}'
+                )
+            with c3:
+                vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.slider(
+                    '📊 Uso Disponibilidad',
+                    min_value=0.0, max_value=1.0,
+                    value=0.75, step=0.01,
+                    key=f'uso_{pit}'
+                )
             with c4:
                 col_ciclo = (
                     'TiempoCiclo_TKS_DESCANSO' if pit == 'DESCANSO'  else
                     'TiempoCiclo2_DP5'          if pit == 'DP5'       else
-                    'TiempoCiclo2_EC'           if pit == 'EC'        else
+                    'TiempoCiclo2_EC'            if pit == 'EC'        else
                     'TiempoCiclo_TKS_PRIBBENOW'
                 )
-                vals_camiones[col_ciclo] = st.slider('⏱ Ciclo (min)', 20.0, 42.0, 30.0, 0.1, key=f'ciclo_{pit}')
+                vals_camiones[col_ciclo] = st.slider(
+                    '⏱ Ciclo (min)',
+                    min_value=20.0, max_value=42.0,
+                    value=30.0, step=0.1,
+                    key=f'ciclo_{pit}'
+                )
             st.markdown('</div>', unsafe_allow_html=True)
 
-    # Botón de Cálculo dinámico
-    btn_label = '▶ CALCULATE BULK CSV' if archivo is not None else '▶ CALCULATE MANUAL'
-    predecir = st.button(btn_label)
+    # ── BOTÓN PREDECIR ───────────────────────────────────────────
+    st.markdown('<br>', unsafe_allow_html=True)
+    predecir = st.button('▶ CALCULATE')
 
+# ══════════════════════════════════════════════════════════════════
+# PANEL DE RESULTADO
+# ══════════════════════════════════════════════════════════════════
 with col_result:
     st.markdown('<br><br>', unsafe_allow_html=True)
     resultado_placeholder = st.empty()
-    resultado_placeholder.markdown('<div class="result-box"><div class="result-label">Loads Predicted</div><div class="result-value" style="color:#2A3A5A">—</div><div class="result-error">Enter data and press Calculate.</div></div>', unsafe_allow_html=True)
+
+    resultado_placeholder.markdown("""
+        <div class="result-box">
+            <div class="result-label">Loads Predicted</div>
+            <div class="result-value" style="color:#2A3A5A">—</div>
+            <div class="result-error">Enter the data and press Calculate.</div>
+        </div>
+    """, unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# LOGICA DE PREDICCIÓN
+# PREDICCIÓN
 # ══════════════════════════════════════════════════════════════════
 if predecir:
-    if archivo is not None:
-        try:
-            df_bulk = pd.read_csv(archivo)
-            missing = [c for c in COLUMNAS_ESPERADAS if c not in df_bulk.columns]
-            if missing:
-                st.error(f"Missing columns: {missing}")
-            else:
-                y_preds = preparar_y_predecir(df_bulk)
-                df_bulk['Predicted_Loads'] = np.round(y_preds).astype(int)
-                st.success(f"Processed {len(df_bulk)} rows.")
-                st.dataframe(df_bulk, use_container_width=True)
-                csv_res = df_bulk.to_csv(index=False).encode('utf-8')
-                st.download_button("📥 Download Results", csv_res, "results.csv", "text/csv")
-        except Exception as e:
-            st.error(f"Error: {e}")
-    else:
-        datos = {**vals_palas, **vals_camiones, 'turno': turno}
-        data_manual = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
-        Y_pred = preparar_y_predecir(data_manual)
-        cargas = int(round(Y_pred[0]))
+    # Construir DataFrame
+    datos = {**vals_palas, **vals_camiones, 'turno': turno}
+    data = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
 
+    # Preparar datos
+    data_prep = data.copy()
+    data_prep = pd.get_dummies(data_prep, columns=['turno'],
+                                drop_first=False, dtype=int)
+    data_prep = data_prep.reindex(columns=variables, fill_value=0)
+    data_prep[COLS_NUMERICAS] = min_max_scaler.transform(
+        data_prep[COLS_NUMERICAS]
+    )
+
+    # Predecir
+    Y_pred = modelo.predict(data_prep)
+    cargas = int(round(Y_pred[0]))
+
+    # Mostrar resultado
+    with col_result:
         resultado_placeholder.markdown(f"""
             <div class="result-box">
                 <div class="result-label">Loads Predicted</div>
@@ -229,5 +362,9 @@ if predecir:
             </div>
         """, unsafe_allow_html=True)
 
-        with st.expander('📋 Show Input Data'):
-            st.dataframe(data_manual.T.rename(columns={0: 'Valor'}), use_container_width=True)
+    # Detalle expandible
+    with st.expander('📋 Show data'):
+        st.dataframe(
+            data.T.rename(columns={0: 'Valor'}),
+            use_container_width=True
+        )
