@@ -1164,7 +1164,7 @@ else:
                     file_name='predicciones.csv',
                     mime='text/csv'
                 )
-                st.caption('⚠ Error del modelo: ±1.5% — Use los resultados como referencia operacional.')
+                st.caption('⚠ Error del modelo: ±5% — Use los resultados como referencia operacional.')
 
         except Exception as e:
             st.error(f'Error al procesar el archivo: {e}')
