@@ -13,57 +13,48 @@ st.set_page_config(
 )
 
 # ══════════════════════════════════════════════════════════════════
-# CSS — COMPACT OBSIDIAN
+# CSS — EXECUTIVE TERMINAL
 # ══════════════════════════════════════════════════════════════════
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 
 :root {
-    --bg-void:       #08090C;
-    --bg-deep:       #0C0F15;
-    --bg-surface:    #10141C;
-    --bg-raised:     #161D2B;
-    --bg-card:       rgba(20, 26, 40, 0.85);
+    --bg-app:        #0F1115;
+    --bg-card:       #161920;
+    --bg-elev:       #1C2029;
+    --bg-deep:       #0A0C10;
 
-    --copper:        #D4822A;
-    --copper-dim:    rgba(212, 130, 42, 0.15);
-    --cyan:          #3EC9C1;
-    --cyan-dim:      rgba(62, 201, 193, 0.12);
-    --green-neo:     #35C97A;
-    --green-dim:     rgba(53, 201, 122, 0.12);
+    --copper:        #A67C52;
+    --copper-hi:     #C49770;
+    --copper-dim:    rgba(166, 124, 82, 0.12);
 
-    --text-primary:  #DDE4F0;
-    --text-secondary:#6B7E9E;
-    --text-muted:    #3A4558;
+    --green-pos:     #6BBE83;
+    --green-dim:     rgba(107, 190, 131, 0.1);
+    --red-neg:       #C76B6B;
+    --amber:         #D4A857;
 
-    --border-subtle: rgba(255,255,255,0.045);
-    --border-mid:    rgba(255,255,255,0.08);
-    --border-accent: rgba(212, 130, 42, 0.28);
+    --text-primary:  #E4E7ED;
+    --text-secondary:#8B92A0;
+    --text-muted:    #545B6A;
+    --text-faint:    #353A45;
 
-    --shadow-copper: 0 0 24px rgba(212,130,42,0.1);
-    --shadow-cyan:   0 0 16px rgba(62,201,193,0.08);
+    --border-hair:   rgba(255,255,255,0.04);
+    --border-line:   rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
 
-    --r-sm: 5px;
-    --r-md: 8px;
-    --r-lg: 12px;
-    --r-xl: 16px;
-
-    --font-display: 'Syne', sans-serif;
-    --font-body:    'DM Sans', sans-serif;
-    --font-mono:    'JetBrains Mono', monospace;
+    --font-sans: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* ── Reset ── */
+/* ═ Base ═ */
 .stApp {
-    background: var(--bg-void) !important;
-    background-image:
-        radial-gradient(ellipse 70% 40% at 50% 0%, rgba(212,130,42,0.035) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 35% at 90% 100%, rgba(62,201,193,0.025) 0%, transparent 50%) !important;
+    background: var(--bg-app) !important;
 }
 html, body, [class*="css"], .stMarkdown, p, span, div {
-    font-family: var(--font-body) !important;
+    font-family: var(--font-sans) !important;
     color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
 }
 #MainMenu, footer, header,
 [data-testid="stToolbar"],
@@ -71,330 +62,484 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 [data-testid="stStatusWidget"] { visibility: hidden !important; display: none !important; }
 
 .main .block-container {
-    padding: 0 1.4rem 2rem 1.4rem !important;
+    padding: 0 2rem 2rem 2rem !important;
     max-width: 1700px !important;
 }
 
-/* ── Header ── */
+/* ═ Header ═ */
 .cmd-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 0 0.8rem 0;
-    border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: 1rem;
+    padding: 1.1rem 0 0.9rem 0;
+    border-bottom: 1px solid var(--border-hair);
+    margin-bottom: 1.3rem;
 }
-.cmd-logo {
-    width: 34px; height: 34px;
-    background: linear-gradient(135deg, var(--copper) 0%, #9E5C18 100%);
-    border-radius: var(--r-md);
+.cmd-brand { display: flex; align-items: center; gap: 14px; }
+.cmd-mark {
+    width: 32px; height: 32px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; flex-shrink: 0;
-    box-shadow: var(--shadow-copper);
+    font-size: 0.95rem;
+    color: var(--copper);
 }
 .cmd-title {
-    font-family: var(--font-display) !important;
-    font-size: 1.05rem !important; font-weight: 800 !important;
-    color: var(--text-primary) !important; letter-spacing: 0.3px; line-height: 1.1;
+    font-size: 0.95rem !important; font-weight: 600 !important;
+    color: var(--text-primary) !important; letter-spacing: -0.2px;
+    line-height: 1.15;
 }
-.cmd-subtitle {
-    font-size: 0.62rem !important; color: var(--text-muted) !important;
-    letter-spacing: 2px; text-transform: uppercase; margin-top: 1px;
+.cmd-sub {
+    font-size: 0.65rem !important; color: var(--text-muted) !important;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-family: var(--font-mono) !important;
+    margin-top: 2px; font-weight: 400 !important;
 }
-.cmd-header-left { display: flex; align-items: center; gap: 10px; }
-.cmd-header-right { display: flex; align-items: center; gap: 14px; }
-.status-pill {
+.cmd-meta { display: flex; align-items: center; gap: 18px; }
+.meta-item {
+    display: flex; flex-direction: column; gap: 1px;
+    text-align: right;
+}
+.meta-label {
+    font-size: 0.56rem !important; color: var(--text-muted) !important;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-family: var(--font-mono) !important;
+}
+.meta-value {
+    font-size: 0.72rem !important; color: var(--text-secondary) !important;
+    font-family: var(--font-mono) !important; font-weight: 500;
+}
+.status-live {
     display: flex; align-items: center; gap: 6px;
-    background: var(--green-dim); border: 1px solid rgba(53,201,122,0.18);
-    border-radius: 20px; padding: 3px 10px;
-    font-size: 0.62rem; color: var(--green-neo);
-    letter-spacing: 1px; text-transform: uppercase;
+    font-size: 0.62rem !important; color: var(--green-pos) !important;
+    letter-spacing: 1.2px; text-transform: uppercase;
     font-family: var(--font-mono) !important;
 }
 .status-dot {
-    width: 6px; height: 6px; background: var(--green-neo);
-    border-radius: 50%; box-shadow: 0 0 5px var(--green-neo);
-    animation: blink 2s infinite;
+    width: 6px; height: 6px; background: var(--green-pos);
+    border-radius: 50%; box-shadow: 0 0 6px var(--green-pos);
+    animation: pulse 2.4s infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
-.version-tag {
-    font-family: var(--font-mono) !important;
-    font-size: 0.58rem !important; color: var(--text-muted) !important;
-    background: var(--bg-raised); border: 1px solid var(--border-subtle);
-    border-radius: var(--r-sm); padding: 2px 8px;
-}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-/* ── Radio / Tabs ── */
+/* ═ Radio (mode tabs) ═ */
 .stRadio > div {
-    display: flex !important; gap: 3px !important;
-    background: var(--bg-surface) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--r-md) !important;
-    padding: 3px !important; width: fit-content;
+    display: flex !important; gap: 0 !important;
+    background: transparent !important;
+    border: none !important; padding: 0 !important;
+    border-bottom: 1px solid var(--border-hair) !important;
+    border-radius: 0 !important;
 }
 .stRadio > div > label {
-    padding: 5px 14px !important; border-radius: var(--r-sm) !important;
-    font-size: 0.7rem !important; font-weight: 600 !important;
-    letter-spacing: 0.4px !important; cursor: pointer;
-    transition: all 0.15s !important; color: var(--text-secondary) !important;
+    padding: 8px 18px 9px 18px !important;
+    border-radius: 0 !important;
+    font-size: 0.68rem !important; font-weight: 500 !important;
+    letter-spacing: 1px !important; text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s !important;
+    color: var(--text-muted) !important;
     background: transparent !important;
+    border-bottom: 2px solid transparent !important;
+    margin-bottom: -1px !important;
+    font-family: var(--font-mono) !important;
 }
-.stRadio > div > label:hover { background: var(--bg-raised) !important; color: var(--text-primary) !important; }
+.stRadio > div > label:hover { color: var(--text-secondary) !important; }
+.stRadio > div > label:has(input:checked) {
+    color: var(--copper-hi) !important;
+    border-bottom-color: var(--copper) !important;
+}
 
-/* ── Selectbox ── */
+/* ═ Selectbox ═ */
 div[data-testid="stSelectbox"] > label {
-    font-size: 0.58rem !important; font-weight: 600 !important;
-    color: var(--text-muted) !important; letter-spacing: 1.8px !important;
-    text-transform: uppercase !important; margin-bottom: 3px !important;
+    font-size: 0.56rem !important; font-weight: 500 !important;
+    color: var(--text-muted) !important; letter-spacing: 1.5px !important;
+    text-transform: uppercase !important; margin-bottom: 4px !important;
+    font-family: var(--font-mono) !important;
 }
 div[data-testid="stSelectbox"] > div > div {
-    background: var(--bg-raised) !important; border: 1px solid var(--border-mid) !important;
-    border-radius: var(--r-sm) !important; color: var(--text-primary) !important;
-    font-size: 0.76rem !important; min-height: 30px !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-line) !important;
+    border-radius: 0 !important;
+    color: var(--text-primary) !important;
+    font-size: 0.85rem !important; min-height: 30px !important;
+    font-family: var(--font-mono) !important;
 }
-div[data-testid="stSelectbox"] > div > div:hover { border-color: var(--border-accent) !important; }
+div[data-testid="stSelectbox"] > div > div:hover { border-bottom-color: var(--copper) !important; }
 
-/* ── Buttons ── */
+/* ═ Buttons (secondary) ═ */
 .stButton > button {
-    font-family: var(--font-display) !important;
-    font-size: 0.65rem !important; font-weight: 700 !important;
-    letter-spacing: 1.2px !important; text-transform: uppercase !important;
-    border-radius: var(--r-sm) !important; padding: 7px 14px !important;
-    transition: all 0.18s ease !important; cursor: pointer !important; width: 100%;
-    background: var(--bg-raised) !important; color: var(--text-secondary) !important;
-    border: 1px solid var(--border-mid) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important; font-weight: 500 !important;
+    letter-spacing: 1.5px !important; text-transform: uppercase !important;
+    border-radius: 3px !important; padding: 7px 14px !important;
+    transition: all 0.18s !important; cursor: pointer !important;
+    background: transparent !important; color: var(--text-secondary) !important;
+    border: 1px solid var(--border-line) !important;
+    width: 100%;
 }
 .stButton > button:hover {
-    border-color: var(--border-accent) !important;
-    color: var(--copper) !important;
+    border-color: var(--copper) !important;
+    color: var(--copper-hi) !important;
+    background: var(--copper-dim) !important;
 }
 
-/* ── Number Inputs — COMPACT ── */
+/* ═ Number Inputs — Line-only style ═ */
 div[data-testid="stNumberInput"] { margin-bottom: 0 !important; }
 div[data-testid="stNumberInput"] label {
-    font-size: 0.55rem !important; font-weight: 500 !important;
+    font-size: 0.58rem !important; font-weight: 500 !important;
     color: var(--text-muted) !important; letter-spacing: 1.2px !important;
     text-transform: uppercase !important; font-family: var(--font-mono) !important;
     margin-bottom: 1px !important; line-height: 1.2 !important;
 }
 div[data-testid="stNumberInput"] > div { gap: 0 !important; }
 div[data-testid="stNumberInput"] input {
-    background: var(--bg-void) !important; color: var(--text-primary) !important;
-    border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--r-sm) !important;
-    font-size: 0.74rem !important; font-family: var(--font-mono) !important;
-    padding: 3px 6px !important; height: 26px !important;
-    transition: border-color 0.15s !important;
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-line) !important;
+    border-radius: 0 !important;
+    font-size: 0.88rem !important; font-family: var(--font-mono) !important;
+    font-weight: 500 !important;
+    padding: 3px 4px !important; height: 26px !important;
+    transition: border-color 0.15s, color 0.15s !important;
+}
+div[data-testid="stNumberInput"] input:hover {
+    border-bottom-color: var(--text-secondary) !important;
 }
 div[data-testid="stNumberInput"] input:focus {
-    border-color: var(--copper) !important;
-    box-shadow: 0 0 0 2px var(--copper-dim) !important; outline: none !important;
+    border-bottom-color: var(--copper) !important;
+    color: var(--copper-hi) !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 div[data-testid="stNumberInput"] button {
-    background: var(--bg-raised) !important; border: 1px solid var(--border-subtle) !important;
-    color: var(--text-secondary) !important; height: 26px !important;
-    min-width: 22px !important; padding: 0 4px !important;
+    background: transparent !important;
+    border: 1px solid var(--border-hair) !important;
+    color: var(--text-muted) !important; height: 26px !important;
+    min-width: 20px !important; padding: 0 4px !important;
+    border-radius: 3px !important;
 }
-div[data-testid="stNumberInput"] button:hover { color: var(--copper) !important; }
+div[data-testid="stNumberInput"] button:hover {
+    color: var(--copper) !important;
+    border-color: var(--border-line) !important;
+}
 
-/* ── Download Button ── */
+/* ═ Download / File / Dataframe / Metric ═ */
 div[data-testid="stDownloadButton"] > button {
-    background: var(--bg-raised) !important; color: var(--cyan) !important;
-    border: 1px solid rgba(62,201,193,0.22) !important;
-    font-size: 0.65rem !important; font-weight: 700 !important;
-    letter-spacing: 1px !important; text-transform: uppercase !important;
-    border-radius: var(--r-sm) !important; padding: 7px 14px !important; width: auto !important;
+    background: transparent !important;
+    color: var(--copper-hi) !important;
+    border: 1px solid rgba(166,124,82,0.3) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important; font-weight: 500 !important;
+    letter-spacing: 1.5px !important; text-transform: uppercase !important;
+    border-radius: 3px !important; padding: 7px 14px !important; width: auto !important;
 }
 div[data-testid="stDownloadButton"] > button:hover {
-    background: var(--cyan-dim) !important; box-shadow: var(--shadow-cyan) !important;
+    background: var(--copper-dim) !important;
+    border-color: var(--copper) !important;
 }
 
-/* ── File Uploader ── */
 div[data-testid="stFileUploader"] > div {
-    background: var(--bg-surface) !important;
-    border: 1px dashed rgba(62,201,193,0.2) !important;
-    border-radius: var(--r-lg) !important; padding: 1.2rem !important;
+    background: var(--bg-card) !important;
+    border: 1px dashed var(--border-line) !important;
+    border-radius: 4px !important; padding: 1.4rem !important;
 }
 div[data-testid="stFileUploader"] > div:hover {
-    border-color: rgba(62,201,193,0.4) !important; background: var(--bg-raised) !important;
+    border-color: var(--copper) !important;
 }
 
-/* ── Dataframe ── */
 div[data-testid="stDataFrame"] {
-    border-radius: var(--r-md) !important; overflow: hidden !important;
-    border: 1px solid var(--border-subtle) !important;
+    border-radius: 4px !important; overflow: hidden !important;
+    border: 1px solid var(--border-hair) !important;
 }
 
-/* ── Metric ── */
 div[data-testid="stMetric"] {
-    background: var(--bg-raised) !important; border: 1px solid var(--border-subtle) !important;
-    border-radius: var(--r-md) !important; padding: 0.7rem 0.9rem !important;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-hair) !important;
+    border-left: 2px solid var(--copper) !important;
+    border-radius: 3px !important; padding: 0.7rem 1rem !important;
 }
 div[data-testid="stMetric"] label {
     font-size: 0.58rem !important; color: var(--text-muted) !important;
-    letter-spacing: 1.8px !important; text-transform: uppercase !important;
+    letter-spacing: 1.5px !important; text-transform: uppercase !important;
+    font-family: var(--font-mono) !important;
 }
 div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    font-family: var(--font-display) !important; color: var(--cyan) !important;
-    font-size: 1.3rem !important;
+    font-family: var(--font-mono) !important;
+    color: var(--text-primary) !important;
+    font-size: 1.3rem !important; font-weight: 600 !important;
 }
 
-/* ── Misc ── */
-div[data-testid="stAlert"] { border-radius: var(--r-md) !important; border: none !important; font-size: 0.76rem !important; }
-div[data-testid="stCaptionContainer"] { color: var(--text-muted) !important; font-size: 0.62rem !important; font-family: var(--font-mono) !important; }
-hr { border: none !important; border-top: 1px solid var(--border-subtle) !important; margin: 0.8rem 0 !important; }
-div[data-testid="stHorizontalBlock"] { gap: 0.6rem; }
+div[data-testid="stAlert"] {
+    border-radius: 3px !important; border: 1px solid var(--border-hair) !important;
+    font-size: 0.78rem !important; background: var(--bg-card) !important;
+}
+div[data-testid="stCaptionContainer"] {
+    color: var(--text-muted) !important; font-size: 0.65rem !important;
+    font-family: var(--font-mono) !important;
+}
+hr { border: none !important; border-top: 1px solid var(--border-hair) !important; margin: 0.8rem 0 !important; }
+div[data-testid="stHorizontalBlock"] { gap: 0.8rem; }
 
 /* ══ COMPONENT CLASSES ══ */
 
+/* Pit card — minimalist with side accent */
 .pit-card {
     background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-top: 2px solid var(--copper);
-    border-radius: var(--r-lg);
-    padding: 0.55rem 0.75rem 0.45rem 0.75rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    margin-bottom: 0.45rem;
+    border: 1px solid var(--border-hair);
+    border-left: 2px solid var(--copper);
+    border-radius: 3px;
+    padding: 0.7rem 0.9rem 0.6rem 0.9rem;
+    margin-bottom: 0.55rem;
 }
-.pit-header-row {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 0.4rem;
+.pit-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--border-hair);
+    margin-bottom: 0.5rem;
 }
+.pit-head-l { display: flex; align-items: baseline; gap: 8px; }
 .pit-name {
-    font-family: var(--font-display) !important;
-    font-size: 0.72rem !important; font-weight: 800 !important;
-    color: var(--copper) !important; letter-spacing: 1px !important;
-    text-transform: uppercase !important;
+    font-size: 0.78rem !important; font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    letter-spacing: 0.2px !important;
 }
-.pit-badge {
+.pit-code {
     font-family: var(--font-mono) !important;
-    font-size: 0.5rem !important; color: var(--text-muted) !important;
-    background: var(--bg-deep); border: 1px solid var(--border-subtle);
-    border-radius: 3px; padding: 1px 5px; letter-spacing: 0.8px;
+    font-size: 0.6rem !important; color: var(--text-muted) !important;
+    letter-spacing: 1.2px !important;
 }
-.eq-chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 1px 7px 1px 5px; border-radius: 20px;
-    font-size: 0.52rem !important; font-weight: 700 !important;
-    font-family: var(--font-mono) !important; text-transform: uppercase;
-    border: 1px solid transparent; margin: 2px 0 2px 0;
+.pit-meta {
+    font-family: var(--font-mono) !important;
+    font-size: 0.55rem !important; color: var(--text-muted) !important;
+    letter-spacing: 1.2px !important; text-transform: uppercase;
 }
-.eq-chip.pc8000 { background: rgba(25,32,80,0.9); color: #6E82C8; border-color: rgba(110,130,200,0.18); }
-.eq-chip.pc4000 { background: rgba(5,75,108,0.7); color: #55AECB; border-color: rgba(85,174,203,0.18); }
-.eq-chip.ex3600 { background: rgba(2,100,112,0.6); color: var(--cyan); border-color: rgba(62,201,193,0.18); }
-.eq-chip.be495  { background: rgba(35,75,36,0.6); color: #6CC86C; border-color: rgba(108,200,108,0.18); }
-.eq-chip.apron  { background: rgba(140,60,0,0.4); color: #E08840; border-color: rgba(224,136,64,0.18); }
 
-.trucks-row {
-    border-top: 1px solid var(--border-subtle);
-    padding-top: 0.3rem; margin-top: 0.35rem;
+/* Equipment model label — strip, no chip */
+.eq-model {
+    font-family: var(--font-mono) !important;
+    font-size: 0.55rem !important; font-weight: 500 !important;
+    letter-spacing: 1.8px !important; text-transform: uppercase;
+    margin: 8px 0 3px 0;
+    padding-left: 6px;
+    border-left: 2px solid;
+    line-height: 1.2;
+}
+.eq-model.pc8000 { color: #7B8FC4; border-left-color: rgba(123,143,196,0.5); }
+.eq-model.pc4000 { color: #5FA8C4; border-left-color: rgba(95,168,196,0.5); }
+.eq-model.ex3600 { color: #6BBEB6; border-left-color: rgba(107,190,182,0.5); }
+.eq-model.be495  { color: #6BBE83; border-left-color: rgba(107,190,131,0.5); }
+.eq-model.apron  { color: #C4885B; border-left-color: rgba(196,136,91,0.5); }
+
+/* Trucks divider */
+.trucks-div {
+    border-top: 1px solid var(--border-hair);
+    padding-top: 0.35rem; margin-top: 0.45rem;
 }
 .trucks-lbl {
-    font-size: 0.5rem !important; font-weight: 700 !important;
-    color: var(--text-muted) !important; letter-spacing: 2.5px !important;
-    text-transform: uppercase !important; font-family: var(--font-mono) !important;
-    margin-bottom: 0.2rem !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.52rem !important; font-weight: 500 !important;
+    color: var(--text-muted) !important; letter-spacing: 2.2px !important;
+    text-transform: uppercase !important;
+    margin-bottom: 0.25rem !important;
 }
 
+/* Pseudo-bar (input value indicator) */
+.val-bar-wrap {
+    width: 100%; height: 2px;
+    background: var(--border-hair);
+    margin-top: 2px;
+    border-radius: 1px;
+    overflow: hidden;
+}
+.val-bar {
+    height: 100%;
+    background: var(--copper);
+    transition: width 0.3s ease;
+}
+
+/* Calc button — primary */
 .calc-wrap .stButton > button {
-    background: linear-gradient(135deg, var(--copper) 0%, #A85E18 100%) !important;
-    color: #08090C !important; font-family: var(--font-display) !important;
-    font-size: 0.68rem !important; font-weight: 800 !important;
-    letter-spacing: 2px !important; border: none !important;
-    border-radius: var(--r-md) !important; padding: 11px 20px !important;
-    box-shadow: 0 4px 16px rgba(212,130,42,0.3) !important;
+    background: linear-gradient(180deg, #B68B5E 0%, #8C6440 100%) !important;
+    color: #0F1115 !important;
+    font-family: var(--font-sans) !important;
+    font-size: 0.7rem !important; font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    border: none !important;
+    border-radius: 4px !important; padding: 13px 22px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15) !important;
     transition: all 0.18s !important; width: 100% !important;
 }
 .calc-wrap .stButton > button:hover {
+    background: linear-gradient(180deg, #C49770 0%, #A67C52 100%) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 6px 24px rgba(212,130,42,0.45) !important;
+    box-shadow: 0 4px 14px rgba(166,124,82,0.4), inset 0 1px 0 rgba(255,255,255,0.2) !important;
 }
 
-.result-box {
+/* Hero result — large lateral display */
+.hero-result {
     background: var(--bg-card);
-    border: 1px solid var(--border-mid);
-    border-radius: var(--r-xl);
-    padding: 1.4rem 1.6rem;
-    text-align: center;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    position: relative; overflow: hidden;
-    height: 100%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 0.15rem;
+    border: 1px solid var(--border-hair);
+    border-radius: 4px;
+    padding: 1.8rem 2rem 1.6rem 2rem;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
 }
-.result-box::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--copper) 40%, transparent);
+.hero-result::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 2px; height: 100%;
+    background: linear-gradient(180deg, var(--copper), transparent);
 }
-.result-box::after {
-    content: ''; position: absolute; bottom: -30px; right: -30px;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(212,130,42,0.06) 0%, transparent 70%);
-    pointer-events: none;
+.hero-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
 }
-.res-eyebrow {
-    font-size: 0.55rem !important; font-weight: 700 !important;
-    color: var(--text-muted) !important; letter-spacing: 3.5px !important;
-    text-transform: uppercase !important; font-family: var(--font-mono) !important;
-}
-.res-num {
-    font-family: var(--font-display) !important;
-    font-size: 4rem !important; font-weight: 800 !important;
-    color: var(--green-neo) !important; line-height: 1 !important;
-    letter-spacing: -2px !important;
-    text-shadow: 0 0 32px rgba(53,201,122,0.28) !important;
-}
-.res-num.empty { color: var(--bg-raised) !important; text-shadow: none !important; }
-.res-unit {
-    font-size: 0.6rem !important; color: var(--text-muted) !important;
-    letter-spacing: 2.5px !important; text-transform: uppercase !important;
+.hero-eyebrow {
     font-family: var(--font-mono) !important;
+    font-size: 0.6rem !important; font-weight: 500 !important;
+    color: var(--text-muted) !important; letter-spacing: 2.5px !important;
+    text-transform: uppercase !important;
 }
-.res-tag {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: var(--bg-raised); border: 1px solid var(--border-subtle);
-    border-radius: 20px; padding: 3px 10px; margin-top: 0.4rem;
-    font-size: 0.58rem !important; color: var(--text-secondary) !important;
+.hero-shift {
     font-family: var(--font-mono) !important;
+    font-size: 0.6rem !important; color: var(--text-secondary) !important;
+    letter-spacing: 1.5px !important; text-transform: uppercase;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-hair);
+    padding: 3px 9px; border-radius: 3px;
 }
-.res-err {
-    font-size: 0.56rem !important; color: var(--copper) !important;
-    font-family: var(--font-mono) !important; letter-spacing: 0.8px !important;
-    margin-top: 0.15rem !important;
+.hero-number {
+    font-family: var(--font-mono) !important;
+    font-size: 5.2rem !important; font-weight: 300 !important;
+    color: var(--text-primary) !important;
+    line-height: 0.95 !important;
+    letter-spacing: -3px !important;
+    margin: 0.6rem 0 0.4rem 0;
+}
+.hero-number.computed { color: var(--green-pos) !important; }
+.hero-number.empty { color: var(--text-faint) !important; }
+.hero-unit {
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important; color: var(--text-muted) !important;
+    letter-spacing: 2px !important; text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+.hero-delta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important; color: var(--green-pos) !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 1rem;
+}
+.hero-delta.empty { color: var(--text-faint) !important; }
+
+/* Confidence section */
+.conf-block {
+    border-top: 1px solid var(--border-hair);
+    padding-top: 0.9rem;
+}
+.conf-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 0.5rem;
+}
+.conf-lbl {
+    font-family: var(--font-mono) !important;
+    font-size: 0.58rem !important; color: var(--text-muted) !important;
+    letter-spacing: 2px !important; text-transform: uppercase;
+}
+.conf-val {
+    font-family: var(--font-mono) !important;
+    font-size: 0.85rem !important; font-weight: 600 !important;
+    color: var(--copper-hi) !important;
+}
+.conf-bar-bg {
+    width: 100%; height: 4px;
+    background: var(--bg-elev);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+.conf-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--copper) 0%, var(--copper-hi) 100%);
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.conf-foot {
+    display: flex; justify-content: space-between;
+    margin-top: 0.45rem;
+    font-family: var(--font-mono) !important;
+    font-size: 0.55rem !important; color: var(--text-muted) !important;
+    letter-spacing: 1px !important;
+}
+.conf-error {
+    color: var(--amber) !important;
 }
 
-.cfg-panel {
-    background: rgba(0,0,0,0.22);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--r-md);
-    padding: 0.65rem 0.85rem;
-    margin-top: 0.65rem;
+/* Cfg panel side */
+.cfg-side {
+    background: var(--bg-card);
+    border: 1px solid var(--border-hair);
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    margin-top: 0.8rem;
+}
+.cfg-side-title {
+    font-family: var(--font-mono) !important;
+    font-size: 0.55rem !important; color: var(--text-muted) !important;
+    letter-spacing: 2.5px !important; text-transform: uppercase;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-hair);
 }
 .cfg-row {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 4px 0; border-bottom: 1px solid var(--border-subtle);
-    font-size: 0.66rem;
+    padding: 5px 0;
+    font-size: 0.7rem;
 }
-.cfg-row:last-child { border-bottom: none; }
-.cfg-key { color: var(--text-secondary); }
-.cfg-val-cyan   { color: var(--cyan);   font-family: var(--font-mono); }
-.cfg-val-copper { color: var(--copper); font-family: var(--font-mono); }
+.cfg-key {
+    color: var(--text-secondary);
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.3px;
+}
+.cfg-val {
+    color: var(--text-primary);
+    font-family: var(--font-mono) !important;
+    font-size: 0.7rem !important;
+    font-weight: 500;
+}
+.cfg-val.accent { color: var(--copper-hi); }
 
+/* Step (bulk) */
 .step-lbl {
-    display: flex; align-items: center; gap: 8px;
-    font-family: var(--font-display) !important;
-    font-size: 0.66rem !important; font-weight: 700 !important;
-    color: var(--text-secondary) !important; letter-spacing: 1.2px !important;
-    text-transform: uppercase !important; margin: 1rem 0 0.5rem 0;
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono) !important;
+    font-size: 0.65rem !important; font-weight: 500 !important;
+    color: var(--text-secondary) !important; letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    margin: 1rem 0 0.5rem 0;
 }
-.step-circ {
-    width: 20px; height: 20px; background: var(--copper); border-radius: 50%;
+.step-num {
+    font-family: var(--font-mono) !important;
+    width: 20px; height: 20px;
+    border: 1px solid var(--copper);
+    color: var(--copper-hi);
+    border-radius: 50%;
     display: inline-flex; align-items: center; justify-content: center;
-    font-size: 0.6rem; font-weight: 800; color: #08090C; flex-shrink: 0;
+    font-size: 0.62rem; font-weight: 600;
+    flex-shrink: 0;
+    background: var(--copper-dim);
 }
 
-::-webkit-scrollbar { width: 3px; height: 3px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--bg-raised); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--bg-elev); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 </style>
 """, unsafe_allow_html=True)
 
@@ -436,7 +581,7 @@ EQUIPOS_POR_PIT = {
     },
 }
 
-EQ_CHIP_CLASS = {
+EQ_MODEL_CLASS = {
     'Komatsu PC8000': 'pc8000',
     'Komatsu PC4000': 'pc4000',
     'Hitachi EX3600': 'ex3600',
@@ -451,11 +596,12 @@ PIT_LABELS = {
     'PRIBBENOW': 'Pribbenow',
 }
 
+# Defaults en PORCENTAJES (0-100) para los inputs visibles al usuario
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 80.0, 'disp': 0.800, 'uso': 0.750, 'ciclo': 30.0},
-    'DP5':      {'qty': 80.0, 'disp': 0.800, 'uso': 0.750, 'ciclo': 30.0},
-    'EC':       {'qty': 15.0, 'disp': 0.800, 'uso': 0.750, 'ciclo': 28.0},
-    'PRIBBENOW':{'qty': 68.0, 'disp': 0.800, 'uso': 0.750, 'ciclo': 26.0},
+    'DESCANSO': {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
+    'DP5':      {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
+    'EC':       {'qty': 15.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 28.0},
+    'PRIBBENOW':{'qty': 68.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 26.0},
 }
 
 COLS_NUMERICAS = [
@@ -485,20 +631,25 @@ COL_CICLO_MAP = {
     'PRIBBENOW': 'TiempoCiclo_TKS_PRIBBENOW',
 }
 
+# Confianza fija — derivada del error ±1.5% del modelo
+MODEL_ERROR_PCT = 1.5
+CONFIDENCE_PCT  = 100 - MODEL_ERROR_PCT  # 98.5%
+
 # ══════════════════════════════════════════════════════════════════
 # SESSION STATE + RESET
-# Fix: escribir directamente sobre las widget-keys 'ni_*'
+# Inputs visibles al usuario: PORCENTAJES (0-100) para %, valores
+# normales para Qty/Ciclo. Conversión a [0,1] al alimentar el modelo.
 # ══════════════════════════════════════════════════════════════════
 def reset_values():
     for pit, modelos in EQUIPOS_POR_PIT.items():
         for equipos in modelos.values():
             for eq in equipos:
-                st.session_state[f'ni_{eq}'] = 0.75
+                st.session_state[f'ni_{eq}'] = 75.0  # 75% por default
         src = DEFAULTS_CAM[pit]
-        st.session_state[f'ni_qty_{pit}']  = float(src['qty'])
-        st.session_state[f'ni_disp_{pit}'] = float(src['disp'])
-        st.session_state[f'ni_uso_{pit}']  = float(src['uso'])
-        st.session_state[f'ni_ciclo_{pit}']= float(src['ciclo'])
+        st.session_state[f'ni_qty_{pit}']     = float(src['qty'])
+        st.session_state[f'ni_disp_{pit}']    = float(src['disp_pct'])  # 80% (no 0.80)
+        st.session_state[f'ni_uso_{pit}']     = float(src['uso_pct'])   # 75%
+        st.session_state[f'ni_ciclo_{pit}']   = float(src['ciclo'])
 
 if 'initialized' not in st.session_state:
     reset_values()
@@ -514,22 +665,34 @@ def predecir(data_df):
     dp[COLS_NUMERICAS] = min_max_scaler.transform(dp[COLS_NUMERICAS])
     return modelo_ml.predict(dp)
 
-
 # ══════════════════════════════════════════════════════════════════
 # HEADER
 # ══════════════════════════════════════════════════════════════════
-st.markdown("""
+from datetime import datetime
+hoy = datetime.now().strftime('%d %b %Y · %H:%M').upper()
+
+st.markdown(f"""
 <div class="cmd-header">
-  <div class="cmd-header-left">
-    <div class="cmd-logo">⛏</div>
+  <div class="cmd-brand">
+    <div class="cmd-mark">◆</div>
     <div>
-      <div class="cmd-title">Load Forecast Simulator</div>
-      <div class="cmd-subtitle">Complex Ops · Ensemble ML v2.1</div>
+      <div class="cmd-title">LOAD FORECAST · COMPLEX</div>
+      <div class="cmd-sub">Production Engineering / Ensemble ML v2.1</div>
     </div>
   </div>
-  <div class="cmd-header-right">
-    <div class="status-pill"><span class="status-dot"></span>Model Online</div>
-    <div class="version-tag">v2.1.0</div>
+  <div class="cmd-meta">
+    <div class="meta-item">
+      <span class="meta-label">Session</span>
+      <span class="meta-value">{hoy}</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Pits</span>
+      <span class="meta-value">04 / 04</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Status</span>
+      <span class="status-live"><span class="status-dot"></span>Online</span>
+    </div>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -537,32 +700,33 @@ st.markdown("""
 # ══════════════════════════════════════════════════════════════════
 # MODE SELECTOR
 # ══════════════════════════════════════════════════════════════════
-modo = st.radio('', ['📊  Predicción Manual', '📁  Carga Masiva'],
+modo = st.radio('', ['Predicción Manual', 'Carga Masiva'],
                 horizontal=True, label_visibility='collapsed')
-st.markdown('<hr>', unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════
 # MODO 1 — PREDICCIÓN MANUAL
 # ══════════════════════════════════════════════════════════════════
-if modo == '📊  Predicción Manual':
+if modo == 'Predicción Manual':
 
-    # ── Control bar ──────────────────────────────────────────────
-    cb1, cb2, cb3 = st.columns([1, 1, 5])
+    st.markdown('<div style="height:0.6rem"></div>', unsafe_allow_html=True)
+
+    # ── Control row ─────────────────────────────────────────────
+    cb1, cb2, _ = st.columns([1.2, 1.2, 6])
     with cb1:
-        turno = st.selectbox('Turno', ['D', 'N'])
+        turno = st.selectbox('Turno de Operación', ['D', 'N'])
     with cb2:
         st.markdown('<div style="height:22px"></div>', unsafe_allow_html=True)
-        if st.button('↺  Resetear'):
+        if st.button('↺  Resetear valores'):
             reset_values()
             st.rerun()
 
-    st.markdown('<div style="height:2px"></div>', unsafe_allow_html=True)
+    st.markdown('<div style="height:0.4rem"></div>', unsafe_allow_html=True)
 
     vals_palas, vals_camiones = {}, {}
     PITS = list(EQUIPOS_POR_PIT.keys())
 
-    # ── 2×2 Pit grid ─────────────────────────────────────────────
+    # ── 2×2 Pit grid ────────────────────────────────────────────
     for fila_pits in [PITS[:2], PITS[2:]]:
         pit_cols = st.columns(2, gap='small')
 
@@ -573,80 +737,111 @@ if modo == '📊  Predicción Manual':
 
                 st.markdown(
                     f'<div class="pit-card">'
-                    f'<div class="pit-header-row">'
-                    f'<span class="pit-name">◆ {pit_label}</span>'
-                    f'<span class="pit-badge">{pit} · {eq_count} EQ</span>'
+                    f'<div class="pit-head">'
+                    f'<div class="pit-head-l">'
+                    f'<span class="pit-name">{pit_label}</span>'
+                    f'<span class="pit-code">/ {pit}</span>'
+                    f'</div>'
+                    f'<span class="pit-meta">{eq_count} unidades</span>'
                     f'</div></div>',
                     unsafe_allow_html=True
                 )
 
+                # Equipment rows
                 for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
-                    chip_cls = EQ_CHIP_CLASS.get(modelo_eq, 'pc8000')
+                    cls = EQ_MODEL_CLASS.get(modelo_eq, 'pc8000')
                     st.markdown(
-                        f'<span class="eq-chip {chip_cls}">◉ {modelo_eq}</span>',
+                        f'<div class="eq-model {cls}">{modelo_eq}</div>',
                         unsafe_allow_html=True
                     )
                     eq_cols = st.columns(len(equipos))
                     for ec, eq in zip(eq_cols, equipos):
                         with ec:
-                            vals_palas[f'UsodeDisp_{eq}'] = st.number_input(
+                            # Input en porcentaje (0-100)
+                            pct_val = st.number_input(
                                 eq,
-                                min_value=0.0, max_value=1.0,
-                                step=0.01, format='%.2f',
+                                min_value=0.0, max_value=100.0,
+                                step=1.0, format='%.1f',
                                 key=f'ni_{eq}'
                             )
+                            # Conversión interna a [0, 1] para el modelo
+                            vals_palas[f'UsodeDisp_{eq}'] = pct_val / 100.0
 
                 # Trucks
                 st.markdown(
-                    '<div class="trucks-row"><div class="trucks-lbl">▶ Camiones</div></div>',
+                    '<div class="trucks-div"><div class="trucks-lbl">'
+                    'Flota de Camiones</div></div>',
                     unsafe_allow_html=True
                 )
                 t1, t2, t3, t4 = st.columns(4)
                 with t1:
-                    vals_camiones[f'QtyCamiones_{pit}'] = st.number_input(
+                    qty = st.number_input(
                         'Qty', min_value=0.0, max_value=200.0,
                         step=1.0, format='%.1f', key=f'ni_qty_{pit}')
+                    vals_camiones[f'QtyCamiones_{pit}'] = qty
                 with t2:
-                    vals_camiones[f'Disponibilidad_TKS_{pit}'] = st.number_input(
-                        'Disp', min_value=0.0, max_value=1.0,
-                        step=0.01, format='%.3f', key=f'ni_disp_{pit}')
+                    disp_pct = st.number_input(
+                        'Disp %', min_value=0.0, max_value=100.0,
+                        step=1.0, format='%.1f', key=f'ni_disp_{pit}')
+                    vals_camiones[f'Disponibilidad_TKS_{pit}'] = disp_pct / 100.0
                 with t3:
-                    vals_camiones[f'UsodeDisp_TKS_{pit}'] = st.number_input(
-                        'Uso', min_value=0.0, max_value=1.0,
-                        step=0.01, format='%.3f', key=f'ni_uso_{pit}')
+                    uso_pct = st.number_input(
+                        'Uso %', min_value=0.0, max_value=100.0,
+                        step=1.0, format='%.1f', key=f'ni_uso_{pit}')
+                    vals_camiones[f'UsodeDisp_TKS_{pit}'] = uso_pct / 100.0
                 with t4:
-                    vals_camiones[COL_CICLO_MAP[pit]] = st.number_input(
-                        'Ciclo', min_value=15.0, max_value=60.0,
+                    ciclo = st.number_input(
+                        'Ciclo (min)', min_value=15.0, max_value=60.0,
                         step=0.1, format='%.1f', key=f'ni_ciclo_{pit}')
+                    vals_camiones[COL_CICLO_MAP[pit]] = ciclo
 
-    # ── Predict row ───────────────────────────────────────────────
+    # ── Hero result + side ───────────────────────────────────────
     st.markdown('<hr>', unsafe_allow_html=True)
-    btn_col, _, res_col = st.columns([1.4, 0.15, 2.6])
+    hero_col, side_col = st.columns([2.4, 1])
 
-    with btn_col:
+    with side_col:
         st.markdown('<div class="calc-wrap">', unsafe_allow_html=True)
-        calcular = st.button('▶  CALCULAR PREDICCIÓN', use_container_width=True)
+        calcular = st.button('▸  EJECUTAR PREDICCIÓN', use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("""
-            <div class="cfg-panel">
-              <div style="font-size:0.52rem;color:var(--text-muted);letter-spacing:2.5px;
-                          text-transform:uppercase;font-family:var(--font-mono);margin-bottom:6px;">
-                Configuración activa
-              </div>
-              <div class="cfg-row"><span class="cfg-key">Frentes activos</span><span class="cfg-val-cyan">4</span></div>
-              <div class="cfg-row"><span class="cfg-key">Variables input</span><span class="cfg-val-cyan">45</span></div>
-              <div class="cfg-row"><span class="cfg-key">Algoritmo</span><span class="cfg-val-copper">Ensemble v2.1</span></div>
+
+        st.markdown(f"""
+            <div class="cfg-side">
+              <div class="cfg-side-title">Configuración Activa</div>
+              <div class="cfg-row"><span class="cfg-key">Frentes Activos</span><span class="cfg-val">04</span></div>
+              <div class="cfg-row"><span class="cfg-key">Variables Input</span><span class="cfg-val">45</span></div>
+              <div class="cfg-row"><span class="cfg-key">Algoritmo</span><span class="cfg-val accent">Ensemble Reg.</span></div>
+              <div class="cfg-row"><span class="cfg-key">Versión Modelo</span><span class="cfg-val">v2.1.0</span></div>
+              <div class="cfg-row"><span class="cfg-key">Error RMSE</span><span class="cfg-val accent">±{MODEL_ERROR_PCT:.1f}%</span></div>
             </div>
         """, unsafe_allow_html=True)
 
-    with res_col:
+    with hero_col:
         ph = st.empty()
-        ph.markdown("""
-            <div class="result-box">
-              <div class="res-eyebrow">Predicted Load Count</div>
-              <div class="res-num empty">—</div>
-              <div class="res-unit">loads / shift</div>
-              <div class="res-tag">Ingresa parámetros y presiona Calcular</div>
+        # Estado inicial (sin predicción)
+        ph.markdown(f"""
+            <div class="hero-result">
+              <div class="hero-top">
+                <div>
+                  <div class="hero-eyebrow">Predicted Load Count</div>
+                  <div class="hero-number empty">0,000</div>
+                  <div class="hero-unit">loads · per shift</div>
+                  <div class="hero-delta empty">—  awaiting input</div>
+                </div>
+                <div class="hero-shift">Shift —</div>
+              </div>
+              <div class="conf-block">
+                <div class="conf-head">
+                  <span class="conf-lbl">Model Confidence</span>
+                  <span class="conf-val">{CONFIDENCE_PCT:.1f}%</span>
+                </div>
+                <div class="conf-bar-bg">
+                  <div class="conf-bar-fill" style="width:{CONFIDENCE_PCT}%"></div>
+                </div>
+                <div class="conf-foot">
+                  <span>RMSE ±{MODEL_ERROR_PCT:.1f}%</span>
+                  <span class="conf-error">Pending execution</span>
+                </div>
+              </div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -656,13 +851,36 @@ if modo == '📊  Predicción Manual':
         Y_pred = predecir(data)
         cargas = int(round(Y_pred[0]))
         turno_label = 'Diurno (D)' if turno == 'D' else 'Nocturno (N)'
+
+        # Banda de incertidumbre
+        margen = int(round(cargas * MODEL_ERROR_PCT / 100))
+        rango_lo = cargas - margen
+        rango_hi = cargas + margen
+
         ph.markdown(f"""
-            <div class="result-box">
-              <div class="res-eyebrow">Predicted Load Count</div>
-              <div class="res-num">{cargas:,}</div>
-              <div class="res-unit">loads / shift</div>
-              <div class="res-tag">✏ Manual &nbsp;·&nbsp; Turno {turno_label}</div>
-              <div class="res-err">⚠ Model error: ±1.5%</div>
+            <div class="hero-result">
+              <div class="hero-top">
+                <div>
+                  <div class="hero-eyebrow">Predicted Load Count</div>
+                  <div class="hero-number computed">{cargas:,}</div>
+                  <div class="hero-unit">loads · per shift</div>
+                  <div class="hero-delta">▴ rango {rango_lo:,} – {rango_hi:,}</div>
+                </div>
+                <div class="hero-shift">Shift {turno_label}</div>
+              </div>
+              <div class="conf-block">
+                <div class="conf-head">
+                  <span class="conf-lbl">Model Confidence</span>
+                  <span class="conf-val">{CONFIDENCE_PCT:.1f}%</span>
+                </div>
+                <div class="conf-bar-bg">
+                  <div class="conf-bar-fill" style="width:{CONFIDENCE_PCT}%"></div>
+                </div>
+                <div class="conf-foot">
+                  <span>RMSE ±{MODEL_ERROR_PCT:.1f}%</span>
+                  <span style="color:var(--green-pos);">● Prediction computed</span>
+                </div>
+              </div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -671,18 +889,23 @@ if modo == '📊  Predicción Manual':
 # MODO 2 — CARGA MASIVA
 # ══════════════════════════════════════════════════════════════════
 else:
+    st.markdown('<div style="height:0.8rem"></div>', unsafe_allow_html=True)
     bulk_l, bulk_r = st.columns([3, 2], gap='large')
 
     with bulk_l:
         st.markdown(
-            '<div class="step-lbl"><span class="step-circ">1</span>Descarga la plantilla CSV</div>',
+            '<div class="step-lbl"><span class="step-num">1</span>Descarga la plantilla CSV</div>',
             unsafe_allow_html=True
         )
         st.markdown("""
-            <div style="background:var(--bg-raised);border:1px solid var(--border-subtle);
-                        border-radius:var(--r-md);padding:0.65rem 0.85rem;margin-bottom:0.5rem;
-                        font-size:0.7rem;color:var(--text-secondary);line-height:1.5;">
-                Plantilla con los 45 parámetros requeridos. Cada fila = un turno de operación.
+            <div style="background:var(--bg-card);border:1px solid var(--border-hair);
+                        border-left:2px solid var(--copper);
+                        border-radius:3px;padding:0.7rem 1rem;margin-bottom:0.6rem;
+                        font-size:0.78rem;color:var(--text-secondary);line-height:1.5;">
+                Plantilla con los 45 parámetros requeridos. Cada fila representa un turno de operación.
+                <br><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);
+                                letter-spacing:1px;">
+                ⓘ Los valores % en plantilla CSV deben ir como decimales (0–1), no como porcentajes.</span>
             </div>
         """, unsafe_allow_html=True)
 
@@ -705,7 +928,7 @@ else:
                            file_name='plantilla_prediccion.csv', mime='text/csv')
 
         st.markdown(
-            '<div class="step-lbl" style="margin-top:0.9rem;"><span class="step-circ">2</span>Carga tu archivo</div>',
+            '<div class="step-lbl" style="margin-top:1rem;"><span class="step-num">2</span>Carga tu archivo</div>',
             unsafe_allow_html=True
         )
         archivo = st.file_uploader(
@@ -714,20 +937,17 @@ else:
         )
 
     with bulk_r:
-        st.markdown("""
-            <div style="background:var(--bg-card);border:1px solid var(--border-subtle);
-                        border-radius:var(--r-xl);padding:1rem 1.1rem;backdrop-filter:blur(10px);">
-              <div style="font-size:0.52rem;color:var(--text-muted);letter-spacing:3px;
-                          text-transform:uppercase;font-family:var(--font-mono);margin-bottom:0.7rem;">
-                Especificaciones del modelo
-              </div>
-              <div class="cfg-row"><span class="cfg-key">Variables numéricas</span><span class="cfg-val-cyan">44</span></div>
-              <div class="cfg-row"><span class="cfg-key">Variable categórica</span><span class="cfg-val-cyan">turno (D/N)</span></div>
-              <div class="cfg-row"><span class="cfg-key">Frentes mineros</span><span class="cfg-val-copper">4</span></div>
-              <div class="cfg-row"><span class="cfg-key">Algoritmo</span><span class="cfg-val-copper">Ensemble Reg.</span></div>
-              <div class="cfg-row" style="border-bottom:none;">
-                <span class="cfg-key">Error estimado</span>
-                <span style="color:var(--green-neo);font-family:var(--font-mono);">±1.5%</span>
+        st.markdown(f"""
+            <div class="cfg-side" style="margin-top:0;">
+              <div class="cfg-side-title">Especificaciones del Modelo</div>
+              <div class="cfg-row"><span class="cfg-key">Variables Numéricas</span><span class="cfg-val">44</span></div>
+              <div class="cfg-row"><span class="cfg-key">Variable Categórica</span><span class="cfg-val">turno (D/N)</span></div>
+              <div class="cfg-row"><span class="cfg-key">Frentes Mineros</span><span class="cfg-val accent">04</span></div>
+              <div class="cfg-row"><span class="cfg-key">Algoritmo</span><span class="cfg-val accent">Ensemble Reg.</span></div>
+              <div class="cfg-row"><span class="cfg-key">Versión</span><span class="cfg-val">v2.1.0</span></div>
+              <div class="cfg-row">
+                <span class="cfg-key">Confianza</span>
+                <span class="cfg-val" style="color:var(--green-pos);">{CONFIDENCE_PCT:.1f}%</span>
               </div>
             </div>
         """, unsafe_allow_html=True)
@@ -745,11 +965,11 @@ else:
             st.dataframe(df[COLUMNAS_ESPERADAS].head(3), use_container_width=True)
 
             st.markdown(
-                '<div class="step-lbl"><span class="step-circ">3</span>Ejecuta la predicción masiva</div>',
+                '<div class="step-lbl"><span class="step-num">3</span>Ejecuta la predicción masiva</div>',
                 unsafe_allow_html=True
             )
             st.markdown('<div class="calc-wrap">', unsafe_allow_html=True)
-            run_bulk = st.button('▶  PREDECIR TODOS LOS TURNOS', use_container_width=False)
+            run_bulk = st.button('▸  PREDECIR TODOS LOS TURNOS', use_container_width=False)
             st.markdown('</div>', unsafe_allow_html=True)
 
             if run_bulk:
@@ -771,7 +991,7 @@ else:
                 buf2.seek(0)
                 st.download_button('⬇  Descargar Resultados', data=buf2,
                                    file_name='predicciones.csv', mime='text/csv')
-                st.caption('⚠ Error del modelo: ±1.5% — Usar como referencia operacional.')
+                st.caption(f'⚠ Error del modelo: ±{MODEL_ERROR_PCT:.1f}% — Usar como referencia operacional.')
 
         except Exception as e:
             st.error(f'Error al procesar el archivo: {e}')
