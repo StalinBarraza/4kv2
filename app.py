@@ -724,20 +724,28 @@ EQ_CHIP_CLASS = {
 }
 
 OPTIMOS_PALAS = {
-    ('DESCANSO', 'Komatsu PC8000'): 0.833, ('DESCANSO', 'Bucyrus BE495'):  0.836,
-    ('DESCANSO', 'Hitachi EX3600'): 0.759, ('DP5', 'Komatsu PC8000'):      0.843,
-    ('DP5', 'Bucyrus BE495'):       0.810,  ('DP5', 'Hitachi EX3600'):      0.752,
-    ('DP5', 'Apron Feeder'):        0.907,  ('EC', 'Komatsu PC8000'):       0.789,
-    ('EC', 'Hitachi EX3600'):       0.739,  ('EC', 'Komatsu PC4000'):       0.677,
-    ('PRIBBENOW', 'Komatsu PC8000'):0.810,  ('PRIBBENOW', 'Komatsu PC4000'):0.759,
-    ('PRIBBENOW', 'Bucyrus BE495'): 0.799,  ('PRIBBENOW', 'Apron Feeder'):  0.902,
+    # UsoDisp_media por (pit, modelo) — Sheet1 TablaResumenGoals
+    ('DESCANSO', 'Komatsu PC8000'): 0.83311, ('DESCANSO', 'Bucyrus BE495'):  0.83600,
+    ('DESCANSO', 'Hitachi EX3600'): 0.75909, ('DP5',      'Komatsu PC8000'): 0.84311,
+    ('DP5',      'Bucyrus BE495'):  0.81048,  ('DP5',      'Hitachi EX3600'): 0.75161,
+    ('EC',       'Komatsu PC8000'): 0.78935,  ('EC',       'Hitachi EX3600'): 0.73871,
+    ('EC',       'Komatsu PC4000'): 0.67669,  ('PRIBBENOW','Komatsu PC8000'): 0.81036,
+    ('PRIBBENOW','Komatsu PC4000'): 0.75885,  ('PRIBBENOW','Bucyrus BE495'):  0.79908,
+}
+
+# Draglines/Apron con UsoDisp_media individual (Sheet1)
+OPTIMOS_PALAS_EQ = {
+    '6449': 0.89885,   # DP5  — Dragline 6449
+    '6455': 0.91557,   # DP5  — Dragline 6455
+    '6457': 0.90221,   # PRIBBENOW — Dragline 6457
 }
 
 OPTIMOS_CAM = {
-    'DESCANSO': {'qty': 89.7,  'disp': 0.664, 'uso': 0.834, 'ciclo': 30.62},
-    'DP5':      {'qty': 81.9,  'disp': 0.925, 'uso': 0.860, 'ciclo': 32.72},
-    'EC':       {'qty': 15.55, 'disp': 0.942, 'uso': 0.814, 'ciclo': 28.32},
-    'PRIBBENOW':{'qty': 67.95, 'disp': 0.716, 'uso': 0.865, 'ciclo': 25.60},
+    # TksAvail_mean→disp, TksUtil_mean→uso, Ciclo_mean→ciclo, QtyCam_mean→qty — Sheet1
+    'DESCANSO': {'qty': 89.70,  'disp': 0.66377, 'uso': 0.85954, 'ciclo': 30.623},
+    'DP5':      {'qty': 81.90,  'disp': 0.92539, 'uso': 0.85954, 'ciclo': 32.723},
+    'EC':       {'qty': 15.55,  'disp': 0.94177, 'uso': 0.81408, 'ciclo': 28.323},
+    'PRIBBENOW':{'qty': 67.95,  'disp': 0.71570, 'uso': 0.86469, 'ciclo': 25.600},
 }
 
 DEFAULTS_CAM = {
@@ -787,8 +795,12 @@ PIT_LABELS = {
 def init_values(optimo=False):
     for pit, modelos in EQUIPOS_POR_PIT.items():
         for modelo_eq, equipos in modelos.items():
-            val = OPTIMOS_PALAS.get((pit, modelo_eq), 0.75) if optimo else 0.75
+            modelo_val = OPTIMOS_PALAS.get((pit, modelo_eq), 0.75) if optimo else 0.75
             for eq in equipos:
+                if optimo and eq in OPTIMOS_PALAS_EQ:
+                    val = OPTIMOS_PALAS_EQ[eq]  # valor individual por equipo
+                else:
+                    val = modelo_val if optimo else 0.75
                 st.session_state[f'v_{eq}'] = float(val)
         src = OPTIMOS_CAM[pit] if optimo else DEFAULTS_CAM[pit]
         for campo in ['qty', 'disp', 'uso', 'ciclo']:
