@@ -315,6 +315,7 @@ div[data-testid="stNumberInput"] button:hover { color:var(--copper) !important; 
     width:2px; height:100%;
     background:linear-gradient(180deg, var(--copper), transparent 70%);
 }
+.hero-top { display: flex; justify-content: space-between; align-items: center; }
 .hero-eyebrow {
     font-family:var(--mono) !important; font-size:0.75rem !important;
     color:var(--t3) !important; letter-spacing:2.5px !important; text-transform:uppercase;
@@ -357,8 +358,8 @@ div[data-testid="stNumberInput"] button:hover { color:var(--copper) !important; 
     box-shadow:0 4px 14px rgba(166,124,82,0.35) !important;
 }
 .calc-wrap .stButton > button:disabled {
-    background:var(--bg-elev) !important; color:var(--t3) !important;
-    transform:none !important; box-shadow:none !important; opacity:1 !important;
+    background:var(--bg-elev) !important; color:var(--t4) !important;
+    transform:none !important; box-shadow:none !important; opacity:0.6 !important;
     border:1px solid var(--b1) !important; cursor:not-allowed !important;
 }
 
@@ -714,9 +715,13 @@ if modo == 'Predicción Manual':
         st.markdown(" · ".join(resumen_parts) + "</div>", unsafe_allow_html=True)
 
     # ════════════════════════════
-    # PANEL DE RESULTADOS (3RA COLUMNA)
+    # PANEL DE RESULTADOS (3RA COLUMNA con VALIDACIÓN)
     # ════════════════════════════
     with result_col:
+        # Calcular de forma reactiva la suma actual de la flota
+        suma_camiones = sum(int(st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])) for p in PITS)
+        flota_invalida = (suma_camiones != QTY_TOTAL)
+
         st.markdown('<div class="hero">', unsafe_allow_html=True)
         st.markdown(f'''
             <div class="hero-top">
@@ -725,12 +730,34 @@ if modo == 'Predicción Manual':
             </div>
         ''', unsafe_allow_html=True)
         
-        # Botón para ejecutar la predicción
-        st.markdown('<div class="calc-wrap" style="margin-top: 1rem; margin-bottom: 1rem;">', unsafe_allow_html=True)
-        btn_predecir = st.button('⚡ Ejecutar Predicción', use_container_width=True)
+        # Inyección del Banner según validación del pool total (255 camiones)
+        if flota_invalida:
+            st.markdown(f'''
+                <div class="cam-banner warn" style="margin-top: 1rem;">
+                    <div>
+                        <div class="cam-banner-msg">Bloqueo de Seguridad</div>
+                        <div class="cam-banner-sub">Suma total de camiones incorrecta (Requerido: {QTY_TOTAL})</div>
+                    </div>
+                    <div class="cam-banner-num">{suma_camiones}</div>
+                </div>
+            ''', unsafe_allow_html=True)
+        else:
+            st.markdown(f'''
+                <div class="cam-banner ok" style="margin-top: 1rem;">
+                    <div>
+                        <div class="cam-banner-msg">Flota Validada</div>
+                        <div class="cam-banner-sub">Distribución óptima del pool global</div>
+                    </div>
+                    <div class="cam-banner-num">{suma_camiones}</div>
+                </div>
+            ''', unsafe_allow_html=True)
+
+        # Botón para ejecutar la predicción (enlazado al estado lógico de validación)
+        st.markdown('<div class="calc-wrap" style="margin-bottom: 1rem;">', unsafe_allow_html=True)
+        btn_predecir = st.button('⚡ Ejecutar Predicción', use_container_width=True, disabled=flota_invalida)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        if btn_predecir:
+        if not flota_invalida and btn_predecir:
             # 1. Recolección limpia del estado persistente completo para el DataFrame
             registro = {}
             for p in PITS:
@@ -755,8 +782,8 @@ if modo == 'Predicción Manual':
 
                 st.markdown(f'''
                     <div class="hero-num live">{res_prediccion:.1f}</div>
-                    <div class="hero-unit"> Cargas / Turno</div>
-                    <div class="hero-range">Rango esperado: {lower_bound:.1f} - {upper_bound:.1f} Cargas </div>
+                    <div class="hero-unit">K Toneladas / Turno</div>
+                    <div class="hero-range">Rango esperado: {lower_bound:.1f} - {upper_bound:.1f} K Ton</div>
                 ''', unsafe_allow_html=True)
 
                 st.markdown(f'''
@@ -773,14 +800,23 @@ if modo == 'Predicción Manual':
             except Exception as e:
                 st.error(f"Error en la inferencia del modelo: {e}")
         else:
-            # Estado en espera antes de presionar el botón
-            st.markdown('''
-                <div class="hero-num">- -</div>
-                <div class="hero-unit">Listo para procesar datos</div>
-                <div style="font-family:var(--mono); font-size:0.75rem; color:var(--t3); margin-top:0.8rem;">
-                    Configura los parámetros de los frentes y presiona el botón superior.
-                </div>
-            ''', unsafe_allow_html=True)
+            # Estado en espera o bloqueado por validación
+            if flota_invalida:
+                st.markdown(f'''
+                    <div class="hero-num" style="color:var(--t4);">ERROR</div>
+                    <div class="hero-unit">Cálculo deshabilitado</div>
+                    <div style="font-family:var(--mono); font-size:0.75rem; color:var(--red); margin-top:0.8rem;">
+                        Ajusta las cantidades fijas en los frentes. Faltan o sobran {abs(QTY_TOTAL - suma_camiones)} camiones en el balance.
+                    </div>
+                ''', unsafe_allow_html=True)
+            else:
+                st.markdown('''
+                    <div class="hero-num">- -</div>
+                    <div class="hero-unit">Listo para procesar datos</div>
+                    <div style="font-family:var(--mono); font-size:0.75rem; color:var(--t3); margin-top:0.8rem;">
+                        Configura los parámetros de los frentes y presiona el botón superior.
+                    </div>
+                ''', unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True) # Cierre de div class="hero"
 
