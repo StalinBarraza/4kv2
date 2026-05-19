@@ -587,7 +587,7 @@ st.markdown(f"""
     <div class="app-mark">◆</div>
     <div>
       <div class="app-title">LOAD FORECAST · COMPLEX</div>
-      <div class="app-sub">Production Engineering / XGB ML v2.1</div>
+      <div class="app-sub">Production Engineering / Stacking Regressor ML v2.1</div>
     </div>
   </div>
   <div class="app-meta">
@@ -896,7 +896,7 @@ if modo == 'Predicción Manual':
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">XGB</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">Stacking Regressor</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
                   <span style="color:var(--t2);font-family:var(--mono);">Error MAPE</span>
@@ -1011,7 +1011,7 @@ else:
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);">XGB Reg.</span>
+                  <span style="color:var(--copper-hi);font-family:var(--mono);">Stacking Regressor Reg.</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;">
                   <span style="color:var(--t2);font-family:var(--mono);">Confianza</span>
