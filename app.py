@@ -535,6 +535,23 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
+
+# Color identity per pit (bg, border, text, badge-bg, badge-text)
+PIT_COLORS = {
+    'DESCANSO':  {'bg': 'rgba(59,130,246,0.07)',  'border': '#3B82F6', 'dim': 'rgba(59,130,246,0.18)',  'text': '#93C5FD', 'label': '#1D4ED8'},
+    'DP5':       {'bg': 'rgba(168,85,247,0.07)',  'border': '#A855F7', 'dim': 'rgba(168,85,247,0.18)',  'text': '#D8B4FE', 'label': '#7C3AED'},
+    'EC':        {'bg': 'rgba(234,179,8,0.07)',   'border': '#EAB308', 'dim': 'rgba(234,179,8,0.18)',   'text': '#FDE047', 'label': '#A16207'},
+    'PRIBBENOW': {'bg': 'rgba(20,184,166,0.07)',  'border': '#14B8A6', 'dim': 'rgba(20,184,166,0.18)',  'text': '#5EEAD4', 'label': '#0F766E'},
+}
+
+# Color identity per equipment model (bg, border, text)
+EQ_COLORS = {
+    'Komatsu PC8000': {'bg': 'rgba(239,68,68,0.07)',   'border': '#EF4444', 'text': '#FCA5A5'},
+    'Komatsu PC4000': {'bg': 'rgba(249,115,22,0.07)',  'border': '#F97316', 'text': '#FDBA74'},
+    'Hitachi EX3600': {'bg': 'rgba(6,182,212,0.07)',   'border': '#06B6D4', 'text': '#67E8F9'},
+    'Bucyrus BE495':  {'bg': 'rgba(34,197,94,0.07)',   'border': '#22C55E', 'text': '#86EFAC'},
+    'Dragline':   {'bg': 'rgba(168,85,247,0.07)',  'border': '#A855F7', 'text': '#D8B4FE'},
+}
 MODEL_ERROR = 4
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
@@ -631,18 +648,44 @@ if modo == 'Predicción Manual':
         """, unsafe_allow_html=True)
 
         for i, pit in enumerate(PITS):
-            label    = PIT_LABELS[pit]
-            eq_cnt   = sum(len(v) for v in EQUIPOS_POR_PIT[pit].values())
+            label     = PIT_LABELS[pit]
+            eq_cnt    = sum(len(v) for v in EQUIPOS_POR_PIT[pit].values())
             is_active = (st.session_state['pit_idx'] == i)
-            active_cls = 'active' if is_active else ''
+            pc        = PIT_COLORS[pit]
+
+            if is_active:
+                nav_style = (
+                    f"background:{pc['dim']};"
+                    f"border-left:4px solid {pc['border']};"
+                )
+                name_color = pc['text']
+                badge_style = (
+                    f"background:{pc['dim']};"
+                    f"border:1px solid {pc['border']};"
+                    f"color:{pc['text']};"
+                )
+            else:
+                nav_style  = f"background:rgba(255,255,255,0.01);border-left:4px solid transparent;"
+                name_color = "var(--t2)"
+                badge_style = (
+                    f"background:rgba(255,255,255,0.04);"
+                    f"border:1px solid var(--b2);"
+                    f"color:var(--t3);"
+                )
 
             st.markdown(f"""
-                <div class="pit-nav-item {active_cls}" id="pit-nav-{i}">
+                <div style="display:flex;align-items:center;gap:12px;
+                            padding:12px 15px;cursor:pointer;transition:all 0.15s;
+                            {nav_style}" id="pit-nav-{i}">
+                  <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0;
+                              background:{''+pc['border'] if is_active else 'var(--t4)'};
+                              box-shadow:{'0 0 6px '+pc['border'] if is_active else 'none'};"></div>
                   <div style="flex:1;min-width:0;">
-                    <div class="pit-nav-name">{label}</div>
-                    <div class="pit-nav-code">{pit}</div>
+                    <div style="font-size:1rem;font-weight:600;color:{name_color};">{label}</div>
+                    <div style="font-family:var(--mono);font-size:0.7rem;color:var(--t3);margin-top:3px;">{pit}</div>
                   </div>
-                  <span class="pit-nav-count">{eq_cnt}</span>
+                  <span style="font-family:var(--mono);font-size:0.72rem;font-weight:700;
+                               border-radius:4px;padding:2px 8px;{badge_style}">{eq_cnt}</span>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -675,12 +718,23 @@ if modo == 'Predicción Manual':
         pit_label = PIT_LABELS[pit]
         eq_count  = sum(len(v) for v in EQUIPOS_POR_PIT[pit].values())
 
+        pc_active = PIT_COLORS[pit]
         st.markdown(f"""
             <div class="content-panel">
-              <div class="content-topbar">
+              <div style="display:flex;align-items:center;justify-content:space-between;
+                          padding:13px 19px;
+                          background:linear-gradient(90deg, {pc_active['bg']} 0%, var(--bg-elev) 60%);
+                          border-bottom:1px solid var(--b2);
+                          border-left:4px solid {pc_active['border']};">
                 <div>
-                  <div class="content-pit-name">{pit_label}</div>
-                  <div class="content-pit-meta">{pit} · {eq_count} unidades · Pit {pit_idx+1} de {len(PITS)}</div>
+                  <div style="font-size:1.1rem;font-weight:700;color:{pc_active['text']};">{pit_label}</div>
+                  <div style="font-family:var(--mono);font-size:0.75rem;color:var(--t3);margin-top:4px;">{pit} · {eq_count} unidades · Pit {pit_idx+1} de {len(PITS)}</div>
+                </div>
+                <div style="font-family:var(--mono);font-size:0.7rem;font-weight:700;
+                            color:{pc_active['text']};background:{pc_active['dim']};
+                            border:1px solid {pc_active['border']};border-radius:4px;
+                            padding:4px 12px;letter-spacing:2px;text-transform:uppercase;">
+                  {pit}
                 </div>
               </div>
             </div>
@@ -718,7 +772,7 @@ if modo == 'Predicción Manual':
         # Pre-populate widget keys from persistent storage for active pit only
         for mod_eq, equipos in EQUIPOS_POR_PIT[pit].items():
             for eq in equipos:
-                st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 85.0)
+                st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 87.0)
         for fld in ['qty', 'disp', 'uso', 'ciclo']:
             st.session_state[f'ni_{fld}_{pit}'] = st.session_state.get(
                 f'val_{fld}_{pit}', float(DEFAULTS_CAM[pit][fld])
@@ -726,10 +780,14 @@ if modo == 'Predicción Manual':
 
         # Render inputs for active pit and sync back to val_* immediately
         for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
-            cls = EQ_MODEL_CLASS.get(modelo_eq, 'pc8000')
+            ec_colors = EQ_COLORS.get(modelo_eq, {'bg':'rgba(255,255,255,0.03)','border':'var(--b3)','text':'var(--t2)'})
             st.markdown(
-                f'<div class="eq-block">'
-                f'<span class="eq-model-lbl {cls}">{modelo_eq}</span>'
+                f'<div style="padding:14px 19px 12px 19px;border-bottom:1px solid var(--b1);'
+                f'background:{ec_colors["bg"]};border-left:3px solid {ec_colors["border"]};">'
+                f'<span style="font-family:var(--mono);font-size:0.78rem;font-weight:700;'
+                f'letter-spacing:2px;text-transform:uppercase;color:{ec_colors["text"]};'
+                f'display:block;margin-bottom:12px;">'
+                f'▌ {modelo_eq}</span>'
                 f'</div>',
                 unsafe_allow_html=True
             )
@@ -1011,7 +1069,7 @@ else:
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);">Stacking Regressor Reg.</span>
+                  <span style="color:var(--copper-hi);font-family:var(--mono);">Ensemble Reg.</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;">
                   <span style="color:var(--t2);font-family:var(--mono);">Confianza</span>
