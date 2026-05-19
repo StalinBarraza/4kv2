@@ -875,7 +875,7 @@ if modo == 'Predicción Manual':
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Frentes</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Pits</span>
                   <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">04 / 04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
@@ -994,7 +994,7 @@ else:
                   <span style="color:var(--t1);font-family:var(--mono);">turno (D/N)</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Frentes mineros</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Pits</span>
                   <span style="color:var(--copper-hi);font-family:var(--mono);">04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
