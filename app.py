@@ -500,10 +500,10 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 92.0, 'disp': 85.0, 'uso': 85.0, 'ciclo': 30.0},
-    'DP5':      {'qty': 80.0, 'disp': 85.0, 'uso': 85.0, 'ciclo': 31.0},
-    'EC':       {'qty': 15.0, 'disp': 85.0, 'uso': 85.0, 'ciclo': 23.0},
-    'PRIBBENOW':{'qty': 68.0, 'disp': 85.0, 'uso': 85.0, 'ciclo': 25.0},
+    'DESCANSO': {'qty': 92.0, 'disp': 85.0, 'uso': 87.0, 'ciclo': 29.0},
+    'DP5':      {'qty': 80.0, 'disp': 85.0, 'uso': 87.0, 'ciclo': 31.0},
+    'EC':       {'qty': 15.0, 'disp': 85.0, 'uso': 87.0, 'ciclo': 23.0},
+    'PRIBBENOW':{'qty': 68.0, 'disp': 85.0, 'uso': 87.0, 'ciclo': 25.0},
 }
 
 COLS_NUMERICAS = [
