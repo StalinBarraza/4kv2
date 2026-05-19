@@ -755,7 +755,7 @@ if modo == 'Predicción Manual':
 
                 st.markdown(f'''
                     <div class="hero-num live">{res_prediccion:.1f}</div>
-                    <div class="hero-unit">K Toneladas / Turno</div>
+                    <div class="hero-unit"> Cargas / Turno</div>
                     <div class="hero-range">Rango esperado: {lower_bound:.1f} - {upper_bound:.1f} K Ton</div>
                 ''', unsafe_allow_html=True)
 
