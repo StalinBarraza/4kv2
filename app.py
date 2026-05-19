@@ -335,8 +335,11 @@ div[data-testid="stNumberInput"] button:hover { color:var(--copper) !important; 
     letter-spacing:1.2px; text-transform:uppercase;
 }
 .conf-block { border-top:1px solid var(--b1); padding-top:1.1rem; margin-top:1.1rem; }
+.conf-head  { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
 .conf-lbl   { font-family:var(--mono) !important; font-size:0.75rem !important; color:var(--t3) !important; letter-spacing:2px !important; text-transform:uppercase; }
 .conf-val   { font-family:var(--mono) !important; font-size:1.15rem !important; font-weight:600 !important; color:var(--copper-hi) !important; }
+.conf-bar-bg   { width:100%; height:4px; background:var(--bg-elev); border-radius:2px; overflow:hidden; }
+.conf-bar-fill { height:100%; background:linear-gradient(90deg, var(--copper), var(--copper-hi)); border-radius:2px; }
 
 /* ── Calc button ── */
 .calc-wrap .stButton > button {
@@ -353,6 +356,11 @@ div[data-testid="stNumberInput"] button:hover { color:var(--copper) !important; 
     transform:translateY(-1px) !important;
     box-shadow:0 4px 14px rgba(166,124,82,0.35) !important;
 }
+.calc-wrap .stButton > button:disabled {
+    background:var(--bg-elev) !important; color:var(--t3) !important;
+    transform:none !important; box-shadow:none !important; opacity:1 !important;
+    border:1px solid var(--b1) !important; cursor:not-allowed !important;
+}
 
 div[data-testid="stMetric"] label {
     font-size:0.75rem !important; color:var(--t3) !important;
@@ -363,6 +371,11 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     font-family:var(--mono) !important; color:var(--t1) !important;
     font-size:1.6rem !important; font-weight:500 !important;
 }
+div[data-testid="stFileUploader"] > div {
+    background:var(--bg-card) !important; border:1px dashed var(--b2) !important;
+    border-radius:4px !important; padding:1.4rem !important;
+}
+div[data-testid="stFileUploader"] > div:hover { border-color:var(--copper) !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -473,7 +486,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 5
+MODEL_ERROR = 1.5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -636,20 +649,6 @@ if modo == 'Predicción Manual':
 
         st.markdown('<div style="height:0.3rem"></div>', unsafe_allow_html=True)
 
-        vals_palas    = {}
-        vals_camiones = {}
-
-        # Construcción robusta desde llaves persistentes de session_state (val_{eq})
-        for p in PITS:
-            for mod_eq, equipos in EQUIPOS_POR_PIT[p].items():
-                for eq in equipos:
-                    val = st.session_state.get(f'val_{eq}', 75.0)
-                    vals_palas[f'UsodeDisp_{eq}'] = val / 100.0
-            vals_camiones[f'QtyCamiones_{p}']         = st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])
-            vals_camiones[f'Disponibilidad_TKS_{p}']  = st.session_state.get(f'val_disp_{p}', DEFAULTS_CAM[p]['disp']) / 100.0
-            vals_camiones[f'UsodeDisp_TKS_{p}']       = st.session_state.get(f'val_uso_{p}',  DEFAULTS_CAM[p]['uso'])  / 100.0
-            vals_camiones[COL_CICLO_MAP[p]]            = st.session_state.get(f'val_ciclo_{p}', DEFAULTS_CAM[p]['ciclo'])
-
         # Render de inputs dinámicos con callback on_change
         for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
             cls = EQ_MODEL_CLASS.get(modelo_eq, 'pc8000')
@@ -662,9 +661,8 @@ if modo == 'Predicción Manual':
             eq_cols = st.columns(len(equipos))
             for ec, eq in zip(eq_cols, equipos):
                 with ec:
-                    # Sincronizamos el estado interno temporal del widget al renderizar
                     st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 75.0)
-                    pct_val = st.number_input(
+                    st.number_input(
                         f'{eq} — Util %',
                         min_value=0.0, max_value=100.0,
                         step=1.0, format='%.1f',
@@ -672,7 +670,6 @@ if modo == 'Predicción Manual':
                         on_change=update_pala,
                         args=(eq,)
                     )
-                    vals_palas[f'UsodeDisp_{eq}'] = pct_val / 100.0
 
         st.markdown(
             '<div class="trucks-block"><span class="trucks-lbl">Flota de Camiones</span></div>',
@@ -681,30 +678,26 @@ if modo == 'Predicción Manual':
         tc1, tc2, tc3, tc4 = st.columns(4)
         with tc1:
             st.session_state[f'ni_qty_{pit}'] = st.session_state.get(f'val_qty_{pit}', DEFAULTS_CAM[pit]['qty'])
-            qty = st.number_input('Qty', min_value=0.0, max_value=400.0,
+            st.number_input('Qty', min_value=0.0, max_value=400.0,
                                   step=1.0, format='%.1f', key=f'ni_qty_{pit}',
                                   on_change=update_qty, args=(pit,))
-            vals_camiones[f'QtyCamiones_{pit}'] = qty
         with tc2:
             st.session_state[f'ni_disp_{pit}'] = st.session_state.get(f'val_disp_{pit}', DEFAULTS_CAM[pit]['disp'])
-            disp = st.number_input('Disp %', min_value=0.0, max_value=100.0,
+            st.number_input('Disp %', min_value=0.0, max_value=100.0,
                                    step=1.0, format='%.1f', key=f'ni_disp_{pit}',
                                    on_change=update_disp, args=(pit,))
-            vals_camiones[f'Disponibilidad_TKS_{pit}'] = disp / 100.0
         with tc3:
             st.session_state[f'ni_uso_{pit}'] = st.session_state.get(f'val_uso_{pit}', DEFAULTS_CAM[pit]['uso'])
-            uso = st.number_input('Uso %', min_value=0.0, max_value=100.0,
+            st.number_input('Uso %', min_value=0.0, max_value=100.0,
                                   step=1.0, format='%.1f', key=f'ni_uso_{pit}',
                                   on_change=update_uso, args=(pit,))
-            vals_camiones[f'UsodeDisp_TKS_{pit}'] = uso / 100.0
         with tc4:
             st.session_state[f'ni_ciclo_{pit}'] = st.session_state.get(f'val_ciclo_{pit}', DEFAULTS_CAM[pit]['ciclo'])
-            ciclo = st.number_input('Ciclo (min)', min_value=15.0, max_value=60.0,
+            st.number_input('Ciclo (min)', min_value=15.0, max_value=60.0,
                                     step=0.1, format='%.1f', key=f'ni_ciclo_{pit}',
                                     on_change=update_ciclo, args=(pit,))
-            vals_camiones[COL_CICLO_MAP[pit]] = ciclo
 
-        # Resumen de todos los pits (camiones) corregido
+        # Resumen inferior de camiones
         st.markdown('<div style="height:0.5rem"></div>', unsafe_allow_html=True)
         st.markdown("""
             <div style="background:var(--bg-elev);border:1px solid var(--b1);border-radius:4px;
@@ -719,3 +712,84 @@ if modo == 'Predicción Manual':
             resumen_parts.append(f"<span style='font-family:var(--mono);font-size:0.8rem;color:var(--t2);'>{p}: <b>{int(qty_p)}</b></span>")
         
         st.markdown(" · ".join(resumen_parts) + "</div>", unsafe_allow_html=True)
+
+    # ════════════════════════════
+    # PANEL DE RESULTADOS (3RA COLUMNA)
+    # ════════════════════════════
+    with result_col:
+        st.markdown('<div class="hero">', unsafe_allow_html=True)
+        st.markdown(f'''
+            <div class="hero-top">
+                <span class="hero-eyebrow">Forecast de Producción</span>
+                <span class="hero-shift">{st.session_state.get("turno_sel", "D")}</span>
+            </div>
+        ''', unsafe_allow_html=True)
+        
+        # Botón para ejecutar la predicción
+        st.markdown('<div class="calc-wrap" style="margin-top: 1rem; margin-bottom: 1rem;">', unsafe_allow_html=True)
+        btn_predecir = st.button('⚡ Ejecutar Predicción', use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        if btn_predecir:
+            # 1. Recolección limpia del estado persistente completo para el DataFrame
+            registro = {}
+            for p in PITS:
+                for mod_eq, equipos in EQUIPOS_POR_PIT[p].items():
+                    for eq in equipos:
+                        val_pala = st.session_state.get(f'val_{eq}', 75.0)
+                        registro[f'UsodeDisp_{eq}'] = val_pala / 100.0
+                
+                registro[f'QtyCamiones_{p}'] = st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])
+                registro[f'Disponibilidad_TKS_{p}'] = st.session_state.get(f'val_disp_{p}', DEFAULTS_CAM[p]['disp']) / 100.0
+                registro[f'UsodeDisp_TKS_{p}'] = st.session_state.get(f'val_uso_{p}', DEFAULTS_CAM[p]['uso']) / 100.0
+                registro[COL_CICLO_MAP[p]] = st.session_state.get(f'val_ciclo_{p}', DEFAULTS_CAM[p]['ciclo'])
+            
+            registro['turno'] = turno
+            df_input = pd.DataFrame([registro])
+
+            # 2. Inferencia con el modelo de ensamble cargado
+            try:
+                res_prediccion = predecir(df_input)[0]
+                lower_bound = res_prediccion * (1 - (MODEL_ERROR / 100.0))
+                upper_bound = res_prediccion * (1 + (MODEL_ERROR / 100.0))
+
+                st.markdown(f'''
+                    <div class="hero-num live">{res_prediccion:.1f}</div>
+                    <div class="hero-unit">K Toneladas / Turno</div>
+                    <div class="hero-range">Rango esperado: {lower_bound:.1f} - {upper_bound:.1f} K Ton</div>
+                ''', unsafe_allow_html=True)
+
+                st.markdown(f'''
+                    <div class="conf-block">
+                        <div class="conf-head">
+                            <span class="conf-lbl">Confianza del Modelo</span>
+                            <span class="conf-val">{CONFIDENCE:.1f}%</span>
+                        </div>
+                        <div class="conf-bar-bg">
+                            <div class="conf-bar-fill" style="width: {CONFIDENCE}%;"></div>
+                        </div>
+                    </div>
+                ''', unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"Error en la inferencia del modelo: {e}")
+        else:
+            # Estado en espera antes de presionar el botón
+            st.markdown('''
+                <div class="hero-num">- -</div>
+                <div class="hero-unit">Listo para procesar datos</div>
+                <div style="font-family:var(--mono); font-size:0.75rem; color:var(--t3); margin-top:0.8rem;">
+                    Configura los parámetros de los frentes y presiona el botón superior.
+                </div>
+            ''', unsafe_allow_html=True)
+
+        st.markdown('</div>', unsafe_allow_html=True) # Cierre de div class="hero"
+
+# ══════════════════════════════════════════════════════════════════
+# MODO 2 — CARGA MASIVA (Estructura de respaldo)
+# ══════════════════════════════════════════════════════════════════
+else:
+    st.markdown('<div style="height:1rem"></div>', unsafe_allow_html=True)
+    st.markdown("### Procesamiento Masivo de Datos")
+    uploaded_file = st.file_uploader("Cargar lote de frentes (.csv, .xlsx)", type=["csv", "xlsx"])
+    if uploaded_file is not None:
+        st.info("Archivo cargado con éxito. Procesando registros mediante el pipeline...")
