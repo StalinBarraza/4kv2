@@ -599,9 +599,9 @@ PIT_LABELS = {
 # Defaults en PORCENTAJES (0-100) para los inputs visibles al usuario
 DEFAULTS_CAM = {
     'DESCANSO': {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
-    'DP5':      {'qty': 90.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
+    'DP5':      {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 28.0},
-    'PRIBBENOW':{'qty': 70.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 26.0},
+    'PRIBBENOW':{'qty': 68.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 26.0},
 }
 
 COLS_NUMERICAS = [
@@ -632,7 +632,7 @@ COL_CICLO_MAP = {
 }
 
 # Confianza fija — derivada del error ±1.5% del modelo
-MODEL_ERROR_PCT = 5
+MODEL_ERROR_PCT = 1.5
 CONFIDENCE_PCT  = 100 - MODEL_ERROR_PCT  # 98.5%
 
 # ══════════════════════════════════════════════════════════════════
@@ -757,9 +757,9 @@ if modo == 'Predicción Manual':
                     eq_cols = st.columns(len(equipos))
                     for ec, eq in zip(eq_cols, equipos):
                         with ec:
-                            # Input en porcentaje (0-100)
+                            # Input en porcentaje (0-100), label muestra "6233 — Util %"
                             pct_val = st.number_input(
-                                eq,
+                                f'{eq} — Util %',
                                 min_value=0.0, max_value=100.0,
                                 step=1.0, format='%.1f',
                                 key=f'ni_{eq}'
@@ -795,13 +795,82 @@ if modo == 'Predicción Manual':
                         step=0.1, format='%.1f', key=f'ni_ciclo_{pit}')
                     vals_camiones[COL_CICLO_MAP[pit]] = ciclo
 
+    # ── Validación total camiones ────────────────────────────────
+    QTY_OBJETIVO = 255
+    total_camiones = sum(
+        st.session_state.get(f'ni_qty_{pit}', 0.0)
+        for pit in PITS
+    )
+    total_camiones_int = int(round(total_camiones))
+    camiones_ok = total_camiones_int == QTY_OBJETIVO
+    delta_cam   = total_camiones_int - QTY_OBJETIVO
+
+    if not camiones_ok:
+        signo = f'+{delta_cam}' if delta_cam > 0 else str(delta_cam)
+        st.markdown(f"""
+            <div style="
+                background: rgba(199,107,107,0.08);
+                border: 1px solid rgba(199,107,107,0.3);
+                border-left: 3px solid #C76B6B;
+                border-radius: 4px;
+                padding: 10px 16px;
+                display: flex; align-items: center; justify-content: space-between;
+                margin-bottom: 0.5rem;
+            ">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:1rem;">⚠</span>
+                    <div>
+                        <div style="font-size:0.78rem;font-weight:600;color:#C76B6B;">
+                            Total de camiones debe ser exactamente {QTY_OBJETIVO}
+                        </div>
+                        <div style="font-size:0.68rem;color:#8B92A0;font-family:var(--font-mono);margin-top:2px;">
+                            La predicción estará bloqueada hasta corregir la flota
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:1.6rem;font-weight:300;font-family:var(--font-mono);
+                                color:#C76B6B;letter-spacing:-1px;line-height:1;">
+                        {total_camiones_int}
+                    </div>
+                    <div style="font-size:0.62rem;color:#C76B6B;font-family:var(--font-mono);">
+                        objetivo {QTY_OBJETIVO} &nbsp;({signo})
+                    </div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+            <div style="
+                background: rgba(107,190,131,0.07);
+                border: 1px solid rgba(107,190,131,0.2);
+                border-left: 3px solid #6BBE83;
+                border-radius: 4px;
+                padding: 8px 16px;
+                display: flex; align-items: center; justify-content: space-between;
+                margin-bottom: 0.5rem;
+            ">
+                <div style="font-size:0.72rem;color:#6BBE83;font-family:var(--font-mono);">
+                    ✓ &nbsp;Flota completa — {total_camiones_int} camiones distribuidos en 4 frentes
+                </div>
+                <div style="font-size:1.1rem;font-weight:500;font-family:var(--font-mono);
+                            color:#6BBE83;letter-spacing:-0.5px;">
+                    {QTY_OBJETIVO}
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+
     # ── Hero result + side ───────────────────────────────────────
     st.markdown('<hr>', unsafe_allow_html=True)
     hero_col, side_col = st.columns([2.4, 1])
 
     with side_col:
         st.markdown('<div class="calc-wrap">', unsafe_allow_html=True)
-        calcular = st.button('▸  EJECUTAR PREDICCIÓN', use_container_width=True)
+        calcular = st.button(
+            '▸  EJECUTAR PREDICCIÓN',
+            use_container_width=True,
+            disabled=not camiones_ok
+        )
         st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown(f"""
@@ -902,7 +971,7 @@ else:
                         border-left:2px solid var(--copper);
                         border-radius:3px;padding:0.7rem 1rem;margin-bottom:0.6rem;
                         font-size:0.78rem;color:var(--text-secondary);line-height:1.5;">
-                Plantilla con los  parámetros requeridos. Cada fila representa un turno de operación.
+                Plantilla con los 45 parámetros requeridos. Cada fila representa un turno de operación.
                 <br><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);
                                 letter-spacing:1px;">
                 ⓘ Los valores % en plantilla CSV deben ir como decimales (0–1), no como porcentajes.</span>
