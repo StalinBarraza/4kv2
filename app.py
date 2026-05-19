@@ -451,7 +451,7 @@ modelo_ml, variables, min_max_scaler = cargar_modelo()
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
-        'Komatsu PC8000': ['6233','6234','6247','6248'],
+        'Komatsu PC8000': ['6233','6234','6247','6248', '6239'],
         'Bucyrus BE495':  ['6243','6244'],
         'Hitachi EX3600': ['6260'],
     },
@@ -462,14 +462,14 @@ EQUIPOS_POR_PIT = {
         'Apron Feeder':   ['6449','6455'],
     },
     'EC': {
-        'Komatsu PC8000': ['6231','6239'],
-        'Hitachi EX3600': ['6262','6268'],
+        'Komatsu PC8000': ['6231'],
+        'Hitachi EX3600': ['6262'],
         'Komatsu PC4000': ['6264','6269'],
     },
     'PRIBBENOW': {
-        'Komatsu PC8000': ['6235','6245','6246'],
+        'Komatsu PC8000': ['6235','6245','6246', '6249'],
         'Bucyrus BE495':  ['6241'],
-        'Komatsu PC4000': ['6249'],
+        'Komatsu PC4000': ['6268'],
         'Apron Feeder':   ['6457'],
     },
 }
@@ -490,7 +490,7 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
+    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 28.0},
     'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 26.0},
@@ -525,7 +525,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 1.5
+MODEL_ERROR = 5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -612,7 +612,7 @@ if modo == 'Predicción Manual':
 
         st.markdown("""
             <div class="sidebar-top">
-              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Frentes Mineros</div>
+              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Pits</div>
               <div style="font-size:0.82rem;color:var(--t2);font-family:var(--mono);margin-top:4px;">
                 Selecciona un pit para editar
               </div>
@@ -774,7 +774,7 @@ if modo == 'Predicción Manual':
             <div style="background:var(--bg-elev);border:1px solid var(--b2);border-radius:6px;
                         padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
               <span style="font-family:var(--mono);font-size:0.85rem;color:var(--t2);
-                           letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Flota por frente:</span>
+                           letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Camiones por mina</span>
         """, unsafe_allow_html=True)
 
         resumen_parts = []
@@ -887,7 +887,7 @@ if modo == 'Predicción Manual':
                   <span style="color:var(--copper-hi);font-family:var(--mono);font-weight:600;">Ensemble</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Error RMSE</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Error MAPE</span>
                   <span style="color:var(--copper-hi);font-family:var(--mono);font-weight:600;">±{MODEL_ERROR:.1f}%</span>
                 </div>
               </div>
