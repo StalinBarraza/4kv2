@@ -300,7 +300,7 @@ if modo == '📊 Predicción Manual':
             <div class="result-box">
                 <div class="result-label">Loads Predicted</div>
                 <div class="result-value">{cargas:,}</div>
-                <div class="result-sub">{tag} &nbsp;|&nbsp; ⚠ Error: ±1.5%</div>
+                <div class="result-sub">{tag} &nbsp;|&nbsp; ⚠ Error: ±5%</div>
             </div>""", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
