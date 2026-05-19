@@ -459,7 +459,7 @@ EQUIPOS_POR_PIT = {
         'Komatsu PC8000': ['6232','6236','6237','6238','6250'],
         'Bucyrus BE495':  ['6242'],
         'Hitachi EX3600': ['6261','6263'],
-        'Apron Feeder':   ['6449','6455'],
+        'Dragline':   ['6449','6455'],
     },
     'EC': {
         'Komatsu PC8000': ['6231'],
@@ -470,7 +470,7 @@ EQUIPOS_POR_PIT = {
         'Komatsu PC8000': ['6235','6245','6246', '6249'],
         'Bucyrus BE495':  ['6241'],
         'Komatsu PC4000': ['6268'],
-        'Apron Feeder':   ['6457'],
+        'Dragline':   ['6457'],
     },
 }
 
@@ -479,7 +479,7 @@ EQ_MODEL_CLASS = {
     'Komatsu PC4000': 'pc4000',
     'Hitachi EX3600': 'ex3600',
     'Bucyrus BE495':  'be495',
-    'Apron Feeder':   'apron',
+    'Dragline':   'apron',
 }
 
 PIT_LABELS = {
