@@ -486,7 +486,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 1.5
+MODEL_ERROR = 5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
