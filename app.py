@@ -599,9 +599,9 @@ PIT_LABELS = {
 # Defaults en PORCENTAJES (0-100) para los inputs visibles al usuario
 DEFAULTS_CAM = {
     'DESCANSO': {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
-    'DP5':      {'qty': 80.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
+    'DP5':      {'qty': 90.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 28.0},
-    'PRIBBENOW':{'qty': 68.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 26.0},
+    'PRIBBENOW':{'qty': 70.0, 'disp_pct': 80.0, 'uso_pct': 75.0, 'ciclo': 26.0},
 }
 
 COLS_NUMERICAS = [
@@ -632,7 +632,7 @@ COL_CICLO_MAP = {
 }
 
 # Confianza fija — derivada del error ±1.5% del modelo
-MODEL_ERROR_PCT = 1.5
+MODEL_ERROR_PCT = 5
 CONFIDENCE_PCT  = 100 - MODEL_ERROR_PCT  # 98.5%
 
 # ══════════════════════════════════════════════════════════════════
@@ -902,7 +902,7 @@ else:
                         border-left:2px solid var(--copper);
                         border-radius:3px;padding:0.7rem 1rem;margin-bottom:0.6rem;
                         font-size:0.78rem;color:var(--text-secondary);line-height:1.5;">
-                Plantilla con los 45 parámetros requeridos. Cada fila representa un turno de operación.
+                Plantilla con los  parámetros requeridos. Cada fila representa un turno de operación.
                 <br><span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-muted);
                                 letter-spacing:1px;">
                 ⓘ Los valores % en plantilla CSV deben ir como decimales (0–1), no como porcentajes.</span>
