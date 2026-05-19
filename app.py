@@ -500,10 +500,10 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
-    'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
-    'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 28.0},
-    'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 26.0},
+    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 80.0, 'ciclo': 30.0},
+    'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 80.0, 'ciclo': 31.0},
+    'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 80.0, 'ciclo': 23.0},
+    'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 80.0, 'ciclo': 26.0},
 }
 
 COLS_NUMERICAS = [
@@ -709,7 +709,7 @@ if modo == 'Predicción Manual':
             for mod_eq, equipos in EQUIPOS_POR_PIT[p].items():
                 for eq in equipos:
                     # ← FIX: read from val_{eq}, not ni_{eq}
-                    vals_palas[f'UsodeDisp_{eq}'] = st.session_state.get(f'val_{eq}', 75.0) / 100.0
+                    vals_palas[f'UsodeDisp_{eq}'] = st.session_state.get(f'val_{eq}', 82.0) / 100.0
             vals_camiones[f'QtyCamiones_{p}']         = st.session_state.get(f'val_qty_{p}',  DEFAULTS_CAM[p]['qty'])
             vals_camiones[f'Disponibilidad_TKS_{p}']  = st.session_state.get(f'val_disp_{p}', DEFAULTS_CAM[p]['disp']) / 100.0
             vals_camiones[f'UsodeDisp_TKS_{p}']       = st.session_state.get(f'val_uso_{p}',  DEFAULTS_CAM[p]['uso'])  / 100.0
@@ -718,7 +718,7 @@ if modo == 'Predicción Manual':
         # Pre-populate widget keys from persistent storage for active pit only
         for mod_eq, equipos in EQUIPOS_POR_PIT[pit].items():
             for eq in equipos:
-                st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 75.0)
+                st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 82.0)
         for fld in ['qty', 'disp', 'uso', 'ciclo']:
             st.session_state[f'ni_{fld}_{pit}'] = st.session_state.get(
                 f'val_{fld}_{pit}', float(DEFAULTS_CAM[pit][fld])
@@ -754,7 +754,7 @@ if modo == 'Predicción Manual':
         )
         tc1, tc2, tc3, tc4 = st.columns(4)
         with tc1:
-            qty = st.number_input('Qty', min_value=0.0, max_value=400.0,
+            qty = st.number_input('Qty', min_value=0.0, max_value=255.0,
                                   step=1.0, format='%.1f', key=f'ni_qty_{pit}',
                                   on_change=_save_truck, args=('qty', pit))
             st.session_state[f'val_qty_{pit}'] = qty
