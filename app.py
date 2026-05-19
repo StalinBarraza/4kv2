@@ -500,7 +500,7 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
+    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 28.0},
     'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 26.0},
@@ -535,7 +535,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 1.5
+MODEL_ERROR = 4
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -587,7 +587,7 @@ st.markdown(f"""
     <div class="app-mark">◆</div>
     <div>
       <div class="app-title">LOAD FORECAST · COMPLEX</div>
-      <div class="app-sub">Production Engineering / Ensemble ML v2.1</div>
+      <div class="app-sub">Production Engineering / XGB ML v2.1</div>
     </div>
   </div>
   <div class="app-meta">
@@ -858,7 +858,7 @@ if modo == 'Predicción Manual':
                   <div class="conf-bar-fill" style="width:{CONFIDENCE}%"></div>
                 </div>
                 <div class="conf-foot">
-                  <span>RMSE ±{MODEL_ERROR:.1f}%</span>
+                  <span>MAPE ±{MODEL_ERROR:.1f}%</span>
                   <span>Pending</span>
                 </div>
               </div>
@@ -896,10 +896,10 @@ if modo == 'Predicción Manual':
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">Ensemble</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">XGB</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Error RMSE</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Error MAPE</span>
                   <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">±{MODEL_ERROR:.1f}%</span>
                 </div>
               </div>
@@ -935,7 +935,7 @@ if modo == 'Predicción Manual':
                       <div class="conf-bar-fill" style="width:{CONFIDENCE}%"></div>
                     </div>
                     <div class="conf-foot">
-                      <span>RMSE ±{MODEL_ERROR:.1f}%</span>
+                      <span>MAPE ±{MODEL_ERROR:.1f}%</span>
                       <span style="color:var(--green);">● Computed</span>
                     </div>
                   </div>
@@ -1011,7 +1011,7 @@ else:
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);">Ensemble Reg.</span>
+                  <span style="color:var(--copper-hi);font-family:var(--mono);">XGB Reg.</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;">
                   <span style="color:var(--t2);font-family:var(--mono);">Confianza</span>
