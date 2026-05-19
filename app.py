@@ -487,7 +487,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 5
+MODEL_ERROR = 1.5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -718,7 +718,6 @@ if modo == 'Predicción Manual':
     # PANEL DE RESULTADOS (3RA COLUMNA con VALIDACIÓN)
     # ════════════════════════════
     with result_col:
-        # Calcular de forma reactiva la suma actual de la flota
         suma_camiones = sum(int(st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])) for p in PITS)
         flota_invalida = (suma_camiones != QTY_TOTAL)
 
@@ -730,7 +729,6 @@ if modo == 'Predicción Manual':
             </div>
         ''', unsafe_allow_html=True)
         
-        # Inyección del Banner según validación del pool total (255 camiones)
         if flota_invalida:
             st.markdown(f'''
                 <div class="cam-banner warn" style="margin-top: 1rem;">
@@ -752,13 +750,11 @@ if modo == 'Predicción Manual':
                 </div>
             ''', unsafe_allow_html=True)
 
-        # Botón para ejecutar la predicción (enlazado al estado lógico de validación)
         st.markdown('<div class="calc-wrap" style="margin-bottom: 1rem;">', unsafe_allow_html=True)
         btn_predecir = st.button('⚡ Ejecutar Predicción', use_container_width=True, disabled=flota_invalida)
         st.markdown('</div>', unsafe_allow_html=True)
 
         if not flota_invalida and btn_predecir:
-            # 1. Recolección limpia del estado persistente completo para el DataFrame
             registro = {}
             for p in PITS:
                 for mod_eq, equipos in EQUIPOS_POR_PIT[p].items():
@@ -774,7 +770,6 @@ if modo == 'Predicción Manual':
             registro['turno'] = turno
             df_input = pd.DataFrame([registro])
 
-            # 2. Inferencia con el modelo de ensamble cargado
             try:
                 res_prediccion = predecir(df_input)[0]
                 lower_bound = res_prediccion * (1 - (MODEL_ERROR / 100.0))
@@ -800,7 +795,6 @@ if modo == 'Predicción Manual':
             except Exception as e:
                 st.error(f"Error en la inferencia del modelo: {e}")
         else:
-            # Estado en espera o bloqueado por validación
             if flota_invalida:
                 st.markdown(f'''
                     <div class="hero-num" style="color:var(--t4);">ERROR</div>
@@ -818,14 +812,107 @@ if modo == 'Predicción Manual':
                     </div>
                 ''', unsafe_allow_html=True)
 
-        st.markdown('</div>', unsafe_allow_html=True) # Cierre de div class="hero"
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════
-# MODO 2 — CARGA MASIVA (Estructura de respaldo)
+# MODO 2 — CARGA MASIVA (Modulo completamente Funcional)
 # ══════════════════════════════════════════════════════════════════
 else:
     st.markdown('<div style="height:1rem"></div>', unsafe_allow_html=True)
-    st.markdown("### Procesamiento Masivo de Datos")
+    st.markdown("### 📊 Procesamiento Masivo de Datos")
+    st.markdown("""
+        <div style="font-size:0.9rem; color:var(--t2); margin-bottom:1.5rem;">
+        Sube un archivo con los frentes estructurados. El pipeline validará automáticamente que cada fila sume exactamente 
+        <b>255 camiones</b> globales distribuidos entre los frentes antes de computar las estimaciones mediante el modelo.
+        </div>
+    """, unsafe_allow_html=True)
+    
     uploaded_file = st.file_uploader("Cargar lote de frentes (.csv, .xlsx)", type=["csv", "xlsx"])
+    
     if uploaded_file is not None:
-        st.info("Archivo cargado con éxito. Procesando registros mediante el pipeline...")
+        try:
+            # Identificación de extensión para lectura de datos
+            if uploaded_file.name.endswith('.csv'):
+                df_bulk = pd.read_csv(uploaded_file)
+            else:
+                df_bulk = pd.read_excel(uploaded_file)
+            
+            # Variables requeridas de flota para realizar la validación por fila
+            cols_camiones = ['QtyCamiones_DESCANSO', 'QtyCamiones_DP5', 'QtyCamiones_EC', 'QtyCamiones_PRIBBENOW']
+            missing_cols = [c for c in cols_camiones if c not in df_bulk.columns]
+            
+            if missing_cols:
+                st.error(f"❌ Estructura de archivo inválida. Faltan las siguientes columnas de flota: {missing_cols}")
+            else:
+                # Verificación analítica de camiones totales en lote
+                df_bulk['Suma_Camiones'] = df_bulk[cols_camiones].fillna(0).sum(axis=1).astype(int)
+                df_bulk['Flota_Valida'] = df_bulk['Suma_Camiones'] == QTY_TOTAL
+                
+                total_filas = len(df_bulk)
+                filas_validas = int(df_bulk['Flota_Valida'].sum())
+                filas_invalidas = total_filas - filas_validas
+                
+                # Tablero de métricas del lote
+                cm1, cm2, cm3 = st.columns(3)
+                with cm1:
+                    st.metric("Total Registros Cargados", total_filas)
+                with cm2:
+                    st.metric("Registros Válidos", filas_validas)
+                with cm3:
+                    st.metric("Registros Rechazados (≠ 255)", filas_invalidas, 
+                              delta=-filas_invalidas if filas_invalidas > 0 else None, 
+                              delta_color="inverse")
+                
+                st.markdown('<hr style="border-color:var(--b1); margin:1.5rem 0;">', unsafe_allow_html=True)
+                
+                if filas_invalidas > 0:
+                    st.markdown(f"""
+                        <div style="background:var(--red-dim); border-left:3px solid var(--red); padding:10px 16px; border-radius:4px; margin-bottom:1rem; font-size:0.85rem;">
+                        ⚠️ <b>Aviso de exclusión:</b> Se detectaron {filas_invalidas} filas cuya suma de flota no es igual a {QTY_TOTAL}. Estas filas se mantendrán en el reporte pero se marcarán como inválidas y no generarán estimaciones.
+                        </div>
+                    """, unsafe_allow_html=True)
+                
+                if filas_validas > 0:
+                    # Aislamiento y procesamiento exclusivo de vectores aprobados
+                    df_validas = df_bulk[df_bulk['Flota_Valida']].copy()
+                    
+                    # Ejecución del pipeline de ensamble en batch
+                    preds = predecir(df_validas)
+                    
+                    # Consolidación estructurada en el DataFrame maestro
+                    df_bulk['Prediccion_K_Ton'] = np.nan
+                    df_bulk.loc[df_bulk['Flota_Valida'], 'Prediccion_K_Ton'] = np.round(preds, 2)
+                    
+                    # Generación de bandas de dispersión analítica
+                    df_bulk['Rango_Min_K_Ton'] = np.nan
+                    df_bulk['Rango_Max_K_Ton'] = np.nan
+                    df_bulk.loc[df_bulk['Flota_Valida'], 'Rango_Min_K_Ton'] = np.round(preds * (1 - (MODEL_ERROR / 100.0)), 2)
+                    df_bulk.loc[df_bulk['Flota_Valida'], 'Rango_Max_K_Ton'] = np.round(preds * (1 + (MODEL_ERROR / 100.0)), 2)
+                    
+                    st.markdown(f"""
+                        <div style="background:var(--green-dim); border-left:3px solid var(--green); padding:10px 16px; border-radius:4px; margin-bottom:1.5rem; font-size:0.9rem; color:var(--green);">
+                        ✓ Inferencia masiva ejecutada correctamente. Modelos predictivos acoplados al set de datos.
+                        </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Visualización matricial de resultados
+                    st.markdown("#### Vista previa de matriz procesada")
+                    st.dataframe(df_bulk, use_container_width=True)
+                    
+                    # Serialización y buffer de descarga
+                    csv_buffer = io.StringIO()
+                    df_bulk.to_csv(csv_buffer, index=False)
+                    csv_data = csv_buffer.getvalue()
+                    
+                    st.markdown('<div style="height:0.5rem"></div>', unsafe_allow_html=True)
+                    st.download_button(
+                        label="📥 Descargar Reporte de Forecast Consolidados (CSV)",
+                        data=csv_data,
+                        file_name=f"reporte_batch_forecast_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                        mime="text/csv"
+                    )
+                else:
+                    st.error("❌ Error de procesamiento crítico: Ningún registro del archivo cumple con la restricción balanceada de 255 camiones.")
+                    
+        except Exception as e:
+            st.error(f"Error crítico durante el análisis estructural del archivo: {e}")
