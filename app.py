@@ -477,7 +477,7 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
+    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 28.0},
     'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 26.0},
@@ -512,7 +512,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 1.5
+MODEL_ERROR = 5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -564,7 +564,7 @@ st.markdown(f"""
     <div class="app-mark">◆</div>
     <div>
       <div class="app-title">LOAD FORECAST · COMPLEX</div>
-      <div class="app-sub">Production Engineering / Ensemble ML v2.1</div>
+      <div class="app-sub">Production Engineering</div>
     </div>
   </div>
   <div class="app-meta">
@@ -933,7 +933,7 @@ else:
                         border-left:2px solid var(--copper);border-radius:3px;
                         padding:0.8rem 1rem;margin-bottom:0.6rem;
                         font-size:0.88rem;color:var(--t2);line-height:1.5;">
-                Plantilla con los 45 parámetros requeridos. Cada fila representa un turno.
+                Plantilla con los parámetros requeridos. Cada fila representa un turno.
                 <br><span style="font-family:var(--mono);font-size:0.75rem;color:var(--t3);">
                 ⓘ Los valores de utilización y disponibilidad en CSV deben ir como decimales (0–1).</span>
             </div>
