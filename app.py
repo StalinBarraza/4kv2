@@ -18,33 +18,42 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 
 :root {
-    --bg-app:     #0D1017;
-    --bg-card:    #13181F;
-    --bg-elev:    #1A2030;
-    --bg-deep:    #080B0F;
+    /* ── Drummond brand ── */
+    --red:        #C8102E;
+    --red-hi:     #E8253F;
+    --red-dim:    rgba(200,16,46,0.14);
+    --red-glow:   rgba(200,16,46,0.25);
 
-    --copper:     #D4935A;
-    --copper-hi:  #F0AE72;
-    --copper-dim: rgba(212,147,90,0.15);
+    /* ── Backgrounds — dark carbon ── */
+    --bg-app:     #0E0F11;
+    --bg-card:    #161719;
+    --bg-elev:    #1E2024;
+    --bg-deep:    #09090B;
 
-    --green:      #4DD87A;
-    --green-dim:  rgba(77,216,122,0.10);
-    --red:        #E05C5C;
-    --red-dim:    rgba(224,92,92,0.10);
-    --amber:      #F0C060;
+    /* ── Accents ── */
+    --gold:       #C89B3C;
+    --gold-hi:    #E8BA52;
+    --gold-dim:   rgba(200,155,60,0.14);
 
-    --t1: #F0F3F8;
-    --t2: #A0AABB;
-    --t3: #606878;
-    --t4: #303848;
+    --green:      #3DD68C;
+    --green-dim:  rgba(61,214,140,0.10);
+    --warn:       #E05C5C;
+    --warn-dim:   rgba(224,92,92,0.10);
 
-    --b1: rgba(255,255,255,0.06);
-    --b2: rgba(255,255,255,0.10);
+    /* ── Text ── */
+    --t1: #F4F5F7;
+    --t2: #9BA3B0;
+    --t3: #5C6470;
+    --t4: #30353E;
+
+    /* ── Borders ── */
+    --b1: rgba(255,255,255,0.05);
+    --b2: rgba(255,255,255,0.09);
     --b3: rgba(255,255,255,0.16);
+    --bred: rgba(200,16,46,0.20);
 
     --sans: 'Inter', -apple-system, sans-serif;
     --mono: 'JetBrains Mono', monospace;
-
     font-size: 15px;
 }
 
@@ -64,25 +73,25 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 /* ── Header ── */
 .app-header {
     display:flex; align-items:center; justify-content:space-between;
-    padding: 1rem 0 0.9rem 0;
-    border-bottom: 1px solid var(--b2);
+    padding: 0.9rem 0 0.8rem 0;
+    border-bottom: 2px solid var(--red);
     margin-bottom: 1.1rem;
 }
 .app-brand { display:flex; align-items:center; gap:14px; }
 .app-mark {
     width:38px; height:38px;
-    background: var(--bg-elev);
-    border: 1px solid var(--b3);
-    border-radius:6px;
+    background: var(--red);
+    border-radius:4px;
     display:flex; align-items:center; justify-content:center;
-    font-size:1.1rem; color:var(--copper);
+    font-size:1.1rem; color:#fff; font-weight:700;
+    box-shadow: 0 2px 12px var(--red-glow);
 }
 .app-title { font-size:1.15rem !important; font-weight:700 !important; color:var(--t1) !important; letter-spacing:-0.2px; }
-.app-sub   { font-size:0.78rem !important; color:var(--t3) !important; letter-spacing:1.5px; text-transform:uppercase; font-family:var(--mono) !important; margin-top:3px; }
-.app-meta  { display:flex; align-items:center; gap:24px; }
+.app-sub   { font-size:0.75rem !important; color:var(--t3) !important; letter-spacing:1.8px; text-transform:uppercase; font-family:var(--mono) !important; margin-top:3px; }
+.app-meta  { display:flex; align-items:center; gap:22px; }
 .meta-pill {
     display:flex; align-items:center; gap:7px;
-    font-size:0.78rem; color:var(--green); letter-spacing:1.2px; text-transform:uppercase;
+    font-size:0.75rem; color:var(--green); letter-spacing:1.2px; text-transform:uppercase;
     font-family:var(--mono) !important; font-weight:600;
 }
 .live-dot {
@@ -90,7 +99,7 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
     box-shadow:0 0 8px var(--green); animation:blink 2.2s infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.meta-txt { font-family:var(--mono) !important; font-size:0.82rem !important; color:var(--t2) !important; }
+.meta-txt { font-family:var(--mono) !important; font-size:0.8rem !important; color:var(--t2) !important; }
 
 /* ── Mode tabs ── */
 .stRadio > div {
@@ -101,8 +110,8 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 }
 .stRadio > div > label {
     padding:10px 26px 11px 26px !important; border-radius:0 !important;
-    font-size:0.85rem !important; font-weight:600 !important;
-    letter-spacing:1.2px !important; text-transform:uppercase;
+    font-size:0.82rem !important; font-weight:600 !important;
+    letter-spacing:1.5px !important; text-transform:uppercase;
     cursor:pointer; transition:all 0.15s !important;
     color:var(--t3) !important; background:transparent !important;
     border-bottom:2px solid transparent !important;
@@ -110,121 +119,121 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 }
 .stRadio > div > label:hover { color:var(--t2) !important; }
 .stRadio > div > label:has(input:checked) {
-    color:var(--copper-hi) !important;
-    border-bottom-color:var(--copper) !important;
+    color:var(--red-hi) !important;
+    border-bottom-color:var(--red) !important;
 }
 
 /* ── Sidebar nav ── */
 .sidebar-nav {
     background: var(--bg-card);
     border: 1px solid var(--b2);
-    border-radius:8px;
+    border-top: 2px solid var(--red);
+    border-radius:6px;
     overflow:hidden;
     height:100%;
 }
 .sidebar-top {
-    padding:16px 18px 13px 18px;
+    padding:15px 17px 12px 17px;
     border-bottom:1px solid var(--b2);
     background: var(--bg-elev);
 }
 .sidebar-section-lbl {
     font-family:var(--mono) !important;
-    font-size:0.72rem !important; color:var(--t3) !important;
+    font-size:0.68rem !important; color:var(--t3) !important;
     letter-spacing:2.5px !important; text-transform:uppercase !important;
-    padding:12px 18px 7px 18px; display:block;
+    padding:11px 17px 6px 17px; display:block;
 }
 .pit-nav-item {
     display:flex; align-items:center; gap:12px;
-    padding:13px 16px; cursor:pointer;
+    padding:12px 15px; cursor:pointer;
     border-left:3px solid transparent;
     transition:all 0.15s;
 }
 .pit-nav-item.active {
-    background:rgba(212,147,90,0.10);
-    border-left-color:var(--copper);
+    background:var(--red-dim);
+    border-left-color:var(--red);
 }
 .pit-nav-item:hover:not(.active) {
-    background:rgba(255,255,255,0.03);
+    background:rgba(255,255,255,0.025);
     border-left-color:var(--b3);
 }
 .pit-nav-name { font-size:1rem !important; font-weight:600 !important; }
-.pit-nav-item.active .pit-nav-name { color:var(--copper-hi) !important; }
+.pit-nav-item.active .pit-nav-name { color:var(--red-hi) !important; }
 .pit-nav-item:not(.active) .pit-nav-name { color:var(--t2) !important; }
-.pit-nav-code { font-family:var(--mono) !important; font-size:0.72rem !important; color:var(--t3) !important; margin-top:3px; }
+.pit-nav-code { font-family:var(--mono) !important; font-size:0.7rem !important; color:var(--t3) !important; margin-top:3px; }
 .pit-nav-count {
     margin-left:auto;
     font-family:var(--mono) !important; font-size:0.72rem !important;
-    color:var(--copper-hi) !important;
-    background:var(--copper-dim);
-    border:1px solid rgba(212,147,90,0.25);
+    color:var(--red-hi) !important;
+    background:var(--red-dim);
+    border:1px solid var(--bred);
     border-radius:4px; padding:2px 8px;
-    font-weight:600;
+    font-weight:700;
 }
 
-/* Turno toggle in sidebar */
+/* Turno section */
 .turno-section {
-    padding:12px 16px 14px 16px;
+    padding:12px 15px 14px 15px;
     border-top:1px solid var(--b2);
 }
 .turno-lbl {
     font-family:var(--mono) !important;
-    font-size:0.72rem !important; color:var(--t3) !important;
+    font-size:0.7rem !important; color:var(--t3) !important;
     letter-spacing:2px !important; text-transform:uppercase !important;
     margin-bottom:7px; display:block;
 }
 
-/* ── Selectbox (turno) ── */
+/* ── Selectbox ── */
 div[data-testid="stSelectbox"] > label {
-    font-size:0.78rem !important; color:var(--t2) !important;
+    font-size:0.75rem !important; color:var(--t2) !important;
     letter-spacing:1.2px !important; text-transform:uppercase !important;
     font-family:var(--mono) !important; margin-bottom:5px !important;
 }
 div[data-testid="stSelectbox"] > div > div {
     background:var(--bg-elev) !important; border:1px solid var(--b2) !important;
-    border-radius:5px !important; color:var(--t1) !important;
+    border-radius:4px !important; color:var(--t1) !important;
     font-size:0.95rem !important; min-height:36px !important;
     font-family:var(--mono) !important;
 }
-div[data-testid="stSelectbox"] > div > div:hover { border-color:var(--copper) !important; }
+div[data-testid="stSelectbox"] > div > div:hover { border-color:var(--red) !important; }
 
 /* ── Content panel ── */
 .content-panel {
     background:var(--bg-card);
     border:1px solid var(--b2);
-    border-radius:8px;
+    border-radius:6px;
     overflow:hidden;
 }
 .content-topbar {
     display:flex; align-items:center; justify-content:space-between;
-    padding:14px 20px;
+    padding:13px 19px;
     background:var(--bg-elev);
     border-bottom:1px solid var(--b2);
+    border-left: 3px solid var(--red);
 }
-.content-pit-name { font-size:1.1rem !important; font-weight:700 !important; color:var(--t1) !important; }
-.content-pit-meta { font-family:var(--mono) !important; font-size:0.78rem !important; color:var(--t3) !important; margin-top:4px; }
+.content-pit-name { font-size:1.08rem !important; font-weight:700 !important; color:var(--t1) !important; }
+.content-pit-meta { font-family:var(--mono) !important; font-size:0.75rem !important; color:var(--t3) !important; margin-top:4px; }
 
 /* ── Nav buttons ── */
 .stButton > button {
-    font-family:var(--mono) !important; font-size:0.82rem !important;
+    font-family:var(--mono) !important; font-size:0.8rem !important;
     font-weight:600 !important; letter-spacing:0.8px !important;
-    text-transform:uppercase !important; border-radius:5px !important;
+    text-transform:uppercase !important; border-radius:4px !important;
     padding:8px 14px !important; transition:all 0.15s !important;
     cursor:pointer !important; width:100%;
     background:var(--bg-elev) !important; color:var(--t2) !important;
     border:1px solid var(--b2) !important;
 }
 .stButton > button:hover {
-    border-color:var(--copper) !important; color:var(--copper-hi) !important;
-    background:var(--copper-dim) !important;
+    border-color:var(--red) !important; color:var(--red-hi) !important;
+    background:var(--red-dim) !important;
 }
-.stButton > button:disabled {
-    opacity:0.35 !important; cursor:not-allowed !important;
-}
+.stButton > button:disabled { opacity:0.35 !important; cursor:not-allowed !important; }
 
 /* ── Number inputs ── */
 div[data-testid="stNumberInput"] { margin-bottom:2px !important; }
 div[data-testid="stNumberInput"] label {
-    font-size:0.78rem !important; font-weight:500 !important;
+    font-size:0.76rem !important; font-weight:500 !important;
     color:var(--t2) !important; letter-spacing:0.5px !important;
     text-transform:uppercase !important; font-family:var(--mono) !important;
     margin-bottom:3px !important; line-height:1.3 !important;
@@ -232,174 +241,175 @@ div[data-testid="stNumberInput"] label {
 div[data-testid="stNumberInput"] > div { gap:0 !important; }
 div[data-testid="stNumberInput"] input {
     background:var(--bg-elev) !important; color:var(--t1) !important;
-    border:1px solid var(--b2) !important;
-    border-radius:5px !important;
+    border:1px solid var(--b2) !important; border-radius:4px !important;
     font-size:1.05rem !important; font-family:var(--mono) !important;
-    font-weight:600 !important;
-    padding:5px 8px !important; height:36px !important;
-    transition:border-color 0.15s, color 0.15s !important;
+    font-weight:600 !important; padding:5px 8px !important; height:36px !important;
+    transition:all 0.15s !important;
 }
 div[data-testid="stNumberInput"] input:hover { border-color:var(--t3) !important; }
 div[data-testid="stNumberInput"] input:focus {
-    border-color:var(--copper) !important;
-    color:var(--copper-hi) !important; outline:none !important; box-shadow:none !important;
+    border-color:var(--red) !important; color:var(--red-hi) !important;
+    outline:none !important; box-shadow:0 0 0 2px var(--red-dim) !important;
     background:var(--bg-elev) !important;
 }
 div[data-testid="stNumberInput"] button {
     background:var(--bg-elev) !important; border:1px solid var(--b2) !important;
     color:var(--t2) !important; height:36px !important;
-    min-width:28px !important; padding:0 6px !important; border-radius:5px !important;
+    min-width:28px !important; padding:0 6px !important; border-radius:4px !important;
 }
-div[data-testid="stNumberInput"] button:hover { color:var(--copper-hi) !important; border-color:var(--copper) !important; background:var(--copper-dim) !important; }
+div[data-testid="stNumberInput"] button:hover {
+    color:var(--red-hi) !important; border-color:var(--red) !important;
+    background:var(--red-dim) !important;
+}
 
 /* ── Equipment section ── */
 .eq-block {
-    padding:16px 20px 14px 20px;
+    padding:15px 19px 13px 19px;
     border-bottom:1px solid var(--b1);
 }
 .eq-model-lbl {
     font-family:var(--mono) !important;
-    font-size:0.78rem !important; font-weight:700 !important;
+    font-size:0.75rem !important; font-weight:700 !important;
     letter-spacing:2px !important; text-transform:uppercase !important;
     margin-bottom:12px !important;
-    padding-left:10px;
-    border-left:3px solid;
-    line-height:1;
-    display:block;
+    padding-left:10px; border-left:3px solid;
+    line-height:1; display:block;
 }
-.eq-model-lbl.pc8000 { color:#8FA8E8; border-left-color:#8FA8E8; }
-.eq-model-lbl.pc4000 { color:#60C0E0; border-left-color:#60C0E0; }
-.eq-model-lbl.ex3600 { color:#50D8D0; border-left-color:#50D8D0; }
-.eq-model-lbl.be495  { color:#50D880; border-left-color:#50D880; }
-.eq-model-lbl.apron  { color:#F0A060; border-left-color:#F0A060; }
+/* Equipment colors — differentiated but harmonious with red brand */
+.eq-model-lbl.pc8000 { color:#E87060; border-left-color:#E87060; }
+.eq-model-lbl.pc4000 { color:#E8A050; border-left-color:#E8A050; }
+.eq-model-lbl.ex3600 { color:#60C8E8; border-left-color:#60C8E8; }
+.eq-model-lbl.be495  { color:#3DD68C; border-left-color:#3DD68C; }
+.eq-model-lbl.apron  { color:#A890E8; border-left-color:#A890E8; }
 
 /* Trucks block */
 .trucks-block {
-    padding:14px 20px 16px 20px;
-    background: rgba(212,147,90,0.04);
-    border-top: 1px solid rgba(212,147,90,0.15);
+    padding:13px 19px 15px 19px;
+    background: rgba(200,16,46,0.04);
+    border-top: 1px solid var(--bred);
 }
 .trucks-lbl {
-    font-family:var(--mono) !important; font-size:0.78rem !important;
-    font-weight:700 !important; color:var(--copper-hi) !important;
+    font-family:var(--mono) !important; font-size:0.76rem !important;
+    font-weight:700 !important; color:var(--red-hi) !important;
     letter-spacing:2px !important; text-transform:uppercase !important;
     margin-bottom:12px !important; display:block;
 }
 
-/* ── Camiones validation banner ── */
+/* ── Fleet validation banner ── */
 .cam-banner {
-    margin:0 0 0.8rem 0;
-    border-radius:6px; padding:13px 18px;
+    margin:0 0 0.8rem 0; border-radius:5px; padding:13px 17px;
     display:flex; align-items:center; justify-content:space-between;
 }
-.cam-banner.ok   { background:rgba(77,216,122,0.12); border:1px solid rgba(77,216,122,0.30); border-left:4px solid var(--green); }
-.cam-banner.warn { background:rgba(224,92,92,0.12);  border:1px solid rgba(224,92,92,0.30);  border-left:4px solid var(--red); }
+.cam-banner.ok   { background:var(--green-dim); border:1px solid rgba(61,214,140,0.28); border-left:4px solid var(--green); }
+.cam-banner.warn { background:var(--warn-dim);  border:1px solid rgba(200,16,46,0.28);  border-left:4px solid var(--red); }
 .cam-banner-msg  { font-size:0.95rem !important; font-weight:700 !important; }
 .cam-banner.ok   .cam-banner-msg { color:var(--green) !important; }
-.cam-banner.warn .cam-banner-msg { color:var(--red) !important; }
+.cam-banner.warn .cam-banner-msg { color:var(--red-hi) !important; }
 .cam-banner-sub  { font-size:0.78rem !important; font-family:var(--mono) !important; color:var(--t2) !important; margin-top:4px; }
 .cam-banner-num  { font-family:var(--mono) !important; font-size:2.2rem !important; font-weight:300 !important; letter-spacing:-2px !important; }
 .cam-banner.ok   .cam-banner-num { color:var(--green) !important; }
-.cam-banner.warn .cam-banner-num { color:var(--red) !important; }
+.cam-banner.warn .cam-banner-num { color:var(--red-hi) !important; }
 .cam-banner-delta { font-family:var(--mono) !important; font-size:0.75rem !important; font-weight:600; }
 .cam-banner.ok   .cam-banner-delta { color:var(--green) !important; }
-.cam-banner.warn .cam-banner-delta { color:var(--red) !important; }
+.cam-banner.warn .cam-banner-delta { color:var(--red-hi) !important; }
 
 /* ── Hero result ── */
 .hero {
-    background: linear-gradient(135deg, #13181F 0%, #1A2030 100%);
+    background: linear-gradient(145deg, #161719 0%, #1E2024 100%);
     border:1px solid var(--b2);
-    border-radius:8px;
+    border-top: 2px solid var(--red);
+    border-radius:6px;
     padding:1.5rem 1.8rem 1.4rem 1.8rem;
     position:relative; overflow:hidden;
 }
 .hero::before {
     content:''; position:absolute; top:0; left:0;
-    width:3px; height:100%;
-    background:linear-gradient(180deg, var(--copper-hi), var(--copper) 50%, transparent);
+    width:100%; height:2px;
+    background:linear-gradient(90deg, var(--red), var(--red-hi) 40%, transparent);
 }
 .hero::after {
-    content:''; position:absolute; top:0; right:0;
-    width:120px; height:120px;
-    background:radial-gradient(circle, rgba(212,147,90,0.08) 0%, transparent 70%);
-    border-radius:50%;
+    content:''; position:absolute; top:-20px; right:-20px;
+    width:140px; height:140px;
+    background:radial-gradient(circle, rgba(200,16,46,0.10) 0%, transparent 70%);
 }
 .hero-top { display:flex; justify-content:space-between; align-items:flex-start; }
 .hero-eyebrow {
-    font-family:var(--mono) !important; font-size:0.75rem !important;
-    color:var(--copper) !important; letter-spacing:2.5px !important;
-    text-transform:uppercase; font-weight:600;
+    font-family:var(--mono) !important; font-size:0.72rem !important;
+    color:var(--red) !important; letter-spacing:2.5px !important;
+    text-transform:uppercase; font-weight:700;
 }
 .hero-num {
-    font-family:var(--mono) !important; font-size:4.5rem !important;
-    font-weight:300 !important; line-height:0.92 !important;
+    font-family:var(--mono) !important; font-size:4.6rem !important;
+    font-weight:200 !important; line-height:0.9 !important;
     letter-spacing:-4px !important; margin:0.5rem 0 0.3rem 0;
-    color:var(--t2) !important;
+    color:var(--t3) !important;
 }
-.hero-num.live { color:var(--green) !important; text-shadow: 0 0 30px rgba(77,216,122,0.3); }
-.hero-unit { font-family:var(--mono) !important; font-size:0.8rem !important; color:var(--t3) !important; letter-spacing:2px !important; text-transform:uppercase; }
+.hero-num.live { color:#fff !important; text-shadow: 0 0 40px rgba(200,16,46,0.4); }
+.hero-unit { font-family:var(--mono) !important; font-size:0.78rem !important; color:var(--t3) !important; letter-spacing:2px !important; text-transform:uppercase; }
 .hero-range { font-family:var(--mono) !important; font-size:0.82rem !important; color:var(--green) !important; margin-top:0.4rem; font-weight:500; }
 .hero-shift {
-    font-family:var(--mono) !important; font-size:0.78rem !important;
-    color:var(--copper-hi) !important; background:var(--copper-dim);
-    border:1px solid rgba(212,147,90,0.30); border-radius:4px; padding:5px 12px;
-    letter-spacing:1.5px; text-transform:uppercase; font-weight:600;
+    font-family:var(--mono) !important; font-size:0.75rem !important;
+    color:#fff !important; background:var(--red);
+    border-radius:4px; padding:5px 13px;
+    letter-spacing:1.5px; text-transform:uppercase; font-weight:700;
+    box-shadow: 0 2px 8px var(--red-glow);
 }
 .conf-block { border-top:1px solid var(--b2); padding-top:1rem; margin-top:1rem; }
 .conf-head  { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
-.conf-lbl   { font-family:var(--mono) !important; font-size:0.75rem !important; color:var(--t3) !important; letter-spacing:2px !important; text-transform:uppercase; }
-.conf-val   { font-family:var(--mono) !important; font-size:1rem !important; font-weight:700 !important; color:var(--copper-hi) !important; }
+.conf-lbl   { font-family:var(--mono) !important; font-size:0.72rem !important; color:var(--t3) !important; letter-spacing:2px !important; text-transform:uppercase; }
+.conf-val   { font-family:var(--mono) !important; font-size:1rem !important; font-weight:700 !important; color:var(--gold-hi) !important; }
 .conf-bar-bg   { width:100%; height:4px; background:var(--bg-elev); border-radius:2px; overflow:hidden; }
-.conf-bar-fill { height:100%; background:linear-gradient(90deg, var(--copper), var(--copper-hi)); border-radius:2px; }
+.conf-bar-fill { height:100%; background:linear-gradient(90deg, var(--red), var(--gold-hi)); border-radius:2px; }
 .conf-foot { display:flex; justify-content:space-between; margin-top:7px;
-    font-family:var(--mono) !important; font-size:0.75rem !important; color:var(--t3) !important; }
+    font-family:var(--mono) !important; font-size:0.72rem !important; color:var(--t3) !important; }
 
 /* ── Calc button ── */
 .calc-wrap .stButton > button {
-    background:linear-gradient(180deg, #E0A060 0%, #B07030 100%) !important;
-    color:#0D1017 !important; font-family:var(--sans) !important;
+    background:linear-gradient(180deg, var(--red-hi) 0%, var(--red) 100%) !important;
+    color:#fff !important; font-family:var(--sans) !important;
     font-size:0.9rem !important; font-weight:800 !important;
-    letter-spacing:1.5px !important; border:none !important;
-    border-radius:6px !important; padding:14px 20px !important;
-    box-shadow:0 4px 16px rgba(212,147,90,0.30) !important;
+    letter-spacing:2px !important; border:none !important;
+    border-radius:5px !important; padding:14px 20px !important;
+    box-shadow:0 4px 18px var(--red-glow) !important;
     transition:all 0.18s !important; width:100% !important;
+    text-transform:uppercase !important;
 }
 .calc-wrap .stButton > button:hover {
-    background:linear-gradient(180deg, #F0B870 0%, #C07A40 100%) !important;
+    background:linear-gradient(180deg, #FF3050 0%, var(--red-hi) 100%) !important;
     transform:translateY(-2px) !important;
-    box-shadow:0 6px 20px rgba(212,147,90,0.45) !important;
+    box-shadow:0 6px 24px rgba(200,16,46,0.50) !important;
 }
 .calc-wrap .stButton > button:disabled {
     background:var(--bg-elev) !important; color:var(--t3) !important;
     transform:none !important; box-shadow:none !important; opacity:1 !important;
     border:1px solid var(--b2) !important; cursor:not-allowed !important;
-    font-size:0.88rem !important;
+    font-size:0.85rem !important;
 }
 
 /* ── Download / Metric / File / Alert ── */
 div[data-testid="stDownloadButton"] > button {
-    background:transparent !important; color:var(--copper-hi) !important;
-    border:1px solid rgba(212,147,90,0.35) !important;
-    font-family:var(--mono) !important; font-size:0.82rem !important;
+    background:transparent !important; color:var(--red-hi) !important;
+    border:1px solid var(--bred) !important;
+    font-family:var(--mono) !important; font-size:0.8rem !important;
     letter-spacing:1px !important; text-transform:uppercase !important;
-    border-radius:5px !important; padding:9px 18px !important; width:auto !important;
+    border-radius:4px !important; padding:9px 18px !important; width:auto !important;
 }
 div[data-testid="stDownloadButton"] > button:hover {
-    background:var(--copper-dim) !important; border-color:var(--copper) !important;
+    background:var(--red-dim) !important; border-color:var(--red) !important;
 }
 div[data-testid="stFileUploader"] > div {
     background:var(--bg-card) !important; border:1px dashed var(--b2) !important;
-    border-radius:6px !important; padding:1.6rem !important;
+    border-radius:5px !important; padding:1.6rem !important;
 }
-div[data-testid="stFileUploader"] > div:hover { border-color:var(--copper) !important; }
-div[data-testid="stDataFrame"] { border-radius:6px !important; border:1px solid var(--b2) !important; }
+div[data-testid="stFileUploader"] > div:hover { border-color:var(--red) !important; }
+div[data-testid="stDataFrame"] { border-radius:5px !important; border:1px solid var(--b2) !important; }
 div[data-testid="stMetric"] {
     background:var(--bg-card) !important; border:1px solid var(--b2) !important;
-    border-left:3px solid var(--copper) !important; border-radius:6px !important;
+    border-left:3px solid var(--red) !important; border-radius:5px !important;
     padding:0.9rem 1.1rem !important;
 }
 div[data-testid="stMetric"] label {
-    font-size:0.75rem !important; color:var(--t2) !important;
+    font-size:0.72rem !important; color:var(--t2) !important;
     letter-spacing:1.5px !important; text-transform:uppercase !important;
     font-family:var(--mono) !important;
 }
@@ -407,32 +417,32 @@ div[data-testid="stMetric"] [data-testid="stMetricValue"] {
     font-family:var(--mono) !important; color:var(--t1) !important;
     font-size:1.6rem !important; font-weight:600 !important;
 }
-div[data-testid="stAlert"] { border-radius:6px !important; font-size:0.92rem !important; }
-div[data-testid="stCaptionContainer"] { color:var(--t2) !important; font-size:0.78rem !important; font-family:var(--mono) !important; }
+div[data-testid="stAlert"] { border-radius:5px !important; font-size:0.9rem !important; }
+div[data-testid="stCaptionContainer"] { color:var(--t2) !important; font-size:0.76rem !important; font-family:var(--mono) !important; }
 hr { border:none !important; border-top:1px solid var(--b2) !important; margin:0.9rem 0 !important; }
 div[data-testid="stHorizontalBlock"] { gap:0.8rem; }
 
 /* Bulk steps */
 .step-lbl {
     display:flex; align-items:center; gap:10px;
-    font-family:var(--mono) !important; font-size:0.85rem !important;
+    font-family:var(--mono) !important; font-size:0.82rem !important;
     color:var(--t1) !important; letter-spacing:1px !important;
-    text-transform:uppercase !important; margin:1.1rem 0 0.6rem 0;
-    font-weight:600;
+    text-transform:uppercase !important; margin:1.1rem 0 0.6rem 0; font-weight:600;
 }
 .step-num {
-    width:26px; height:26px; border:2px solid var(--copper);
-    color:var(--copper-hi); border-radius:50%;
+    width:26px; height:26px; border:2px solid var(--red);
+    color:#fff; border-radius:50%;
     display:inline-flex; align-items:center; justify-content:center;
     font-size:0.75rem; font-weight:700; flex-shrink:0;
-    background:var(--copper-dim);
+    background:var(--red);
+    box-shadow: 0 2px 8px var(--red-glow);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:var(--bg-deep); }
-::-webkit-scrollbar-thumb { background:var(--b3); border-radius:2px; }
-::-webkit-scrollbar-thumb:hover { background:var(--copper-dim); }
+::-webkit-scrollbar-thumb { background:var(--red-dim); border-radius:2px; }
+::-webkit-scrollbar-thumb:hover { background:var(--bred); }
 </style>
 """, unsafe_allow_html=True)
 
@@ -451,7 +461,7 @@ modelo_ml, variables, min_max_scaler = cargar_modelo()
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
-        'Komatsu PC8000': ['6233','6234','6247','6248', '6239'],
+        'Komatsu PC8000': ['6233','6234','6247','6248'],
         'Bucyrus BE495':  ['6243','6244'],
         'Hitachi EX3600': ['6260'],
     },
@@ -459,18 +469,18 @@ EQUIPOS_POR_PIT = {
         'Komatsu PC8000': ['6232','6236','6237','6238','6250'],
         'Bucyrus BE495':  ['6242'],
         'Hitachi EX3600': ['6261','6263'],
-        'Dragline':   ['6449','6455'],
+        'Apron Feeder':   ['6449','6455'],
     },
     'EC': {
-        'Komatsu PC8000': ['6231'],
-        'Hitachi EX3600': ['6262'],
+        'Komatsu PC8000': ['6231','6239'],
+        'Hitachi EX3600': ['6262','6268'],
         'Komatsu PC4000': ['6264','6269'],
     },
     'PRIBBENOW': {
-        'Komatsu PC8000': ['6235','6245','6246', '6249'],
+        'Komatsu PC8000': ['6235','6245','6246'],
         'Bucyrus BE495':  ['6241'],
-        'Komatsu PC4000': ['6268'],
-        'Dragline':   ['6457'],
+        'Komatsu PC4000': ['6249'],
+        'Apron Feeder':   ['6457'],
     },
 }
 
@@ -479,7 +489,7 @@ EQ_MODEL_CLASS = {
     'Komatsu PC4000': 'pc4000',
     'Hitachi EX3600': 'ex3600',
     'Bucyrus BE495':  'be495',
-    'Dragline':   'apron',
+    'Apron Feeder':   'apron',
 }
 
 PIT_LABELS = {
@@ -490,7 +500,7 @@ PIT_LABELS = {
 }
 
 DEFAULTS_CAM = {
-    'DESCANSO': {'qty': 92.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
+    'DESCANSO': {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'DP5':      {'qty': 80.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 30.0},
     'EC':       {'qty': 15.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 28.0},
     'PRIBBENOW':{'qty': 68.0, 'disp': 80.0, 'uso': 75.0, 'ciclo': 26.0},
@@ -525,7 +535,7 @@ COL_CICLO_MAP = {
 
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
-MODEL_ERROR = 5
+MODEL_ERROR = 1.5
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
 
 # ══════════════════════════════════════════════════════════════════
@@ -612,8 +622,8 @@ if modo == 'Predicción Manual':
 
         st.markdown("""
             <div class="sidebar-top">
-              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Pits</div>
-              <div style="font-size:0.82rem;color:var(--t2);font-family:var(--mono);margin-top:4px;">
+              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Frentes Mineros</div>
+              <div style="font-size:0.78rem;color:var(--t3);font-family:var(--mono);margin-top:4px;letter-spacing:0.5px;">
                 Selecciona un pit para editar
               </div>
             </div>
@@ -771,18 +781,19 @@ if modo == 'Predicción Manual':
         # Fleet summary all pits
         st.markdown('<div style="height:0.5rem"></div>', unsafe_allow_html=True)
         st.markdown("""
-            <div style="background:var(--bg-elev);border:1px solid var(--b2);border-radius:6px;
-                        padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-              <span style="font-family:var(--mono);font-size:0.85rem;color:var(--t2);
-                           letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Camiones por mina</span>
+            <div style="background:var(--bg-elev);border:1px solid var(--bred);border-radius:5px;
+                        padding:11px 17px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+                        border-left:3px solid var(--red);">
+              <span style="font-family:var(--mono);font-size:0.82rem;color:var(--red-hi);
+                           letter-spacing:2px;text-transform:uppercase;font-weight:700;">Flota por frente:</span>
         """, unsafe_allow_html=True)
 
         resumen_parts = []
         for p in PITS:
             qty_p = st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])
             resumen_parts.append(
-                f'<span style="font-family:var(--mono);font-size:1rem;color:var(--t2);">'
-                f'{PIT_LABELS[p]}: <strong style="color:var(--copper-hi);">{int(qty_p)}</strong></span>'
+                f'<span style="font-family:var(--mono);font-size:0.95rem;color:var(--t2);">'
+                f'{PIT_LABELS[p]}: <strong style="color:var(--t1);">{int(qty_p)}</strong></span>'
             )
         st.markdown(' &nbsp;<span style="color:var(--b3)">|</span>&nbsp; '.join(resumen_parts) + '</div>', unsafe_allow_html=True)
 
@@ -867,15 +878,16 @@ if modo == 'Predicción Manual':
 
         st.markdown(f"""
             <div style="background:var(--bg-elev);border:1px solid var(--b2);
-                        border-radius:6px;padding:1rem 1.1rem;margin-top:0.7rem;">
-              <div style="font-family:var(--mono);font-size:0.75rem;color:var(--copper);
+                        border-top:2px solid var(--red);
+                        border-radius:5px;padding:1rem 1.1rem;margin-top:0.7rem;">
+              <div style="font-family:var(--mono);font-size:0.72rem;color:var(--red);
                           letter-spacing:2px;text-transform:uppercase;font-weight:700;
                           margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--b2);">
                 Configuración Activa
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Pits</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Frentes</span>
                   <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">04 / 04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
@@ -884,11 +896,11 @@ if modo == 'Predicción Manual':
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
                   <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);font-weight:600;">Ensemble</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">Ensemble</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Error MAPE</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);font-weight:600;">±{MODEL_ERROR:.1f}%</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Error RMSE</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">±{MODEL_ERROR:.1f}%</span>
                 </div>
               </div>
             </div>
@@ -943,7 +955,7 @@ else:
                     unsafe_allow_html=True)
         st.markdown("""
             <div style="background:var(--bg-card);border:1px solid var(--b1);
-                        border-left:2px solid var(--copper);border-radius:3px;
+                        border-left:3px solid var(--red);border-radius:4px;
                         padding:0.8rem 1rem;margin-bottom:0.6rem;
                         font-size:0.88rem;color:var(--t2);line-height:1.5;">
                 Plantilla con los 45 parámetros requeridos. Cada fila representa un turno.
@@ -994,7 +1006,7 @@ else:
                   <span style="color:var(--t1);font-family:var(--mono);">turno (D/N)</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Pits</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Frentes mineros</span>
                   <span style="color:var(--copper-hi);font-family:var(--mono);">04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
