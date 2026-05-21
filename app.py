@@ -377,7 +377,7 @@ modelo_ml, variables, min_max_scaler = load_model()
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
-        'Komatsu PC8000': ['6233','6234','6247','6248'],
+        'Komatsu PC8000': ['6233','6234','6247','6248', '6239'],
         'Bucyrus BE495':  ['6243','6244'],
         'Hitachi EX3600': ['6260'],
     },
@@ -388,7 +388,7 @@ EQUIPOS_POR_PIT = {
         'Dragline':       ['6449','6455'],
     },
     'EC': {
-        'Komatsu PC8000': ['6231','6239'],
+        'Komatsu PC8000': ['6231'],
         'Hitachi EX3600': ['6262','6268'],
         'Komatsu PC4000': ['6264','6269'],
     },
@@ -807,7 +807,7 @@ if mode == 'Manual Prediction':
                 </div>
                 <div class="conf-foot">
                   <span>MAPE ±{MODEL_ERROR:.1f}%</span>
-                  <span>Pending</span>
+                  <span></span>
                 </div>
               </div>
             </div>
