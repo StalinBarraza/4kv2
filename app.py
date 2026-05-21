@@ -650,7 +650,7 @@ if modo == 'Predicción Manual':
 
         st.markdown("""
             <div class="sidebar-top">
-              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Frentes Mineros</div>
+              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">PITS</div>
               <div style="font-size:0.78rem;color:var(--t3);font-family:var(--mono);margin-top:4px;letter-spacing:0.5px;">
                 Selecciona un pit para editar
               </div>
@@ -818,7 +818,7 @@ if modo == 'Predicción Manual':
 
         # Trucks for active pit
         st.markdown(
-            '<div class="trucks-block"><span class="trucks-lbl">Flota de Camiones</span></div>',
+            '<div class="trucks-block"><span class="trucks-lbl">TRUCKS</span></div>',
             unsafe_allow_html=True
         )
         tc1, tc2, tc3, tc4 = st.columns(4)
@@ -835,7 +835,7 @@ if modo == 'Predicción Manual':
             st.session_state[f'val_disp_{pit}'] = disp
             vals_camiones[f'Disponibilidad_TKS_{pit}'] = disp / 100.0
         with tc3:
-            uso = st.number_input('Uso %', min_value=0.0, max_value=100.0,
+            uso = st.number_input('UTIL %', min_value=0.0, max_value=100.0,
                                   step=1.0, format='%.1f', key=f'ni_uso_{pit}',
                                   on_change=_save_truck, args=('uso', pit))
             st.session_state[f'val_uso_{pit}'] = uso
@@ -854,7 +854,7 @@ if modo == 'Predicción Manual':
                         padding:11px 17px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
                         border-left:3px solid var(--red);">
               <span style="font-family:var(--mono);font-size:0.82rem;color:var(--red-hi);
-                           letter-spacing:2px;text-transform:uppercase;font-weight:700;">Flota por frente:</span>
+                           letter-spacing:2px;text-transform:uppercase;font-weight:700;">Trucks by pit</span>
         """, unsafe_allow_html=True)
 
         resumen_parts = []
@@ -912,7 +912,7 @@ if modo == 'Predicción Manual':
             <div class="hero">
               <div class="hero-top">
                 <div>
-                  <div class="hero-eyebrow">Predicted Load Count</div>
+                  <div class="hero-eyebrow">Predicted Loads</div>
                   <div class="hero-num">—</div>
                   <div class="hero-unit">loads · per shift</div>
                 </div>
@@ -928,7 +928,7 @@ if modo == 'Predicción Manual':
                 </div>
                 <div class="conf-foot">
                   <span>MAPE ±{MODEL_ERROR:.1f}%</span>
-                  <span>Pending</span>
+                  <span></span>
                 </div>
               </div>
             </div>
@@ -956,7 +956,7 @@ if modo == 'Predicción Manual':
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Frentes</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">PITS</span>
                   <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">04 / 04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
@@ -988,7 +988,7 @@ if modo == 'Predicción Manual':
                 <div class="hero">
                   <div class="hero-top">
                     <div>
-                      <div class="hero-eyebrow">Predicted Load Count</div>
+                      <div class="hero-eyebrow">Predicted Loads</div>
                       <div class="hero-num live">{cargas:,}</div>
                       <div class="hero-unit">loads · per shift</div>
                       <div class="hero-range">▴ rango {lo:,} – {hi:,}</div>
@@ -1075,7 +1075,7 @@ else:
                   <span style="color:var(--t1);font-family:var(--mono);">turno (D/N)</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Frentes mineros</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">PITS</span>
                   <span style="color:var(--copper-hi);font-family:var(--mono);">04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
