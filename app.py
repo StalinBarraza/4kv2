@@ -536,21 +536,32 @@ COL_CICLO_MAP = {
 PITS        = list(EQUIPOS_POR_PIT.keys())
 QTY_TOTAL   = 255
 
-# Color identity per pit (bg, border, text, badge-bg, badge-text)
+# Color identity per pit — Drummond brand palette only
+# Rojo corporativo + escala de grises. Sin colores externos.
 PIT_COLORS = {
-    'DESCANSO':  {'bg': 'rgba(59,130,246,0.07)',  'border': '#3B82F6', 'dim': 'rgba(59,130,246,0.18)',  'text': '#93C5FD', 'label': '#1D4ED8'},
-    'DP5':       {'bg': 'rgba(168,85,247,0.07)',  'border': '#A855F7', 'dim': 'rgba(168,85,247,0.18)',  'text': '#D8B4FE', 'label': '#7C3AED'},
-    'EC':        {'bg': 'rgba(234,179,8,0.07)',   'border': '#EAB308', 'dim': 'rgba(234,179,8,0.18)',   'text': '#FDE047', 'label': '#A16207'},
-    'PRIBBENOW': {'bg': 'rgba(20,184,166,0.07)',  'border': '#14B8A6', 'dim': 'rgba(20,184,166,0.18)',  'text': '#5EEAD4', 'label': '#0F766E'},
+    # Rojo pleno — pit principal / más grande
+    'DESCANSO':  {'bg': 'rgba(200,16,46,0.10)',  'border': '#C8102E', 'dim': 'rgba(200,16,46,0.22)',  'text': '#FF6075', 'label': '#C8102E'},
+    # Rojo oscuro / vino
+    'DP5':       {'bg': 'rgba(160,10,30,0.10)',  'border': '#A00A1E', 'dim': 'rgba(160,10,30,0.22)',  'text': '#FF8090', 'label': '#A00A1E'},
+    # Gris claro — contraste neutro
+    'EC':        {'bg': 'rgba(180,185,195,0.08)', 'border': '#8A909E', 'dim': 'rgba(180,185,195,0.18)', 'text': '#C8CDD8', 'label': '#8A909E'},
+    # Gris oscuro — peso visual diferenciado
+    'PRIBBENOW': {'bg': 'rgba(100,108,120,0.10)', 'border': '#606878', 'dim': 'rgba(100,108,120,0.22)', 'text': '#9BA3B2', 'label': '#606878'},
 }
 
-# Color identity per equipment model (bg, border, text)
+# Color identity per equipment model — Drummond brand palette only
+# Rojo en distintas intensidades + grises para diferenciar modelos
 EQ_COLORS = {
-    'Komatsu PC8000': {'bg': 'rgba(239,68,68,0.07)',   'border': '#EF4444', 'text': '#FCA5A5'},
-    'Komatsu PC4000': {'bg': 'rgba(249,115,22,0.07)',  'border': '#F97316', 'text': '#FDBA74'},
-    'Hitachi EX3600': {'bg': 'rgba(6,182,212,0.07)',   'border': '#06B6D4', 'text': '#67E8F9'},
-    'Bucyrus BE495':  {'bg': 'rgba(34,197,94,0.07)',   'border': '#22C55E', 'text': '#86EFAC'},
-    'Dragline':   {'bg': 'rgba(168,85,247,0.07)',  'border': '#A855F7', 'text': '#D8B4FE'},
+    # Rojo Drummond pleno
+    'Komatsu PC8000': {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
+    # Rojo medio / rosa oscuro
+    'Komatsu PC4000': {'bg': 'rgba(180,40,60,0.09)',   'border': '#B4283C', 'text': '#FF8C9A'},
+    # Gris plateado — diferenciación neutra
+    'Hitachi EX3600': {'bg': 'rgba(160,168,180,0.07)', 'border': '#7A8290', 'text': '#B8C0CC'},
+    # Gris oscuro carbón
+    'Bucyrus BE495':  {'bg': 'rgba(80,88,100,0.10)',   'border': '#505864', 'text': '#8A929E'},
+    # Rojo desaturado / ladrillo
+    'Dragline':       {'bg': 'rgba(140,50,60,0.09)',   'border': '#8C323C', 'text': '#C87880'},
 }
 MODEL_ERROR = 4
 CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
