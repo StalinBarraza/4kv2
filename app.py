@@ -18,46 +18,34 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 
 :root {
-    /* ── Drummond brand ── */
     --red:        #C8102E;
     --red-hi:     #E8253F;
     --red-dim:    rgba(200,16,46,0.14);
     --red-glow:   rgba(200,16,46,0.25);
-
-    /* ── Backgrounds — dark carbon ── */
     --bg-app:     #0E0F11;
     --bg-card:    #161719;
     --bg-elev:    #1E2024;
     --bg-deep:    #09090B;
-
-    /* ── Accents ── */
     --gold:       #C89B3C;
     --gold-hi:    #E8BA52;
     --gold-dim:   rgba(200,155,60,0.14);
-
     --green:      #3DD68C;
     --green-dim:  rgba(61,214,140,0.10);
     --warn:       #E05C5C;
     --warn-dim:   rgba(224,92,92,0.10);
-
-    /* ── Text ── */
     --t1: #F4F5F7;
     --t2: #9BA3B0;
     --t3: #5C6470;
     --t4: #30353E;
-
-    /* ── Borders ── */
     --b1: rgba(255,255,255,0.05);
     --b2: rgba(255,255,255,0.09);
     --b3: rgba(255,255,255,0.16);
     --bred: rgba(200,16,46,0.20);
-
     --sans: 'Inter', -apple-system, sans-serif;
     --mono: 'JetBrains Mono', monospace;
     font-size: 15px;
 }
 
-/* ── Reset ── */
 .stApp { background: var(--bg-app) !important; }
 html, body, [class*="css"], .stMarkdown, p, span, div {
     font-family: var(--sans) !important;
@@ -70,7 +58,6 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 [data-testid="stStatusWidget"] { visibility:hidden !important; display:none !important; }
 .main .block-container { padding: 0 1.8rem 2rem 1.8rem !important; max-width:1800px !important; }
 
-/* ── Header ── */
 .app-header {
     display:flex; align-items:center; justify-content:space-between;
     padding: 0.9rem 0 0.8rem 0;
@@ -101,7 +88,6 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 .meta-txt { font-family:var(--mono) !important; font-size:0.8rem !important; color:var(--t2) !important; }
 
-/* ── Mode tabs ── */
 .stRadio > div {
     display:flex !important; gap:0 !important;
     background:transparent !important; border:none !important; padding:0 !important;
@@ -123,7 +109,6 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
     border-bottom-color:var(--red) !important;
 }
 
-/* ── Sidebar nav ── */
 .sidebar-nav {
     background: var(--bg-card);
     border: 1px solid var(--b2);
@@ -143,35 +128,6 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
     letter-spacing:2.5px !important; text-transform:uppercase !important;
     padding:11px 17px 6px 17px; display:block;
 }
-.pit-nav-item {
-    display:flex; align-items:center; gap:12px;
-    padding:12px 15px; cursor:pointer;
-    border-left:3px solid transparent;
-    transition:all 0.15s;
-}
-.pit-nav-item.active {
-    background:var(--red-dim);
-    border-left-color:var(--red);
-}
-.pit-nav-item:hover:not(.active) {
-    background:rgba(255,255,255,0.025);
-    border-left-color:var(--b3);
-}
-.pit-nav-name { font-size:1rem !important; font-weight:600 !important; }
-.pit-nav-item.active .pit-nav-name { color:var(--red-hi) !important; }
-.pit-nav-item:not(.active) .pit-nav-name { color:var(--t2) !important; }
-.pit-nav-code { font-family:var(--mono) !important; font-size:0.7rem !important; color:var(--t3) !important; margin-top:3px; }
-.pit-nav-count {
-    margin-left:auto;
-    font-family:var(--mono) !important; font-size:0.72rem !important;
-    color:var(--red-hi) !important;
-    background:var(--red-dim);
-    border:1px solid var(--bred);
-    border-radius:4px; padding:2px 8px;
-    font-weight:700;
-}
-
-/* Turno section */
 .turno-section {
     padding:12px 15px 14px 15px;
     border-top:1px solid var(--b2);
@@ -183,7 +139,6 @@ html, body, [class*="css"], .stMarkdown, p, span, div {
     margin-bottom:7px; display:block;
 }
 
-/* ── Selectbox ── */
 div[data-testid="stSelectbox"] > label {
     font-size:0.75rem !important; color:var(--t2) !important;
     letter-spacing:1.2px !important; text-transform:uppercase !important;
@@ -197,24 +152,13 @@ div[data-testid="stSelectbox"] > div > div {
 }
 div[data-testid="stSelectbox"] > div > div:hover { border-color:var(--red) !important; }
 
-/* ── Content panel ── */
 .content-panel {
     background:var(--bg-card);
     border:1px solid var(--b2);
     border-radius:6px;
     overflow:hidden;
 }
-.content-topbar {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:13px 19px;
-    background:var(--bg-elev);
-    border-bottom:1px solid var(--b2);
-    border-left: 3px solid var(--red);
-}
-.content-pit-name { font-size:1.08rem !important; font-weight:700 !important; color:var(--t1) !important; }
-.content-pit-meta { font-family:var(--mono) !important; font-size:0.75rem !important; color:var(--t3) !important; margin-top:4px; }
 
-/* ── Nav buttons ── */
 .stButton > button {
     font-family:var(--mono) !important; font-size:0.8rem !important;
     font-weight:600 !important; letter-spacing:0.8px !important;
@@ -230,7 +174,6 @@ div[data-testid="stSelectbox"] > div > div:hover { border-color:var(--red) !impo
 }
 .stButton > button:disabled { opacity:0.35 !important; cursor:not-allowed !important; }
 
-/* ── Number inputs ── */
 div[data-testid="stNumberInput"] { margin-bottom:2px !important; }
 div[data-testid="stNumberInput"] label {
     font-size:0.76rem !important; font-weight:500 !important;
@@ -262,27 +205,6 @@ div[data-testid="stNumberInput"] button:hover {
     background:var(--red-dim) !important;
 }
 
-/* ── Equipment section ── */
-.eq-block {
-    padding:15px 19px 13px 19px;
-    border-bottom:1px solid var(--b1);
-}
-.eq-model-lbl {
-    font-family:var(--mono) !important;
-    font-size:0.75rem !important; font-weight:700 !important;
-    letter-spacing:2px !important; text-transform:uppercase !important;
-    margin-bottom:12px !important;
-    padding-left:10px; border-left:3px solid;
-    line-height:1; display:block;
-}
-/* Equipment colors — differentiated but harmonious with red brand */
-.eq-model-lbl.pc8000 { color:#E87060; border-left-color:#E87060; }
-.eq-model-lbl.pc4000 { color:#E8A050; border-left-color:#E8A050; }
-.eq-model-lbl.ex3600 { color:#60C8E8; border-left-color:#60C8E8; }
-.eq-model-lbl.be495  { color:#3DD68C; border-left-color:#3DD68C; }
-.eq-model-lbl.apron  { color:#A890E8; border-left-color:#A890E8; }
-
-/* Trucks block */
 .trucks-block {
     padding:13px 19px 15px 19px;
     background: rgba(200,16,46,0.04);
@@ -295,7 +217,6 @@ div[data-testid="stNumberInput"] button:hover {
     margin-bottom:12px !important; display:block;
 }
 
-/* ── Fleet validation banner ── */
 .cam-banner {
     margin:0 0 0.8rem 0; border-radius:5px; padding:13px 17px;
     display:flex; align-items:center; justify-content:space-between;
@@ -313,7 +234,6 @@ div[data-testid="stNumberInput"] button:hover {
 .cam-banner.ok   .cam-banner-delta { color:var(--green) !important; }
 .cam-banner.warn .cam-banner-delta { color:var(--red-hi) !important; }
 
-/* ── Hero result ── */
 .hero {
     background: linear-gradient(145deg, #161719 0%, #1E2024 100%);
     border:1px solid var(--b2);
@@ -363,7 +283,6 @@ div[data-testid="stNumberInput"] button:hover {
 .conf-foot { display:flex; justify-content:space-between; margin-top:7px;
     font-family:var(--mono) !important; font-size:0.72rem !important; color:var(--t3) !important; }
 
-/* ── Calc button ── */
 .calc-wrap .stButton > button {
     background:linear-gradient(180deg, var(--red-hi) 0%, var(--red) 100%) !important;
     color:#fff !important; font-family:var(--sans) !important;
@@ -386,7 +305,6 @@ div[data-testid="stNumberInput"] button:hover {
     font-size:0.85rem !important;
 }
 
-/* ── Download / Metric / File / Alert ── */
 div[data-testid="stDownloadButton"] > button {
     background:transparent !important; color:var(--red-hi) !important;
     border:1px solid var(--bred) !important;
@@ -422,7 +340,6 @@ div[data-testid="stCaptionContainer"] { color:var(--t2) !important; font-size:0.
 hr { border:none !important; border-top:1px solid var(--b2) !important; margin:0.9rem 0 !important; }
 div[data-testid="stHorizontalBlock"] { gap:0.8rem; }
 
-/* Bulk steps */
 .step-lbl {
     display:flex; align-items:center; gap:10px;
     font-family:var(--mono) !important; font-size:0.82rem !important;
@@ -438,7 +355,6 @@ div[data-testid="stHorizontalBlock"] { gap:0.8rem; }
     box-shadow: 0 2px 8px var(--red-glow);
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:var(--bg-deep); }
 ::-webkit-scrollbar-thumb { background:var(--red-dim); border-radius:2px; }
@@ -448,16 +364,16 @@ div[data-testid="stHorizontalBlock"] { gap:0.8rem; }
 
 
 # ══════════════════════════════════════════════════════════════════
-# MODELO
+# MODEL
 # ══════════════════════════════════════════════════════════════════
 @st.cache_resource
-def cargar_modelo():
+def load_model():
     return pickle.load(open('modelo-ensamble-reg-loads-v2.1.pkl', 'rb'))
 
-modelo_ml, variables, min_max_scaler = cargar_modelo()
+modelo_ml, variables, min_max_scaler = load_model()
 
 # ══════════════════════════════════════════════════════════════════
-# DATOS
+# DATA
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
@@ -469,7 +385,7 @@ EQUIPOS_POR_PIT = {
         'Komatsu PC8000': ['6232','6236','6237','6238','6250'],
         'Bucyrus BE495':  ['6242'],
         'Hitachi EX3600': ['6261','6263'],
-        'Dragline':   ['6449','6455'],
+        'Dragline':       ['6449','6455'],
     },
     'EC': {
         'Komatsu PC8000': ['6231','6239'],
@@ -480,7 +396,7 @@ EQUIPOS_POR_PIT = {
         'Komatsu PC8000': ['6235','6245','6246'],
         'Bucyrus BE495':  ['6241'],
         'Komatsu PC4000': ['6249'],
-        'Dragline':   ['6457'],
+        'Dragline':       ['6457'],
     },
 }
 
@@ -489,7 +405,7 @@ EQ_MODEL_CLASS = {
     'Komatsu PC4000': 'pc4000',
     'Hitachi EX3600': 'ex3600',
     'Bucyrus BE495':  'be495',
-    'Dragline':   'apron',
+    'Dragline':       'apron',
 }
 
 PIT_LABELS = {
@@ -533,46 +449,35 @@ COL_CICLO_MAP = {
     'PRIBBENOW': 'TiempoCiclo_TKS_PRIBBENOW',
 }
 
-PITS        = list(EQUIPOS_POR_PIT.keys())
-QTY_TOTAL   = 255
+PITS      = list(EQUIPOS_POR_PIT.keys())
+QTY_TOTAL = 255
 
-# Color identity per pit — Drummond brand palette only
-# Rojo corporativo + escala de grises. Sin colores externos.
+# Pit colors — Drummond brand palette (red + grays)
 PIT_COLORS = {
-    # Rojo pleno — pit principal / más grande
-    'DESCANSO':  {'bg': 'rgba(200,16,46,0.10)',  'border': '#C8102E', 'dim': 'rgba(200,16,46,0.22)',  'text': '#FF6075', 'label': '#C8102E'},
-    # Rojo oscuro / vino
-    'DP5':       {'bg': 'rgba(160,10,30,0.10)',  'border': '#A00A1E', 'dim': 'rgba(160,10,30,0.22)',  'text': '#FF8090', 'label': '#A00A1E'},
-    # Gris claro — contraste neutro
-    'EC':        {'bg': 'rgba(180,185,195,0.08)', 'border': '#8A909E', 'dim': 'rgba(180,185,195,0.18)', 'text': '#C8CDD8', 'label': '#8A909E'},
-    # Gris oscuro — peso visual diferenciado
-    'PRIBBENOW': {'bg': 'rgba(100,108,120,0.10)', 'border': '#606878', 'dim': 'rgba(100,108,120,0.22)', 'text': '#9BA3B2', 'label': '#606878'},
+    'DESCANSO':  {'bg': 'rgba(200,16,46,0.10)',   'border': '#C8102E', 'dim': 'rgba(200,16,46,0.22)',   'text': '#FF6075'},
+    'DP5':       {'bg': 'rgba(160,10,30,0.10)',   'border': '#A00A1E', 'dim': 'rgba(160,10,30,0.22)',   'text': '#FF8090'},
+    'EC':        {'bg': 'rgba(180,185,195,0.08)', 'border': '#8A909E', 'dim': 'rgba(180,185,195,0.18)', 'text': '#C8CDD8'},
+    'PRIBBENOW': {'bg': 'rgba(100,108,120,0.10)', 'border': '#606878', 'dim': 'rgba(100,108,120,0.22)', 'text': '#9BA3B2'},
 }
 
-# Color identity per equipment model — Drummond brand palette only
-# Rojo en distintas intensidades + grises para diferenciar modelos
+# Equipment colors — Drummond brand palette (red intensities + grays)
 EQ_COLORS = {
-    # Rojo Drummond pleno
     'Komatsu PC8000': {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
-    # Rojo medio / rosa oscuro
     'Komatsu PC4000': {'bg': 'rgba(180,40,60,0.09)',   'border': '#B4283C', 'text': '#FF8C9A'},
-    # Gris plateado — diferenciación neutra
     'Hitachi EX3600': {'bg': 'rgba(160,168,180,0.07)', 'border': '#7A8290', 'text': '#B8C0CC'},
-    # Gris oscuro carbón
     'Bucyrus BE495':  {'bg': 'rgba(80,88,100,0.10)',   'border': '#505864', 'text': '#8A929E'},
-    # Rojo desaturado / ladrillo
     'Dragline':       {'bg': 'rgba(140,50,60,0.09)',   'border': '#8C323C', 'text': '#C87880'},
 }
+
 MODEL_ERROR = 4
-CONFIDENCE  = 100 - MODEL_ERROR   # 98.5 %
+CONFIDENCE  = 100 - MODEL_ERROR  # 96.0%
 
 # ══════════════════════════════════════════════════════════════════
 # SESSION STATE
 # ══════════════════════════════════════════════════════════════════
 def reset_values():
-    """Resetea TODOS los valores en la memoria persistente val_*"""
-    for pit, modelos in EQUIPOS_POR_PIT.items():
-        for equipos in modelos.values():
+    for pit, models in EQUIPOS_POR_PIT.items():
+        for equipos in models.values():
             for eq in equipos:
                 st.session_state[f'val_{eq}'] = 87.0
         src = DEFAULTS_CAM[pit]
@@ -582,7 +487,6 @@ def reset_values():
         st.session_state[f'val_ciclo_{pit}'] = float(src['ciclo'])
 
 def _save_eq(eq):
-    """Callback: cuando el widget cambia, guarda en val_* persistente"""
     st.session_state[f'val_{eq}'] = st.session_state[f'ni_{eq}']
 
 def _save_truck(field, pit):
@@ -595,9 +499,9 @@ if 'pit_idx' not in st.session_state:
     st.session_state['pit_idx'] = 0
 
 # ══════════════════════════════════════════════════════════════════
-# PREDICCIÓN
+# PREDICTION
 # ══════════════════════════════════════════════════════════════════
-def predecir(data_df):
+def predict(data_df):
     dp = data_df.copy()
     dp = pd.get_dummies(dp, columns=['turno'], drop_first=False, dtype=int)
     dp = dp.reindex(columns=variables, fill_value=0)
@@ -608,7 +512,7 @@ def predecir(data_df):
 # ══════════════════════════════════════════════════════════════════
 # HEADER
 # ══════════════════════════════════════════════════════════════════
-hoy = datetime.now().strftime('%d %b %Y · %H:%M').upper()
+now = datetime.now().strftime('%d %b %Y · %H:%M').upper()
 st.markdown(f"""
 <div class="app-header">
   <div class="app-brand">
@@ -619,7 +523,7 @@ st.markdown(f"""
     </div>
   </div>
   <div class="app-meta">
-    <span class="meta-txt">{hoy}</span>
+    <span class="meta-txt">{now}</span>
     <span class="meta-txt">04 PITS</span>
     <div class="meta-pill"><span class="live-dot"></span>Online</div>
   </div>
@@ -629,14 +533,14 @@ st.markdown(f"""
 # ══════════════════════════════════════════════════════════════════
 # MODE TABS
 # ══════════════════════════════════════════════════════════════════
-modo = st.radio('', ['Predicción Manual', 'Carga Masiva'],
+mode = st.radio('', ['Manual Prediction', 'Bulk Upload'],
                 horizontal=True, label_visibility='collapsed')
 
 
 # ══════════════════════════════════════════════════════════════════
-# MODO 1 — PREDICCIÓN MANUAL
+# MODE 1 — MANUAL PREDICTION
 # ══════════════════════════════════════════════════════════════════
-if modo == 'Predicción Manual':
+if mode == 'Manual Prediction':
 
     st.markdown('<div style="height:0.6rem"></div>', unsafe_allow_html=True)
 
@@ -650,12 +554,12 @@ if modo == 'Predicción Manual':
 
         st.markdown("""
             <div class="sidebar-top">
-              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">PITS</div>
+              <div style="font-size:1.05rem;font-weight:700;color:var(--t1);">Mining Pits</div>
               <div style="font-size:0.78rem;color:var(--t3);font-family:var(--mono);margin-top:4px;letter-spacing:0.5px;">
-                Selecciona un pit para editar
+                Select a pit to edit
               </div>
             </div>
-            <span class="sidebar-section-lbl">Operaciones activas</span>
+            <span class="sidebar-section-lbl">Active Operations</span>
         """, unsafe_allow_html=True)
 
         for i, pit in enumerate(PITS):
@@ -665,24 +569,13 @@ if modo == 'Predicción Manual':
             pc        = PIT_COLORS[pit]
 
             if is_active:
-                nav_style = (
-                    f"background:{pc['dim']};"
-                    f"border-left:4px solid {pc['border']};"
-                )
-                name_color = pc['text']
-                badge_style = (
-                    f"background:{pc['dim']};"
-                    f"border:1px solid {pc['border']};"
-                    f"color:{pc['text']};"
-                )
+                nav_style   = f"background:{pc['dim']};border-left:4px solid {pc['border']};"
+                name_color  = pc['text']
+                badge_style = f"background:{pc['dim']};border:1px solid {pc['border']};color:{pc['text']};"
             else:
-                nav_style  = f"background:rgba(255,255,255,0.01);border-left:4px solid transparent;"
-                name_color = "var(--t2)"
-                badge_style = (
-                    f"background:rgba(255,255,255,0.04);"
-                    f"border:1px solid var(--b2);"
-                    f"color:var(--t3);"
-                )
+                nav_style   = "background:rgba(255,255,255,0.01);border-left:4px solid transparent;"
+                name_color  = "var(--t2)"
+                badge_style = "background:rgba(255,255,255,0.04);border:1px solid var(--b2);color:var(--t3);"
 
             st.markdown(f"""
                 <div style="display:flex;align-items:center;gap:12px;
@@ -700,20 +593,16 @@ if modo == 'Predicción Manual':
                 </div>
             """, unsafe_allow_html=True)
 
-            if st.button(f'›', key=f'nav_pit_{i}',
-                         help=f'Ver {label}',
-                         use_container_width=True):
+            if st.button('›', key=f'nav_pit_{i}', help=f'View {label}', use_container_width=True):
                 st.session_state['pit_idx'] = i
                 st.rerun()
 
-        st.markdown('<div class="turno-section"><span class="turno-lbl">Turno de operación</span></div>',
+        st.markdown('<div class="turno-section"><span class="turno-lbl">Operating Shift</span></div>',
                     unsafe_allow_html=True)
-        turno = st.selectbox('', ['D', 'N'],
-                             key='turno_sel',
-                             label_visibility='collapsed')
+        turno = st.selectbox('', ['D', 'N'], key='turno_sel', label_visibility='collapsed')
 
         st.markdown('<div style="padding:0 14px 12px 14px;">', unsafe_allow_html=True)
-        if st.button('↺  Resetear valores', use_container_width=True):
+        if st.button('↺  Reset Values', use_container_width=True):
             reset_values()
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -739,7 +628,7 @@ if modo == 'Predicción Manual':
                           border-left:4px solid {pc_active['border']};">
                 <div>
                   <div style="font-size:1.1rem;font-weight:700;color:{pc_active['text']};">{pit_label}</div>
-                  <div style="font-family:var(--mono);font-size:0.75rem;color:var(--t3);margin-top:4px;">{pit} · {eq_count} unidades · Pit {pit_idx+1} de {len(PITS)}</div>
+                  <div style="font-family:var(--mono);font-size:0.75rem;color:var(--t3);margin-top:4px;">{pit} · {eq_count} units · Pit {pit_idx+1} of {len(PITS)}</div>
                 </div>
                 <div style="font-family:var(--mono);font-size:0.7rem;font-weight:700;
                             color:{pc_active['text']};background:{pc_active['dim']};
@@ -763,24 +652,18 @@ if modo == 'Predicción Manual':
 
         st.markdown('<div style="height:0.3rem"></div>', unsafe_allow_html=True)
 
-        # ─────────────────────────────────────────────────────────
-        # FIX: Collect values for ALL pits from val_* (persistent storage)
-        # NOT from ni_* (widget keys that only exist for the active pit)
-        # ─────────────────────────────────────────────────────────
         vals_palas    = {}
         vals_camiones = {}
 
         for p in PITS:
             for mod_eq, equipos in EQUIPOS_POR_PIT[p].items():
                 for eq in equipos:
-                    # ← FIX: read from val_{eq}, not ni_{eq}
                     vals_palas[f'UsodeDisp_{eq}'] = st.session_state.get(f'val_{eq}', 87.0) / 100.0
-            vals_camiones[f'QtyCamiones_{p}']         = st.session_state.get(f'val_qty_{p}',  DEFAULTS_CAM[p]['qty'])
-            vals_camiones[f'Disponibilidad_TKS_{p}']  = st.session_state.get(f'val_disp_{p}', DEFAULTS_CAM[p]['disp']) / 100.0
-            vals_camiones[f'UsodeDisp_TKS_{p}']       = st.session_state.get(f'val_uso_{p}',  DEFAULTS_CAM[p]['uso'])  / 100.0
-            vals_camiones[COL_CICLO_MAP[p]]            = st.session_state.get(f'val_ciclo_{p}', DEFAULTS_CAM[p]['ciclo'])
+            vals_camiones[f'QtyCamiones_{p}']        = st.session_state.get(f'val_qty_{p}',  DEFAULTS_CAM[p]['qty'])
+            vals_camiones[f'Disponibilidad_TKS_{p}'] = st.session_state.get(f'val_disp_{p}', DEFAULTS_CAM[p]['disp']) / 100.0
+            vals_camiones[f'UsodeDisp_TKS_{p}']      = st.session_state.get(f'val_uso_{p}',  DEFAULTS_CAM[p]['uso'])  / 100.0
+            vals_camiones[COL_CICLO_MAP[p]]           = st.session_state.get(f'val_ciclo_{p}', DEFAULTS_CAM[p]['ciclo'])
 
-        # Pre-populate widget keys from persistent storage for active pit only
         for mod_eq, equipos in EQUIPOS_POR_PIT[pit].items():
             for eq in equipos:
                 st.session_state[f'ni_{eq}'] = st.session_state.get(f'val_{eq}', 87.0)
@@ -789,7 +672,6 @@ if modo == 'Predicción Manual':
                 f'val_{fld}_{pit}', float(DEFAULTS_CAM[pit][fld])
             )
 
-        # Render inputs for active pit and sync back to val_* immediately
         for modelo_eq, equipos in EQUIPOS_POR_PIT[pit].items():
             ec_colors = EQ_COLORS.get(modelo_eq, {'bg':'rgba(255,255,255,0.03)','border':'var(--b3)','text':'var(--t2)'})
             st.markdown(
@@ -812,13 +694,12 @@ if modo == 'Predicción Manual':
                         key=f'ni_{eq}',
                         on_change=_save_eq, args=(eq,)
                     )
-                    # Sync immediately to persistent store and prediction dict
                     st.session_state[f'val_{eq}'] = pct_val
                     vals_palas[f'UsodeDisp_{eq}'] = pct_val / 100.0
 
-        # Trucks for active pit
+        # Truck fleet inputs
         st.markdown(
-            '<div class="trucks-block"><span class="trucks-lbl">TRUCKS</span></div>',
+            '<div class="trucks-block"><span class="trucks-lbl">Truck Fleet</span></div>',
             unsafe_allow_html=True
         )
         tc1, tc2, tc3, tc4 = st.columns(4)
@@ -829,52 +710,49 @@ if modo == 'Predicción Manual':
             st.session_state[f'val_qty_{pit}'] = qty
             vals_camiones[f'QtyCamiones_{pit}'] = qty
         with tc2:
-            disp = st.number_input('Disp %', min_value=0.0, max_value=100.0,
+            disp = st.number_input('Avail %', min_value=0.0, max_value=100.0,
                                    step=1.0, format='%.1f', key=f'ni_disp_{pit}',
                                    on_change=_save_truck, args=('disp', pit))
             st.session_state[f'val_disp_{pit}'] = disp
             vals_camiones[f'Disponibilidad_TKS_{pit}'] = disp / 100.0
         with tc3:
-            uso = st.number_input('UTIL %', min_value=0.0, max_value=100.0,
+            uso = st.number_input('Util %', min_value=0.0, max_value=100.0,
                                   step=1.0, format='%.1f', key=f'ni_uso_{pit}',
                                   on_change=_save_truck, args=('uso', pit))
             st.session_state[f'val_uso_{pit}'] = uso
             vals_camiones[f'UsodeDisp_TKS_{pit}'] = uso / 100.0
         with tc4:
-            ciclo = st.number_input('Ciclo (min)', min_value=15.0, max_value=60.0,
+            ciclo = st.number_input('Cycle (min)', min_value=15.0, max_value=60.0,
                                     step=0.1, format='%.1f', key=f'ni_ciclo_{pit}',
                                     on_change=_save_truck, args=('ciclo', pit))
             st.session_state[f'val_ciclo_{pit}'] = ciclo
             vals_camiones[COL_CICLO_MAP[pit]] = ciclo
 
-        # Fleet summary all pits
+        # Fleet summary
         st.markdown('<div style="height:0.5rem"></div>', unsafe_allow_html=True)
         st.markdown("""
             <div style="background:var(--bg-elev);border:1px solid var(--bred);border-radius:5px;
                         padding:11px 17px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
                         border-left:3px solid var(--red);">
               <span style="font-family:var(--mono);font-size:0.82rem;color:var(--red-hi);
-                           letter-spacing:2px;text-transform:uppercase;font-weight:700;">Trucks by pit</span>
+                           letter-spacing:2px;text-transform:uppercase;font-weight:700;">Trucks by Pit:</span>
         """, unsafe_allow_html=True)
 
-        resumen_parts = []
+        summary_parts = []
         for p in PITS:
             qty_p = st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])
-            resumen_parts.append(
+            summary_parts.append(
                 f'<span style="font-family:var(--mono);font-size:0.95rem;color:var(--t2);">'
                 f'{PIT_LABELS[p]}: <strong style="color:var(--t1);">{int(qty_p)}</strong></span>'
             )
-        st.markdown(' &nbsp;<span style="color:var(--b3)">|</span>&nbsp; '.join(resumen_parts) + '</div>', unsafe_allow_html=True)
+        st.markdown(' &nbsp;<span style="color:var(--b3)">|</span>&nbsp; '.join(summary_parts) + '</div>', unsafe_allow_html=True)
 
     # ════════════════════════════
     # RESULT PANEL
     # ════════════════════════════
     with result_col:
 
-        total_cam = sum(
-            st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty'])
-            for p in PITS
-        )
+        total_cam     = sum(st.session_state.get(f'val_qty_{p}', DEFAULTS_CAM[p]['qty']) for p in PITS)
         total_cam_int = int(round(total_cam))
         cam_ok        = total_cam_int == QTY_TOTAL
         delta_cam     = total_cam_int - QTY_TOTAL
@@ -884,12 +762,12 @@ if modo == 'Predicción Manual':
             st.markdown(f"""
                 <div class="cam-banner ok">
                   <div>
-                    <div class="cam-banner-msg">✓ Flota completa</div>
-                    <div class="cam-banner-sub">{total_cam_int} camiones distribuidos</div>
+                    <div class="cam-banner-msg">✓ Fleet Complete</div>
+                    <div class="cam-banner-sub">{total_cam_int} trucks distributed</div>
                   </div>
                   <div style="text-align:right;">
                     <div class="cam-banner-num">{QTY_TOTAL}</div>
-                    <div class="cam-banner-delta">objetivo</div>
+                    <div class="cam-banner-delta">target</div>
                   </div>
                 </div>
             """, unsafe_allow_html=True)
@@ -897,17 +775,18 @@ if modo == 'Predicción Manual':
             st.markdown(f"""
                 <div class="cam-banner warn">
                   <div>
-                    <div class="cam-banner-msg">⚠ Flota incorrecta</div>
-                    <div class="cam-banner-sub">Objetivo: {QTY_TOTAL} · Ajuste: {signo}</div>
+                    <div class="cam-banner-msg">⚠ Fleet Mismatch</div>
+                    <div class="cam-banner-sub">Target: {QTY_TOTAL} · Adjustment: {signo}</div>
                   </div>
                   <div style="text-align:right;">
                     <div class="cam-banner-num">{total_cam_int}</div>
-                    <div class="cam-banner-delta">actual</div>
+                    <div class="cam-banner-delta">current</div>
                   </div>
                 </div>
             """, unsafe_allow_html=True)
 
         ph = st.empty()
+        shift_label = 'Day' if turno == 'D' else 'Night'
         ph.markdown(f"""
             <div class="hero">
               <div class="hero-top">
@@ -916,7 +795,7 @@ if modo == 'Predicción Manual':
                   <div class="hero-num">—</div>
                   <div class="hero-unit">loads · per shift</div>
                 </div>
-                <div class="hero-shift">Shift {turno}</div>
+                <div class="hero-shift">{shift_label} ({turno})</div>
               </div>
               <div class="conf-block">
                 <div class="conf-head">
@@ -928,7 +807,7 @@ if modo == 'Predicción Manual':
                 </div>
                 <div class="conf-foot">
                   <span>MAPE ±{MODEL_ERROR:.1f}%</span>
-                  <span></span>
+                  <span>Pending</span>
                 </div>
               </div>
             </div>
@@ -937,8 +816,8 @@ if modo == 'Predicción Manual':
         st.markdown('<div style="height:0.6rem"></div>', unsafe_allow_html=True)
 
         st.markdown('<div class="calc-wrap">', unsafe_allow_html=True)
-        calcular = st.button(
-            '▸  Ejecutar Predicción' if cam_ok else f'▸  Flota ≠ {QTY_TOTAL}',
+        run_pred = st.button(
+            '▸  Run Prediction' if cam_ok else f'▸  Fleet ≠ {QTY_TOTAL}',
             use_container_width=True,
             disabled=not cam_ok,
             key='btn_calc'
@@ -952,11 +831,11 @@ if modo == 'Predicción Manual':
               <div style="font-family:var(--mono);font-size:0.72rem;color:var(--red);
                           letter-spacing:2px;text-transform:uppercase;font-weight:700;
                           margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--b2);">
-                Configuración Activa
+                Active Configuration
               </div>
               <div style="display:flex;flex-direction:column;gap:8px;">
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">PITS</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Pits</span>
                   <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">04 / 04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
@@ -964,25 +843,25 @@ if modo == 'Predicción Manual':
                   <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">45</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Algorithm</span>
                   <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">Stacking Regressor</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.88rem;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Error MAPE</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">MAPE Error</span>
                   <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">±{MODEL_ERROR:.1f}%</span>
                 </div>
               </div>
             </div>
         """, unsafe_allow_html=True)
 
-        if calcular and cam_ok:
+        if run_pred and cam_ok:
             datos  = {**vals_palas, **vals_camiones, 'turno': turno}
             data   = pd.DataFrame([datos])[COLUMNAS_ESPERADAS]
-            Y_pred = predecir(data)
+            Y_pred = predict(data)
             cargas = int(round(Y_pred[0]))
             margen = int(round(cargas * MODEL_ERROR / 100))
             lo, hi = cargas - margen, cargas + margen
-            turno_label = 'Diurno' if turno == 'D' else 'Nocturno'
+            shift_full = 'Day' if turno == 'D' else 'Night'
 
             ph.markdown(f"""
                 <div class="hero">
@@ -991,9 +870,9 @@ if modo == 'Predicción Manual':
                       <div class="hero-eyebrow">Predicted Loads</div>
                       <div class="hero-num live">{cargas:,}</div>
                       <div class="hero-unit">loads · per shift</div>
-                      <div class="hero-range">▴ rango {lo:,} – {hi:,}</div>
+                      <div class="hero-range">▴ range {lo:,} – {hi:,}</div>
                     </div>
-                    <div class="hero-shift">{turno_label} ({turno})</div>
+                    <div class="hero-shift">{shift_full} ({turno})</div>
                   </div>
                   <div class="conf-block">
                     <div class="conf-head">
@@ -1013,23 +892,23 @@ if modo == 'Predicción Manual':
 
 
 # ══════════════════════════════════════════════════════════════════
-# MODO 2 — CARGA MASIVA
+# MODE 2 — BULK UPLOAD
 # ══════════════════════════════════════════════════════════════════
 else:
     st.markdown('<div style="height:0.8rem"></div>', unsafe_allow_html=True)
     bulk_l, bulk_r = st.columns([3, 2], gap='large')
 
     with bulk_l:
-        st.markdown('<div class="step-lbl"><span class="step-num">1</span>Descarga la plantilla CSV</div>',
+        st.markdown('<div class="step-lbl"><span class="step-num">1</span>Download the CSV template</div>',
                     unsafe_allow_html=True)
         st.markdown("""
             <div style="background:var(--bg-card);border:1px solid var(--b1);
                         border-left:3px solid var(--red);border-radius:4px;
                         padding:0.8rem 1rem;margin-bottom:0.6rem;
                         font-size:0.88rem;color:var(--t2);line-height:1.5;">
-                Plantilla con los 45 parámetros requeridos. Cada fila representa un turno.
+                Template with all 45 required parameters. Each row represents one shift.
                 <br><span style="font-family:var(--mono);font-size:0.75rem;color:var(--t3);">
-                ⓘ Los valores de utilización y disponibilidad en CSV deben ir como decimales (0–1).</span>
+                ⓘ Utilization and availability values in the CSV must be decimals (0–1).</span>
             </div>
         """, unsafe_allow_html=True)
 
@@ -1048,43 +927,43 @@ else:
         buf = io.BytesIO()
         pd.DataFrame([ej]).to_csv(buf, index=False)
         buf.seek(0)
-        st.download_button('⬇  Descargar Plantilla CSV', data=buf,
-                           file_name='plantilla_prediccion.csv', mime='text/csv')
+        st.download_button('⬇  Download CSV Template', data=buf,
+                           file_name='prediction_template.csv', mime='text/csv')
 
-        st.markdown('<div class="step-lbl" style="margin-top:1rem;"><span class="step-num">2</span>Carga tu archivo</div>',
+        st.markdown('<div class="step-lbl" style="margin-top:1rem;"><span class="step-num">2</span>Upload your file</div>',
                     unsafe_allow_html=True)
-        archivo = st.file_uploader('Arrastra tu CSV aquí o haz click para seleccionar',
+        archivo = st.file_uploader('Drag your CSV here or click to browse',
                                    type=['csv'], label_visibility='visible')
 
     with bulk_r:
         st.markdown(f"""
-            <div style="background:var(--bg-card);border:1px solid var(--b1);
-                        border-radius:4px;padding:1rem 1.1rem;">
-              <div style="font-family:var(--mono);font-size:0.65rem;color:var(--t3);
-                          letter-spacing:2px;text-transform:uppercase;
-                          margin-bottom:0.8rem;padding-bottom:6px;border-bottom:1px solid var(--b1);">
-                Especificaciones del Modelo
+            <div style="background:var(--bg-card);border:1px solid var(--b2);
+                        border-top:2px solid var(--red);border-radius:4px;padding:1rem 1.1rem;">
+              <div style="font-family:var(--mono);font-size:0.68rem;color:var(--red);
+                          letter-spacing:2px;text-transform:uppercase;font-weight:700;
+                          margin-bottom:0.8rem;padding-bottom:6px;border-bottom:1px solid var(--b2);">
+                Model Specifications
               </div>
               <div style="display:flex;flex-direction:column;gap:6px;">
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Variables numéricas</span>
-                  <span style="color:var(--t1);font-family:var(--mono);">44</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Numeric variables</span>
+                  <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">44</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Variable categórica</span>
-                  <span style="color:var(--t1);font-family:var(--mono);">turno (D/N)</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Categorical variable</span>
+                  <span style="color:var(--t1);font-family:var(--mono);font-weight:600;">shift (D/N)</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">PITS</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);">04</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Mining pits</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">04</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;border-bottom:1px solid var(--b1);">
-                  <span style="color:var(--t2);font-family:var(--mono);">Algoritmo</span>
-                  <span style="color:var(--copper-hi);font-family:var(--mono);">Ensemble Reg.</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Algorithm</span>
+                  <span style="color:var(--gold-hi);font-family:var(--mono);font-weight:600;">Stacking Regressor</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;font-size:0.82rem;padding:4px 0;">
-                  <span style="color:var(--t2);font-family:var(--mono);">Confianza</span>
-                  <span style="color:var(--green);font-family:var(--mono);">{CONFIDENCE:.1f}%</span>
+                  <span style="color:var(--t2);font-family:var(--mono);">Confidence</span>
+                  <span style="color:var(--green);font-family:var(--mono);font-weight:600;">{CONFIDENCE:.1f}%</span>
                 </div>
               </div>
             </div>
@@ -1094,40 +973,40 @@ else:
         st.markdown('<hr>', unsafe_allow_html=True)
         try:
             df = pd.read_csv(archivo)
-            faltantes = [c for c in COLUMNAS_ESPERADAS if c not in df.columns]
-            if faltantes:
-                st.error(f'❌ Columnas faltantes: {faltantes}')
+            missing = [c for c in COLUMNAS_ESPERADAS if c not in df.columns]
+            if missing:
+                st.error(f'❌ Missing columns: {missing}')
                 st.stop()
 
-            st.success(f'✅ {len(df):,} turnos cargados correctamente')
+            st.success(f'✅ {len(df):,} shifts loaded successfully')
             st.dataframe(df[COLUMNAS_ESPERADAS].head(3), use_container_width=True)
 
-            st.markdown('<div class="step-lbl"><span class="step-num">3</span>Ejecuta la predicción masiva</div>',
+            st.markdown('<div class="step-lbl"><span class="step-num">3</span>Run bulk prediction</div>',
                         unsafe_allow_html=True)
             st.markdown('<div class="calc-wrap">', unsafe_allow_html=True)
-            run_bulk = st.button('▸  Predecir todos los turnos', use_container_width=False)
+            run_bulk = st.button('▸  Predict All Shifts', use_container_width=False)
             st.markdown('</div>', unsafe_allow_html=True)
 
             if run_bulk:
-                Y = predecir(df[COLUMNAS_ESPERADAS].copy())
-                df['Prediccion_Cargas'] = np.round(Y).astype(int)
+                Y = predict(df[COLUMNAS_ESPERADAS].copy())
+                df['Predicted_Loads'] = np.round(Y).astype(int)
 
                 m1, m2, m3, m4 = st.columns(4)
-                m1.metric('Turnos procesados',  f"{len(df):,}")
-                m2.metric('Promedio de cargas', f"{df['Prediccion_Cargas'].mean():,.0f}")
-                m3.metric('Mínimo',             f"{df['Prediccion_Cargas'].min():,}")
-                m4.metric('Máximo',             f"{df['Prediccion_Cargas'].max():,}")
+                m1.metric('Shifts Processed', f"{len(df):,}")
+                m2.metric('Average Loads',    f"{df['Predicted_Loads'].mean():,.0f}")
+                m3.metric('Minimum',          f"{df['Predicted_Loads'].min():,}")
+                m4.metric('Maximum',          f"{df['Predicted_Loads'].max():,}")
 
                 st.markdown('<div style="height:6px"></div>', unsafe_allow_html=True)
-                cols_v = ['turno','Prediccion_Cargas'] + [c for c in COLUMNAS_ESPERADAS if c != 'turno']
+                cols_v = ['turno','Predicted_Loads'] + [c for c in COLUMNAS_ESPERADAS if c != 'turno']
                 st.dataframe(df[cols_v], use_container_width=True)
 
                 buf2 = io.BytesIO()
                 df.to_csv(buf2, index=False)
                 buf2.seek(0)
-                st.download_button('⬇  Descargar Resultados', data=buf2,
-                                   file_name='predicciones.csv', mime='text/csv')
-                st.caption(f'⚠ Error del modelo: ±{MODEL_ERROR:.1f}% — Usar como referencia operacional.')
+                st.download_button('⬇  Download Results', data=buf2,
+                                   file_name='predictions.csv', mime='text/csv')
+                st.caption(f'⚠ Model error: ±{MODEL_ERROR:.1f}% — For operational reference only.')
 
         except Exception as e:
-            st.error(f'Error al procesar el archivo: {e}')
+            st.error(f'Error processing file: {e}')
