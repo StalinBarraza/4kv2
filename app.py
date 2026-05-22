@@ -377,7 +377,7 @@ modelo_ml, variables, min_max_scaler = load_model()
 # ══════════════════════════════════════════════════════════════════
 EQUIPOS_POR_PIT = {
     'DESCANSO': {
-        'Komatsu PC8000': ['6233','6234','6247','6248', '6239'],
+        'Komatsu PC8000': ['6233','6234','6247','6248'],
         'Bucyrus BE495':  ['6243','6244'],
         'Hitachi EX3600': ['6260'],
     },
@@ -388,14 +388,14 @@ EQUIPOS_POR_PIT = {
         'Dragline':       ['6449','6455'],
     },
     'EC': {
-        'Komatsu PC8000': ['6231'],
-        'Hitachi EX3600': ['6262'],
-        'Komatsu PC4000': ['6268'],
+        'Komatsu PC8000': ['6231','6239'],
+        'Hitachi EX3600': ['6262','6268'],
+        'Komatsu PC4000': ['6264','6269'],
     },
     'PRIBBENOW': {
-        'Komatsu PC8000': ['6235','6245','6246', '6449'],
+        'Komatsu PC8000': ['6235','6245','6246'],
         'Bucyrus BE495':  ['6241'],
-        'Komatsu PC4000': ['6264', '6269'],
+        'Komatsu PC4000': ['6249'],
         'Dragline':       ['6457'],
     },
 }
@@ -807,7 +807,7 @@ if mode == 'Manual Prediction':
                 </div>
                 <div class="conf-foot">
                   <span>MAPE ±{MODEL_ERROR:.1f}%</span>
-                  <span></span>
+                  <span>Pending</span>
                 </div>
               </div>
             </div>
