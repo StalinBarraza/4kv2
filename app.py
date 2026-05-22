@@ -22,7 +22,7 @@ st.markdown("""
     --red-hi:     #E8253F;
     --red-dim:    rgba(200,16,46,0.14);
     --red-glow:   rgba(200,16,46,0.25);
-    --bg-app:     #0E0F11;
+    --bg-app:     #3E517A;
     --bg-card:    #161719;
     --bg-elev:    #1E2024;
     --bg-deep:    #09090B;
