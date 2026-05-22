@@ -389,13 +389,13 @@ EQUIPOS_POR_PIT = {
     },
     'EC': {
         'Komatsu PC8000': ['6231'],
-        'Hitachi EX3600': ['6262','6268'],
-        'Komatsu PC4000': ['6264','6269'],
+        'Hitachi EX3600': ['6262'],
+        'Komatsu PC4000': ['6268'],
     },
     'PRIBBENOW': {
-        'Komatsu PC8000': ['6235','6245','6246'],
+        'Komatsu PC8000': ['6235','6245','6246', '6449'],
         'Bucyrus BE495':  ['6241'],
-        'Komatsu PC4000': ['6249'],
+        'Komatsu PC4000': ['6264', '6269'],
         'Dragline':       ['6457'],
     },
 }
