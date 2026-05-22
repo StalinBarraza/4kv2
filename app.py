@@ -463,10 +463,10 @@ PIT_COLORS = {
 # Equipment colors — Drummond brand palette (red intensities + grays)
 EQ_COLORS = {
     'Komatsu PC8000': {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
-    'Komatsu PC4000': {'bg': 'rgba(180,40,60,0.09)',   'border': '#B4283C', 'text': '#FF8C9A'},
-    'Hitachi EX3600': {'bg': 'rgba(160,168,180,0.07)', 'border': '#7A8290', 'text': '#B8C0CC'},
-    'Bucyrus BE495':  {'bg': 'rgba(80,88,100,0.10)',   'border': '#505864', 'text': '#8A929E'},
-    'Dragline':       {'bg': 'rgba(140,50,60,0.09)',   'border': '#8C323C', 'text': '#C87880'},
+    'Komatsu PC4000': {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
+    'Hitachi EX3600': {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
+    'Bucyrus BE495':  {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
+    'Dragline':       {'bg': 'rgba(200,16,46,0.09)',   'border': '#C8102E', 'text': '#FF6878'},
 }
 
 MODEL_ERROR = 4
